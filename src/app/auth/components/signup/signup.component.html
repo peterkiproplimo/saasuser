@@ -1,0 +1,129 @@
+<div class="min-h-screen w-full bg-gray-100 dark:bg-gray-900">
+<app-navbar></app-navbar>
+
+<div class="flex min-h-screen w-full bg-gray-100 dark:bg-gray-900 p-4">
+  <!-- Left Side: Image -->
+  <div
+    class="hidden lg:flex w-1/2 relative items-center justify-center overflow-hidden shadow-lg"
+  >
+    <!-- Animated Welcome Text -->
+    <h3
+      class="absolute top-24 left-8 right-8 text-center text-white text-2xl font-light leading-relaxed z-20 animate-fade-drop"
+    >
+      Welcome to
+      <span class="text-indigo-400 font-semibold">Techsavanna SaaS</span> —
+      Scalable solutions for finance, operations, and growth with
+      <span class="text-blue-400 font-semibold">ERP</span>,
+      <span class="text-blue-400 font-semibold">CRM</span>,
+      <span class="text-blue-400 font-semibold">HR</span> &
+      <span class="text-blue-400 font-semibold">Analytics</span>
+      in one platform.
+    </h3>
+
+    <!-- Background Image -->
+    <img
+      src="/images/banner-bg.jpg"
+      alt="Banner Background"
+      class="absolute inset-0 w-full h-full object-cover z-0"
+    />
+
+    <!-- Floating Infographic -->
+    <img
+      src="/images/software-infographic.svg"
+      alt="Software Infographic"
+      style="bottom: 100px;"
+      class="absolute right-0 max-w-4xl animate-float-reverse z-10"
+    />
+  </div>
+
+  <!-- Right Side: Signup Form -->
+  <div
+    class="w-full lg:w-1/2 flex flex-col justify-center px-4 lg:px-20 py-12 bg-white dark:bg-gray-800 shadow-lg"
+  >
+    <div class="max-w-xl w-full mx-auto">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white text-center mb-6">
+        Power Your Business with Techsavanna Software Solutions
+      </h2>
+
+     <form class="space-y-6" [formGroup]="signup_form">
+  <app-reactive-input
+    [form]="signup_form"
+    [id]="'company_name'"
+    [key]="'company_name'"
+    [label]="'Company Name'"
+    [type]="'text'"
+    [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+  ></app-reactive-input>
+
+  <app-reactive-input
+    [form]="signup_form"
+    [id]="'full_name'"
+    [key]="'full_name'"
+    [label]="'Full Name'"
+    [type]="'text'"
+    [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+  ></app-reactive-input>
+
+  <app-reactive-input
+    [form]="signup_form"
+    [id]="'email'"
+    [key]="'email'"
+    [label]="'Email Address'"
+    [type]="'email'"
+    [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+  ></app-reactive-input>
+
+  <app-reactive-input
+    [form]="signup_form"
+    [id]="'phone'"
+    [key]="'phone'"
+    [label]="'Phone Number'"
+    [type]="'tel'"
+    [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+  ></app-reactive-input>
+
+  <app-reactive-input
+    [form]="signup_form"
+    [id]="'password'"
+    [key]="'password'"
+    [label]="'Password'"
+    [type]="'password'"
+    [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+  ></app-reactive-input>
+
+  <app-reactive-input
+    [form]="signup_form"
+    [id]="'confirm_password'"
+    [key]="'confirm_password'"
+    [label]="'Confirm Password'"
+    [type]="'password'"
+    [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+  ></app-reactive-input>
+
+  <div>
+    <button
+      type="submit"
+      class="flex w-full justify-center gap-2 rounded-md bg-sky-500 hover:bg-sky-600 focus:ring-2 focus:ring-sky-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-200"
+    >
+      Sign Up
+
+      @if (loading) {
+        <p-progress-spinner
+          strokeWidth="8"
+          fill="transparent"
+          animationDuration=".5s"
+          [style]="{ width: '20px', height: '20px' }"
+          class="text-white"
+        />
+      }
+    </button>
+  </div>
+</form>
+
+
+
+      <p-toast position="top-right" class="mt-4" />
+    </div>
+  </div>
+</div>
+</div>

@@ -34,6 +34,10 @@ export class NavbarComponent{
     localStorage.removeItem('token');
     this.router.navigate(['/auth/login']);
   }
+  signup() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/auth/signup']);
+  }
 
   profile() {
     this.router.navigate(['/member-profile']);

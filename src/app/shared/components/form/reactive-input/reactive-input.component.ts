@@ -22,6 +22,7 @@ export class ReactiveInputComponent {
   @Input() pattern: string="[\\s\\S]+"
   @Input() id: string="";
   @Input() name: string="";
+  @Input() classes: string = '';
   @Input() disabled: boolean=false;
 
   shared_functions= new Functions()

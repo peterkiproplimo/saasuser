@@ -1,5 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
-
 @use "tailwindcss";
 @use "primeicons/primeicons.css";
 @custom-variant dark (&:where(.dark, .dark *));
+
+// Float Up and Down
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+// Float Down and Up (Reverse Animation)
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(15px);
+  }
+}
+
+// Utility Classes
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 3s ease-in-out infinite;
+}
