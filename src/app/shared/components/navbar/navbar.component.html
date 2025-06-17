@@ -1,0 +1,108 @@
+<nav class="bg-[#0082CC] dark:bg-gray-800 shadow sticky top-0 z-50">
+  <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+
+      <div class="inline-flex gap-4">
+      <!-- Left: Logo -->
+
+        <div class="block sm:hidden">
+          <a routerLink="/">
+            <img src="logo.png" alt="Logo" class="h-8 w-8 rounded-full">
+          </a>
+        </div>
+
+        <div class="hidden sm:flex items-center justify-between">
+
+          <a routerLink="/">
+            <img src="logo.png" alt="Logo" class="h-8 w-8 rounded-full">
+          </a>
+
+          <a routerLink="/">
+          <span class="m-4 text-xl font-bold text-white">Karen Country Club</span>
+          </a>
+
+          <nav class="space-x-4 font-semibold">
+
+            <a routerLink="/" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Home</a>
+            <a routerLink="/propose-member" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Propose Member</a>
+            <a routerLink="/member-card" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Member Card</a>
+            <a routerLink="/book-event" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Events</a>
+            <a routerLink="/book-tee-time" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Book Tee Time</a>
+            <a routerLink="/reserve-table" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Reserve Table</a>
+
+          </nav>
+        </div>
+
+      </div>
+      <!-- Right: Dark mode + profile -->
+      <div class="flex items-center space-x-4">
+
+        <!-- Dark Mode Toggle -->
+        <p-button
+          [icon]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
+          (onClick)="toggleDarkMode()"
+          styleClass="p-button-rounded p-button-text p-button-sm"
+        ></p-button>
+
+        <!-- Profile -->
+        <button (click)="menu.toggle($event)" class="h-8 w-8 cursor-pointer text-white rounded-full ring-2 ring-indigo-500 flex items-center justify-center font-bold">
+          JC
+        </button>
+
+        <!-- Mobile menu button (hamburger) -->
+        <div class="sm:hidden">
+
+          <p-button
+            [icon]="isMenuOpen ? 'pi pi-times' : 'pi pi-bars'"
+            (onClick)="toggleMenu()"
+            styleClass="p-button-rounded p-button-text p-button-sm"
+          ></p-button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p-menu #menu [model]="items" [popup]="true" class="flex justify-center w-max md:w-60">
+      <ng-template #end>
+
+        <div class="flex flex-col py-2">
+          <button
+            (click)="logout()"
+            pRipple
+            class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
+          >
+        <span class="inline-flex flex-col">
+          <span class="font-bold">Logout</span>
+        </span>
+          </button>
+
+          <button
+            (click)="profile()"
+            pRipple
+            class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
+          >
+        <span class="inline-flex flex-col">
+          <span class="font-bold">Member Profile</span>
+        </span>
+          </button>
+        </div>
+
+      </ng-template>
+    </p-menu>
+  </div>
+
+  @if (isMenuOpen){
+    <div class="sm:hidden bg-[0082cc] dark:bg-gray-800 px-4 pt-4 pb-3 space-y-2" (click)="close_menu()">
+      <a routerLink="/" class="block text-gray-700 dark:text-gray-300 hover:text-gray-300 hover:bg-white dark:hover:text-blue-400">Home</a>
+      <a routerLink="/propose-member" class="block text-gray-700 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Propose Member</a>
+      <a routerLink="/member-card" class="block text-gray-700 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Member Card</a>
+      <a routerLink="/book-event" class="block text-gray-700 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Events</a>
+      <a routerLink="/book-tee-time" class="block text-gray-700 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Book Tee Time</a>
+      <a routerLink="/reserve-table" class="block text-gray-700 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Reserve Table</a>
+    </div>
+  }
+
+</nav>
