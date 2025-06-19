@@ -1,24 +1,24 @@
 import { Routes } from '@angular/router';
-import {Layout} from './layout/layout';
+import { Layout } from './layout/layout';
 
 export const routes: Routes = [
-
   {
-    path : "",
+    path: '',
     component: Layout,
     children: [
       {
-        path: "",
+        path: '',
         loadChildren: () => import('./layout/routes').then(m => m.layoutRoutes)
       },
+      {
+        path: 'auth',
+        loadChildren: () => import('./auth/routes').then(m => m.authRoutes)
+      },
+      {
+        path: 'hrm',
+        loadChildren: () => import('./hrm/routes').then(m => m.landingRoutes)
+      }
     ]
   },
-
-  {
-    path : "auth",
-    loadChildren: () => import('./auth/routes').then(m => m.authRoutes)
-  },
-
   { path: '**', redirectTo: '/' }
-
 ];

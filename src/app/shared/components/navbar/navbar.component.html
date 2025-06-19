@@ -13,9 +13,90 @@
     <!-- Navigation Links -->
     <nav class="space-x-6 font-semibold">
       <a routerLink="/propose-member" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Home</a>
-      <a routerLink="/member-card" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Solutions</a>
-      <a routerLink="/member-card" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Tickets</a>
-      <a routerLink="/book-event" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">COntact Us</a>
+      <!-- Solutions Dropdown -->
+<div class="relative group inline-block">
+  <a
+    href="#"
+    class="flex items-center gap-1 text-white font-semibold group-hover:text-sky-600 transition"
+  >
+    Solutions
+    <!-- Arrow Icon -->
+    <svg
+      class="w-4 h-4 transform transition-transform duration-200 group-hover:rotate-90 text-white group-hover:text-sky-600"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </a>
+
+  <!-- Dropdown -->
+  <div
+    class="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50"
+  >
+    <ul class="text-sm divide-y divide-gray-100">
+      <!-- Menu Items -->
+      <li>
+        <a
+          routerLink="/solutions/hrm"
+          class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
+        >
+          Techsavanna HRM
+          <span class="transition-transform group-hover:rotate-0">&rsaquo;</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/solutions/pos"
+          class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
+        >
+          Techsavanna POS
+          <span class="transition-transform group-hover:rotate-0">&rsaquo;</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/solutions/crm"
+          class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
+        >
+          Techsavanna CRM
+          <span class="transition-transform group-hover:rotate-0">&rsaquo;</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/solutions/erp"
+          class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
+        >
+          Techsavanna ERP
+          <span class="transition-transform group-hover:rotate-0">&rsaquo;</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/solutions/bpo"
+          class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
+        >
+          Techsavanna BPO
+          <span class="transition-transform group-hover:rotate-0">&rsaquo;</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/solutions/bespoke"
+          class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
+        >
+          Bespoke
+          <span class="transition-transform group-hover:rotate-0">&rsaquo;</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+      <a routerLink="/book-event" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Contact Us</a>
     </nav>
   </div>
 </div>
@@ -23,7 +104,7 @@
       <!-- Right: Dark mode + profile -->
       <div class="flex items-center space-x-4">
         <a routerLink="/auth/login" class="text-white font-medium hover:underline">Login</a>
-        <a routerLink="/auth/signup" class="bg-white text-[#0082CC] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">Sign Up</a>
+        <a routerLink="/auth/signup" class="text-white font-medium hover:underline">Sign Up</a>
 
 
         <!-- Dark Mode Toggle -->
@@ -35,7 +116,7 @@
 
         <!-- Profile -->
         <button (click)="menu.toggle($event)" class="h-8 w-8 cursor-pointer text-white rounded-full ring-2 ring-indigo-500 flex items-center justify-center font-bold">
-          JC
+          WL
         </button>
 
         <!-- Mobile menu button (hamburger) -->

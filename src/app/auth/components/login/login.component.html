@@ -1,57 +1,85 @@
-<div class="flex min-h-screen flex-col justify-start sm:justify-center px-2 py-12 lg:px-8 w-full bg-gray-100 dark:bg-gray-900">
-  <div class="sm:mx-auto w-full sm:max-w-2xl bg-white dark:bg-gray-800 px-2 sm:px-8 py-10">
-    <h2 class="text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-gray-100">
-      Upishi Hub Admin
-    </h2>
-    <h2 class="my-5 text-center text-2xl/9 font-semibold tracking-tight text-gray-900 dark:text-gray-100">
-      Sign in to your account
-    </h2>
+<div class="min-h-screen w-full bg-gray-100 dark:bg-gray-900">
+  <div class="flex flex-col lg:flex-row min-h-screen w-full">
+    
+    <!-- Left Side: Image Column (hidden on small screens) -->
+    <div class="hidden lg:flex w-1/2 relative shadow-lg">
+      <!-- Gradient Overlay -->
+      <div class="absolute inset-0 z-10 bg-gradient-to-b from-sky-600/90 via-sky-800/100 to-transparent"></div>
 
-    <form class="space-y-6" (ngSubmit)="login()" [formGroup]="login_form">
-      <div>
-        <app-reactive-input
-          [form]="login_form"
-          [id]="'email'"
-          [key]="'email'"
-          [label]="'Email Address'"
-          [type]="'email'"
-        >
-        </app-reactive-input>
-      </div>
+      <!-- Background Image -->
+      <img
+        src="/images/accounting-services.jpeg"
+        alt="Banner"
+        class="w-full h-full object-cover z-0"
+      />
+    </div>
 
-      <div>
-        <app-reactive-input
-          [form]="login_form"
-          [id]="'password'"
-          [key]="'password'"
-          [label]="'Password'"
-          [type]="'password'"
-        >
-        </app-reactive-input>
-      </div>
+    <!-- Right Side: Login Section -->
+   <div class="w-full lg:w-1/2 flex items-center justify-center px-4 py-12 bg-white dark:bg-gray-800 shadow-lg">
+  <div class="max-w-xl w-full space-y-6 lg:space-y-8 pt-2 lg:pt-0">
+    
+    <!-- Centered Logo -->
+    <div class="flex justify-center">
+      <a routerLink="/">
+        <img src="/images/images.jpeg" alt="Logo" class="h-32 w-32 rounded-full object-cover" />
+      </a>
+    </div>
 
-      <div>
+    <!-- Welcome Message -->
+    <div class="text-center -mt-4 lg:-mt-6">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+        Welcome Back to Techsavanna SaaS Solutions
+      </h2>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+        Your business command center.
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <form class="space-y-6" [formGroup]="login_form">
+      <app-reactive-input
+        [form]="login_form"
+        [id]="'email'"
+        [key]="'email'"
+        [label]="'Email Address'"
+        [type]="'email'"
+        [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+      ></app-reactive-input>
+
+      <app-reactive-input
+        [form]="login_form"
+        [id]="'password'"
+        [key]="'password'"
+        [label]="'Password'"
+        [type]="'password'"
+        [classes]="'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'"
+      ></app-reactive-input>
+
+      <!-- Spacer Below Password on Web -->
+      <div class="hidden lg:block h-2"></div>
+
+      <!-- Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4">
         <button
           type="submit"
-          class="flex w-full justify-center gap-2 rounded-md bg-indigo-600 dark:bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-indigo-500 dark:hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-400"
+          class="flex-1 flex justify-center gap-2 rounded-md bg-sky-500 hover:bg-sky-600 focus:ring-2 focus:ring-sky-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-200"
         >
-          Sign in
-
+          Login
           @if (loading) {
             <p-progress-spinner
               strokeWidth="8"
               fill="transparent"
               animationDuration=".5s"
               [style]="{ width: '20px', height: '20px' }"
-              class="text-white dark:text-gray-100"
+              class="text-white"
             />
           }
         </button>
       </div>
     </form>
 
-    <div class="mx-4">
-      <p-toast position="top-right" />
-    </div>
+    <p-toast position="top-right" class="mt-4" />
   </div>
+</div>
+
 </div>

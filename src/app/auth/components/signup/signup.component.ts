@@ -35,31 +35,12 @@ signup_form = new FormGroup({
 });
 
 
-  // signup() {
-  //   this.signup_form?.markAllAsTouched();
-  //   if (this.signup_form?.invalid) return;
-  //   this.loading = true;
-  //     let signup_request : signupRequest = {
-  //       email: this.signup_form.value.email!,
-  //       password: this.signup_form.value.password!
-  //     }
-  //   this.auth_service.signup(signup_request).pipe(
-  //     takeUntilDestroyed(this.destroyRef)
-  //   )
-  //     .subscribe({
-  //         next: data => {
-  //           this.loading = false;
-  //           this.router.navigate(["/"]);
-  //         },
-  //         error: error => {
-  //           this.loading = false;
-  //           this.showError(error.error.message);
-  //         },
-  //         complete: () => {
-  //         }
-  //       }
-  //     )
-  // }
+  signup() {
+    this.signup_form?.markAllAsTouched();
+    if (this.signup_form?.invalid) return;
+     console.log(this.signup_form.value);
+
+  }
 
   showError(message:string) {
     this.message_service.add({ severity: 'error', summary: 'Authentication Error', detail: message });
