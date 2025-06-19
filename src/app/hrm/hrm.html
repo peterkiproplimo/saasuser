@@ -19,7 +19,7 @@
     <!-- Right Side: Text -->
     <div class="w-full md:w-1/2 text-gray-800 dark:text-white text-left">
        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6 text-yellow-400">
-          Savanna HRM
+          Techsavanna HRM
         </h1>
       <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
         <strong>Grow and Evolve with Your Business Needs</strong><br /><br />
@@ -120,47 +120,99 @@
 
 
   <!-- Glimpse + Testimonials -->
-  <section class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24">
-    <div class="max-w-6xl mx-auto text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-6">A Glimpse of Our Solution</h2>
-      <h3 class="text-2xl mb-6">What Our Customers are Saying</h3>
-      <!-- Placeholder for testimonials or a carousel -->
-      <p class="text-lg">“Savanna HRM transformed our operations—we’re faster, more compliant, and employees love it.”</p>
+<section class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-10">A Glimpse of Our Solution</h2>
+
+    <div class="relative flex items-center justify-center gap-6">
+
+      <!-- Left Scroll Button -->
+      <button (click)="scrollLeft()"
+        class="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-gray-200 dark:bg-gray-700 rounded-full p-2 shadow-md">
+        <i class="pi pi-angle-left text-xl"></i>
+      </button>
+
+      <!-- Left Blurred Image -->
+      <img [src]="getSideImage(-1)" alt="Left"
+        class="w-[300px] opacity-40 blur-sm rounded-lg shadow-md transition-all duration-300" />
+
+      <!-- Center Main Image -->
+      <img [src]="getSideImage(0)" alt="Main"
+        class="w-[500px] z-10 relative rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 transition-all duration-300" />
+
+      <!-- Right Blurred Image -->
+      <img [src]="getSideImage(1)" alt="Right"
+        class="w-[300px] opacity-40 blur-sm rounded-lg shadow-md transition-all duration-300" />
+
+      <!-- Right Scroll Button -->
+      <button (click)="scrollRight()"
+        class="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-gray-200 dark:bg-gray-700 rounded-full p-2 shadow-md">
+        <i class="pi pi-angle-right text-xl"></i>
+      </button>
+
     </div>
-  </section>
+  </div>
+</section>
+
+
 
   <!-- What Makes Us Different -->
-  <section class="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24">
-    <div class="max-w-6xl mx-auto space-y-10">
-      <h2 class="text-3xl md:text-4xl font-bold text-center">What Makes Us Different</h2>
-      <p class="text-center text-lg max-w-3xl mx-auto">
-        We offer a complete suite of tools for managing employee information, payroll, and benefits, while keeping businesses organized. It also simplifies onboarding, time tracking, and performance management, ensuring streamlined operations and regulatory compliance.
-      </p>
-      <div class="grid md:grid-cols-2 gap-10">
-        <div>
-          <h3 class="text-xl font-bold mb-2">True Partnership with our Clients</h3>
-          <p>We stand by your side to help you hit your goals. We consider clients our “Co-creators” and prioritize their feedback to deliver on-going enhancement.</p>
+ <section class="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24">
+  <div class="max-w-6xl mx-auto space-y-12">
+    <h2 class="text-3xl md:text-4xl font-bold text-center">What Makes Us Different</h2>
+    <p class="text-center text-lg max-w-3xl mx-auto">
+      We offer a complete suite of tools for managing employee information, payroll, and benefits, while keeping businesses organized. It also simplifies onboarding, time tracking, and performance management, ensuring streamlined operations and regulatory compliance.
+    </p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <!-- True Partnership -->
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3">
+        <div class="text-blue-600 dark:text-blue-400 text-3xl">
+          <i class="pi pi-users"></i>
         </div>
-        <div>
-          <h3 class="text-xl font-bold mb-2">Innovative Product Development</h3>
-          <p>We invest in key features that keep you on the cutting edge and experiences that engage your employees in the platform every day.</p>
+        <h3 class="text-lg font-bold">True Partnership with our Clients</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          We stand by your side to help you hit your goals. We consider clients our “Co-creators” and prioritize their feedback to deliver ongoing enhancement.
+        </p>
+      </div>
+
+      <!-- Innovative Product Development -->
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3">
+        <div class="text-purple-600 dark:text-purple-400 text-3xl">
+          <i class="pi pi-cog"></i>
         </div>
-        <div>
-          <h3 class="text-xl font-bold mb-2">Award-Winning Customer Service</h3>
-          <p>Clients say we deliver the best service of any provider they’ve worked with, and we’re dedicated to delivering the same level of service to you.</p>
+        <h3 class="text-lg font-bold">Innovative Product Development</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          We invest in key features that keep you on the cutting edge and create experiences that engage your employees every day.
+        </p>
+      </div>
+
+      <!-- Award-Winning Support -->
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3">
+        <div class="text-green-600 dark:text-green-400 text-3xl">
+          <i class="pi pi-star"></i>
         </div>
+        <h3 class="text-lg font-bold">Award-Winning Customer Service</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          Clients say we deliver the best service of any provider they’ve worked with—and we’re committed to giving you the same.
+        </p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- Trusted By -->
   <section class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24 text-center">
     <h2 class="text-3xl md:text-4xl font-bold mb-8">We are glad to be Trusted by:</h2>
     <!-- Placeholder logos or client brands -->
     <div class="flex flex-wrap justify-center gap-6">
-      <img src="/images/client1.png" alt="Client 1" class="h-12">
-      <img src="/images/client2.png" alt="Client 2" class="h-12">
-      <img src="/images/client3.png" alt="Client 3" class="h-12">
+      <img src="/images/safaricom.png" alt="Client 1" class="h-12">
+      <img src="/images/equity.png" alt="Client 1" class="h-12">
+      <img src="/images/icealion.jpg" alt="Client 1" class="h-12">
+      <img src="/images/kcb.png" alt="Client 1" class="h-12">
+      <img src="/images/NCBA.jpg" alt="Client 1" class="h-12">
+      <img src="/images/cellulant.jpeg" alt="Client 1" class="h-12">
     </div>
   </section>
 </div>

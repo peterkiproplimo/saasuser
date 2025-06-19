@@ -115,9 +115,9 @@
         ></p-button>
 
         <!-- Profile -->
-        <button (click)="menu.toggle($event)" class="h-8 w-8 cursor-pointer text-white rounded-full ring-2 ring-indigo-500 flex items-center justify-center font-bold">
+        <!-- <button (click)="menu.toggle($event)" class="h-8 w-8 cursor-pointer text-white rounded-full ring-2 ring-indigo-500 flex items-center justify-center font-bold">
           WL
-        </button>
+        </button> -->
 
         <!-- Mobile menu button (hamburger) -->
         <div class="sm:hidden">
@@ -134,7 +134,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <!-- <div class="card">
     <p-menu #menu [model]="items" [popup]="true" class="flex justify-center w-max md:w-60">
       <ng-template #end>
 
@@ -162,7 +162,7 @@
 
       </ng-template>
     </p-menu>
-  </div>
+  </div> -->
 
   @if (isMenuOpen){
     <div class="sm:hidden bg-[0082cc] dark:bg-gray-800 px-4 pt-4 pb-3 space-y-2" (click)="close_menu()">
