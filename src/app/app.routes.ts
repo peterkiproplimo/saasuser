@@ -17,6 +17,18 @@ export const routes: Routes = [
       {
         path: 'hrm',
         loadChildren: () => import('./hrm/routes').then(m => m.landingRoutes)
+      },
+      {
+        path: 'pos',
+        loadChildren: () => import('./pos/routes').then(m => m.landingRoutes)
+      },
+      {
+        path: 'erp',
+        loadChildren: () => import('./erp/routes').then(m => m.landingRoutes)
+      },
+      {
+        path: 'bpo',
+        loadChildren: () => import('./bpo/routes').then(m => m.landingRoutes)
       }
     ]
   },
