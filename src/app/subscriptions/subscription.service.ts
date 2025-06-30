@@ -6,7 +6,7 @@ import { SubscriptionResponse } from './subscription.model';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionService {
-  private readonly url = `${environment.BASE_URL}/subscriptions`;
+  private readonly url = `${environment.BASE_URL}.subscription.list_subscriptions`;
 
   constructor(private http: HttpClient) {}
 
