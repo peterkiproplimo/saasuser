@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import {Icon} from '../shared/components/icon/icon';
 import {Service} from './models/service';
 import {SolutionCard} from './components/solution-card/solution-card';
 
 @Component({
   selector: 'app-landing',
   imports: [
-    Icon,
     SolutionCard
   ],
   templateUrl: './landing.html',

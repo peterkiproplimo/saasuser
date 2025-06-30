@@ -1,18 +1,16 @@
 import {Component, DestroyRef, inject} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {ReactiveInputComponent} from '../../../shared/components/form/reactive-input/reactive-input.component';
 import {AuthService} from '../../services/auth.service';
-import {LoginRequest} from '../../models/login-request';
+import {LoginRequest} from '../../models/requests/login-request';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {MessageService} from 'primeng/api';
-import {Toast} from 'primeng/toast';
 import {ProgressSpinner} from 'primeng/progressspinner';
+import {Functions} from '../../../shared/functions/functions';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, FormsModule, ReactiveInputComponent, Toast, ProgressSpinner],
-  providers: [MessageService],
+  imports: [ReactiveFormsModule, FormsModule, ReactiveInputComponent, ProgressSpinner, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -20,9 +18,10 @@ export class LoginComponent {
   loading: boolean = false;
 
   private router = inject(Router);
-  message_service = inject(MessageService);
   private auth_service = inject(AuthService);
   private destroyRef = inject(DestroyRef);
+
+  functions = new Functions();
 
   login_form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -48,16 +47,12 @@ export class LoginComponent {
           },
           error: error => {
             this.loading = false;
-            this.showError(error.error.message);
+            this.functions.show_toast("Login Failed", 'error', error.error.message);
           },
           complete: () => {
           }
         }
       )
-  }
-
-  showError(message:string) {
-    this.message_service.add({ severity: 'error', summary: 'Authentication Error', detail: message });
   }
 
 }

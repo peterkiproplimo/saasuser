@@ -11,10 +11,6 @@ export const routes: Routes = [
         loadChildren: () => import('./layout/routes').then(m => m.layoutRoutes)
       },
       {
-        path: 'auth',
-        loadChildren: () => import('./auth/routes').then(m => m.authRoutes)
-      },
-      {
         path: 'hrm',
         loadChildren: () => import('./hrm/routes').then(m => m.landingRoutes)
       },
@@ -39,6 +35,10 @@ export const routes: Routes = [
         loadChildren: () => import('./customerjourney/routes').then(m => m.landingRoutes)
       }
     ]
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/routes').then(m => m.authRoutes)
   },
   { path: '**', redirectTo: '/' }
 ];

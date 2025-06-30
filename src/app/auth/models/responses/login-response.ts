@@ -10,7 +10,7 @@ export type User = {
     name?:       string;
     email?:      string;
     first_name?: string;
-    last_name?:  null;
+    last_name?:  string;
     last_login?: Date;
     role?:       string[];
 }

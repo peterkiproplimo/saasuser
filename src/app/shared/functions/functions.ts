@@ -4,6 +4,8 @@ import {inject} from "@angular/core";
 import {AbstractControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 import {HttpParams} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
+import { FormGroup } from '@angular/forms';
+
 
 export class Functions {
   location = inject(Location)
@@ -140,4 +142,13 @@ export function  prepare_params(page: number, page_size: number, search_term: st
   }
 
   return params;
+}
+
+export function passwordMatchValidator(): ValidatorFn {
+  return (form: AbstractControl): ValidationErrors | null => {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirm_password')?.value;
+
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  };
 }
