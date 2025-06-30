@@ -30,10 +30,6 @@ export const routes: Routes = [
         path: 'crm',
         loadChildren: () => import('./crm/routes').then(m => m.landingRoutes)
       },
-       {
-        path: 'customerjourney',
-        loadChildren: () => import('./customerjourney/routes').then(m => m.landingRoutes)
-      },
       {
         path: 'about',
         loadChildren: () => import('./aboutus/routes').then(m => m.landingRoutes)
