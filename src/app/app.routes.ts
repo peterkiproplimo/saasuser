@@ -33,6 +33,22 @@ export const routes: Routes = [
        {
         path: 'customerjourney',
         loadChildren: () => import('./customerjourney/routes').then(m => m.landingRoutes)
+      },
+      {
+        path: 'about',
+        loadChildren: () => import('./aboutus/routes').then(m => m.landingRoutes)
+      },
+       {
+        path: 'our',
+        loadChildren: () => import('./ourcompany/routes').then(m => m.landingRoutes)
+      },
+      {
+        path: 'contactus',
+        loadChildren: () => import('./contactus/routes').then(m => m.landingRoutes)
+      },
+       {
+        path: 'subscriptions',
+        loadChildren: () => import('./subscriptions/routes').then(m => m.landingRoutes)
       }
     ]
   },
