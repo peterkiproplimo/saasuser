@@ -1,0 +1,138 @@
+<div class="overflow-y-auto h-screen" *ngIf="solutionData">
+  <!-- Hero Section -->
+  <section class="relative bg-white dark:bg-gray-900 py-10">
+    <div class="container mx-auto flex flex-col md:flex-row items-center px-6 gap-10">
+      
+      <!-- Image Side -->
+      <div class="w-full md:w-1/2 flex justify-center">
+        <div class="relative rounded-2xl border-[8px] border-gray-300 overflow-hidden">
+          <div class="absolute inset-0 bg-black/40 dark:block hidden z-10 rounded-2xl"></div>
+          <img 
+            [src]="solutionData.app_logo" 
+            [alt]="solutionData.name" 
+            class="w-full h-150 object-contain rounded-2xl relative z-0"
+          />
+        </div>
+      </div>
+
+      <!-- Text Side -->
+      <div class="w-full md:w-1/2 text-gray-800 dark:text-white text-left">
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6 text-yellow-400">
+          {{ solutionData.name }}
+        </h1>
+        <div [innerHTML]="solutionData.describe" class="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-6"></div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#" class="bg-blue-800 hover:bg-sky-400 text-white px-6 py-3 rounded-md font-semibold shadow-md text-center transition-colors duration-300">
+            Request Demo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Heading Section -->
+  <section class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24">
+    <div class="max-w-6xl mx-auto space-y-10">
+      <h2 class="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-blue-900 via-blue-600 to-blue-300 bg-clip-text text-transparent">
+        {{ solutionData.name }} Features
+      </h2>
+      <p class="text-lg text-center max-w-3xl mx-auto">
+        <!-- Optional static or dynamic summary -->
+        Explore the powerful capabilities of {{ solutionData.name }} to streamline and optimize your business.
+      </p>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white py-16 px-6 md:px-12 lg:px-24">
+    <div class="grid md:grid-cols-2 gap-10 max-w-7xl mx-auto items-start">
+      
+      <!-- Dynamic Features List -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div *ngFor="let feature of solutionData.features" class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3">
+          <div class="text-blue-600 dark:text-blue-400 text-3xl">
+            <i class="pi pi-check-circle"></i>
+          </div>
+          <h3 class="text-lg font-bold">{{ feature }}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            <!-- Optional: Feature description placeholder -->
+            Learn how this feature helps optimize your operations.
+          </p>
+        </div>
+      </div>
+
+      <!-- Embedded Video Placeholder -->
+      <div class="w-full aspect-video rounded-xl overflow-hidden shadow-lg">
+        <iframe 
+          class="w-full h-full"
+          src="https://www.youtube.com/embed/crynl8l-Zac"
+          title="YouTube video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+   <section class="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24">
+  <div class="max-w-6xl mx-auto space-y-12">
+    <h2 class="text-3xl md:text-4xl font-bold text-center">What Makes Us Different</h2>
+    <p class="text-center text-lg max-w-3xl mx-auto">
+      We offer a complete suite of tools for managing employee information, payroll, and benefits, while keeping businesses organized. It also simplifies onboarding, time tracking, and performance management, ensuring streamlined operations and regulatory compliance.
+    </p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <!-- True Partnership -->
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3">
+        <div class="text-blue-600 dark:text-blue-400 text-3xl">
+          <i class="pi pi-users"></i>
+        </div>
+        <h3 class="text-lg font-bold">True Partnership with our Clients</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          We stand by your side to help you hit your goals. We consider clients our “Co-creators” and prioritize their feedback to deliver ongoing enhancement.
+        </p>
+      </div>
+
+      <!-- Innovative Product Development -->
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3">
+        <div class="text-purple-600 dark:text-purple-400 text-3xl">
+          <i class="pi pi-cog"></i>
+        </div>
+        <h3 class="text-lg font-bold">Innovative Product Development</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          We invest in key features that keep you on the cutting edge and create experiences that engage your employees every day.
+        </p>
+      </div>
+
+      <!-- Award-Winning Support -->
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3">
+        <div class="text-green-600 dark:text-green-400 text-3xl">
+          <i class="pi pi-star"></i>
+        </div>
+        <h3 class="text-lg font-bold">Award-Winning Customer Service</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          Clients say we deliver the best service of any provider they’ve worked with—and we’re committed to giving you the same.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Trusted Clients Section -->
+  <section class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-8">We are glad to be Trusted by:</h2>
+    <div class="flex flex-wrap justify-center gap-6">
+      <img src="/images/safaricom.png" alt="Safaricom" class="h-12">
+      <img src="/images/equity.png" alt="Equity" class="h-12">
+      <img src="/images/icealion.jpg" alt="ICEA Lion" class="h-12">
+      <img src="/images/kcb.png" alt="KCB" class="h-12">
+      <img src="/images/NCBA.jpg" alt="NCBA" class="h-12">
+      <img src="/images/cellulant.jpeg" alt="Cellulant" class="h-12">
+    </div>
+  </section>
+</div>
+
+<!-- Solution not found fallback -->
+<div *ngIf="!solutionData" class="p-10 text-center text-red-500 text-xl">
+  <p>Solution not found.</p>
+</div>

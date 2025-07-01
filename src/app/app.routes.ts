@@ -13,24 +13,16 @@ export const routes: Routes = [
       },
       {
         path: 'hrm',
-        loadChildren: () => import('./hrm/routes').then(m => m.landingRoutes)
+        loadChildren: () => import('./oursolutions/routes').then(m => m.landingRoutes)
       },
       {
         path: 'pos',
         loadChildren: () => import('./pos/routes').then(m => m.landingRoutes)
       },
-      {
-        path: 'erp',
-        loadChildren: () => import('./erp/routes').then(m => m.landingRoutes)
-      },
-      {
-        path: 'bpo',
-        loadChildren: () => import('./bpo/routes').then(m => m.landingRoutes)
-      },
-      {
-        path: 'crm',
-        loadChildren: () => import('./crm/routes').then(m => m.landingRoutes)
-      },
+     {
+  path: 'solutions/:id',
+  loadComponent: () => import('./oursolutions/oursolutions').then(m => m.OursolutionsComponent)
+},
       {
         path: 'about',
         loadChildren: () => import('./aboutus/routes').then(m => m.landingRoutes)
