@@ -47,10 +47,6 @@ export class NavbarComponent{
     this.router.navigate(['/member-profile']);
   }
 
-  reset_password() {
-    this.router.navigate(['/auth/reset-password']);
-  }
-
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }

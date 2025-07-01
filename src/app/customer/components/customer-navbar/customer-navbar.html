@@ -1,0 +1,60 @@
+<nav class="text-white shadow sticky top-0 z-50">
+  <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-end">
+
+      <!-- Right: Dark mode + profile -->
+      <div class="flex items-center space-x-4">
+
+        <!-- Dark Mode Toggle -->
+        <p-button
+          [icon]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
+          (onClick)="toggleDarkMode()"
+          styleClass="p-button-rounded p-button-text p-button-sm"
+        ></p-button>
+
+        <!-- Profile -->
+        @if (loggedIn) {
+          <button (click)="menu.toggle($event)"
+                  class="h-8 w-8 cursor-pointer text-[#084c9c] dark:text-white rounded-full ring-2 ring-indigo-500 flex items-center justify-center font-bold">
+            {{ storedUser.first_name!.charAt(0).toUpperCase() }}
+            {{ storedUser.last_name!.charAt(0).toUpperCase() }}
+          </button>
+        }
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p-menu #menu [popup]="true" class="flex justify-center w-max md:w-60">
+      <ng-template #end>
+
+        <div class="flex flex-col py-2">
+          <button
+            (click)="logout()"
+            pRipple
+            class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
+          >
+        <span class="inline-flex flex-col">
+          <span class="font-bold">Logout</span>
+        </span>
+          </button>
+
+
+          <button
+            (click)="profile()"
+            pRipple
+            class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
+          >
+        <span class="inline-flex flex-col">
+          <span class="font-bold">Member Profile</span>
+        </span>
+          </button>
+        </div>
+
+      </ng-template>
+    </p-menu>
+  </div>
+
+
+</nav>

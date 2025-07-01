@@ -1,0 +1,136 @@
+<div class="min-h-screen flex flex-col w-full overflow-hidden">
+
+  <div>
+
+    <!-- Mobile Toggle Button (visible only on small screens) -->
+
+
+    <!-- Drawer for Small Screens -->
+    <p-drawer class="sm:hidden" header="Filters" autoZIndex [(visible)]="drawerVisible" position="left" [modal]="true" closable>
+
+
+      <div class="mb-6">
+        <h3 class="font-bold px-2">Configurations</h3>
+
+        <div class="px-4">
+          <a routerLink="/configurations/topics" class="font-medium">
+            <app-side-bar-item item="Topics" (click)="close_drawer()" />
+          </a>
+
+          <a routerLink="/configurations/resource-types" class="font-medium">
+            <app-side-bar-item item="Resource Types" (click)="close_drawer()" />
+          </a>
+
+          <a routerLink="/configurations/media-types" class="font-medium">
+            <app-side-bar-item item="Media Types" (click)="close_drawer()" />
+          </a>
+        </div>
+
+
+      </div>
+
+      <div class="mb-4">
+        <a class="font-bold">
+          <app-side-bar-item item="Submissions" (click)="close_drawer()" />
+        </a>
+
+        <a class="font-bold">
+          <app-side-bar-item item="Resources" (click)="close_drawer()"/>
+        </a>
+
+        <a class="font-bold" routerLink="/faq">
+          <app-side-bar-item item="FAQs" (click)="close_drawer()"/>
+        </a>
+
+        <a class="font-bold" routerLink="/contact">
+          <app-side-bar-item item="Contact Us" (click)="close_drawer()"/>
+        </a>
+
+        <a class="font-bold" routerLink="/users">
+          <app-side-bar-item item="Users" (click)="close_drawer()"/>
+        </a>
+
+      </div>
+
+    </p-drawer>
+
+    <!-- Scrollable Content Area -->
+<div>
+
+      <div class="flex min-h-screen">
+
+        <aside class="hidden sm:block sm:w-64 bg-gradient-to-b from-[#1476B7] to-[#093553] rounded-r-3xl px-6">
+
+          <div class="inline-flex gap-4">
+            <!-- Left: Logo + Nav Container -->
+            <div class="hidden sm:flex items-center justify-between gap-12">
+              <!-- Logo -->
+              <a routerLink="/">
+                <img src="/images/tech-savanna-logo.svg" alt="Logo" class="h-32 w-32 rounded-full text-white"/>
+              </a>
+
+              <!-- Navigation Links -->
+            </div>
+          </div>
+
+          <div class="mb-6">
+
+            <div>
+              <a routerLink="/customer" class="font-medium">
+                <app-side-bar-item item="Dashboard" icon="pi-table" />
+              </a>
+
+              <a routerLink="/customer/subscriptions" class="font-medium">
+                <app-side-bar-item item="My Subscriptions" icon="pi-sync" />
+              </a>
+
+              <a routerLink="/customer/invoices" class="font-medium">
+                <app-side-bar-item item="Invoices" icon="pi-receipt" />
+              </a>
+
+              <a routerLink="/customer/profile" class="font-medium">
+                <app-side-bar-item item="My Profile" icon="pi-user" />
+              </a>
+
+              <a routerLink="/customer/billing" class="font-medium">
+                <app-side-bar-item item="Billing History" icon="pi-dollar" />
+              </a>
+
+            </div>
+
+          </div>
+
+        </aside>
+
+        <div class="flex-1 overflow-auto">
+          <div class="flex justify-between items-center border-b border-[#084c9c] dark:border-[#084c9c]">
+            <div class="sm:hidden">
+              <p-button
+                [icon]="drawerVisible ? 'pi pi-times' : 'pi pi-bars'"
+                (onClick)="toggleDrawer()"
+                styleClass="p-button-rounded p-button-text p-button-sm"
+                aria-label="Toggle menu"
+              ></p-button>
+            </div>
+
+            @if (loggedIn){
+              <div class="hidden sm:block px-4">
+
+                <p class="font-bold text-xl text-capitalize">Good {{ getTimeOfDay() }}, {{storedUser.name}}</p>
+
+              </div>
+            }
+
+
+            <app-customer-navbar></app-customer-navbar>
+          </div>
+          <router-outlet></router-outlet>
+        </div>
+
+      </div>
+
+</div>
+  </div>
+  <!-- Footer (Sticky Bottom) -->
+
+</div>

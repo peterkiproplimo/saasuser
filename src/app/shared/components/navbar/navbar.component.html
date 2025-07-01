@@ -148,8 +148,11 @@
 
       <!-- Right: Dark mode + profile -->
       <div class="flex items-center space-x-4">
+
+        @if (!loggedIn) {
         <a routerLink="/auth/login" class="text-white font-medium hover:underline">Login</a>
         <a routerLink="/auth/signup" class="text-white font-medium hover:underline">Sign Up</a>
+        }
 
 
         <!-- Dark Mode Toggle -->

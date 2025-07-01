@@ -43,7 +43,7 @@ export class LoginComponent {
       .subscribe({
           next: data => {
             this.loading = false;
-            this.router.navigate(["/"]);
+            this.router.navigate(["/customer"]);
           },
           error: error => {
             this.loading = false;
