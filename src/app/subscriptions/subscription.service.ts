@@ -1,22 +1,21 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { SubscriptionResponse } from './subscription.model';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionService {
-  private readonly url = `${environment.BASE_URL}.subscription.list_subscriptions`;
+    url = environment.BASE_URL;
 
-  constructor(private http: HttpClient) {}
+  page = signal(1);
+  pageSize = signal(20);
 
-  /**
-   * GET /subscriptions?page=1&page_size=20
-   */
-  getAll(page = 1, pageSize = 20): Observable<SubscriptionResponse> {
-    const params = new HttpParams()
-      .set('page', page)
-      .set('page_size', pageSize);
-    return this.http.get<SubscriptionResponse>(this.url, { params });
-  }
+  http = inject(HttpClient);
+
+    subscription_resource = httpResource<SubscriptionResponse>(
+        () => `${this.url}.subscription.list_subscriptions?page=${this.page()}&page_size=${this.pageSize()}`,
+        {defaultValue: { } }
+    );
+
+
 }
