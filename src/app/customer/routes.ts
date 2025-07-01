@@ -6,6 +6,7 @@ import {Invoices} from './pages/invoices/invoices';
 import {BillingHistory} from './pages/billing-history/billing-history';
 import {SubscriptionsComponent} from '../subscriptions/subscriptions';
 import {Subscribe} from './pages/subscribe/subscribe';
+import {SolutionDetail} from './pages/subscribe/components/solution-detail/solution-detail';
 
 export const customerRoutes: Routes = [
 
@@ -36,6 +37,11 @@ export const customerRoutes: Routes = [
       {
         path: "subscribe",
         component: Subscribe
+      },
+
+      {
+        path: "solution",
+        component: SolutionDetail
       }
       ]
   }

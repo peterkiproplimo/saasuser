@@ -1,11 +1,13 @@
 import {Component, input} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {Solution} from '../../models/responses/list-solutions-response';
+import {Card} from 'primeng/card';
 
 @Component({
   selector: 'app-solution-card',
   imports: [
-    NgOptimizedImage
+    NgOptimizedImage,
+    Card
   ],
   templateUrl: './solution-card.html',
   styleUrl: './solution-card.scss'

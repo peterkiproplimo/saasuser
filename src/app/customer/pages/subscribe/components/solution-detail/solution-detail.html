@@ -1,0 +1,22 @@
+
+<div class="p-6">
+  <h3 class="font-bold text-center text-3xl pb-4">{{ selected_solution().name}}</h3>
+
+  @if (is_loading()) {
+        <div class="w-full flex justify-center">
+          <p-progressSpinner
+            class="text-gray-500 dark:text-gray-400"
+            [style]="{ width: '40px', height: '40px' }">
+          </p-progressSpinner>
+        </div>
+  }
+  @else {
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      @for (plan of plans().data; track plan.name) {
+        <app-plan-card [plan]="plan"></app-plan-card>
+      }
+    </div>
+  }
+
+</div>
+

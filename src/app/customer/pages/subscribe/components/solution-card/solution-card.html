@@ -1,6 +1,4 @@
-<article
-  class="group relative rounded-lg border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
-  role="region"
+<p-card
 >
 
   <div
@@ -9,7 +7,7 @@
 
   <div>
 
-    <div class="relative aspect-square w-full overflow-hidden rounded-md bg-gray-200">
+    <div class="relative aspect-square w-full overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700">
       <img
         class="h-full w-full object-cover group-hover:scale-105 group-hover:opacity-90 transition-transform duration-300"
         alt="test" [ngSrc]="solution()?.app_logo!" fill/>
@@ -17,7 +15,7 @@
     </div>
 
     <div class="my-4 flex flex-col gap-1 h-10">
-      <h3 class="text-sm font-semibold text-gray-900 line-clamp-2">
+      <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-200 line-clamp-2">
 
         {{solution()?.name}}
 
@@ -27,4 +25,4 @@
   </div>
 
   </div>
-</article>
+</p-card>

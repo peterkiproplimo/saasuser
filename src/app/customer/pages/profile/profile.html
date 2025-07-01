@@ -1,1 +1,38 @@
-<p>profile works!</p>
+<div class="max-w-md w-full mx-auto my-8">
+  <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden">
+    <div class="bg-gradient-to-b from-[#1476B7] to-[#093553] p-4 flex justify-between items-center">
+      <h3 class="text-xl font-semibold text-white">{{ user.name || 'User Profile' }}</h3>
+    </div>
+    <div class="p-4">
+
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Full Name:
+              {{ user.name || 'Not provided' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">First Name:
+            {{ user.first_name || 'Not provided' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Last Name:
+            {{ user.last_name || 'Not provided' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Email:
+           {{ user.email || 'Not provided' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Last Login:
+            {{ user.last_login | date:'dd-MMM-yyyy HH:mm z' }}
+            </p>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
