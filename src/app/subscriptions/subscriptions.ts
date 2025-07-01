@@ -9,6 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
+import {RouterLink} from '@angular/router';
 
 @Component({
   standalone: true,
@@ -22,11 +23,12 @@ import { FormsModule } from '@angular/forms';
     BadgeModule,
     DialogModule,
     InputTextModule,
-    ButtonModule
+    ButtonModule,
+    RouterLink
   ]
 })
 export class SubscriptionsComponent {
-  
+
   loading = false;
   error = '';
 
@@ -39,7 +41,7 @@ export class SubscriptionsComponent {
 
   subscription_service = inject(SubscriptionService);
 
-  list = this.subscription_service.subscription_resource.value; 
+  list = this.subscription_service.subscription_resource.value;
   is_loading = this.subscription_service.subscription_resource.isLoading;
   is_error = this.subscription_service.subscription_resource.statusCode;
 

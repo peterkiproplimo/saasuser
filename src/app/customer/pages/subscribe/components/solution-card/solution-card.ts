@@ -15,5 +15,10 @@ import {Card} from 'primeng/card';
 export class SolutionCard {
 
   solution = input<Solution>();
+  root_url = "https://saas.techsavanna.technology";
+
+  get imageUrl(): string {
+    return this.root_url+this.solution()?.app_logo!;
+  }
 
 }

@@ -4,14 +4,17 @@
   <!-- Header bar with button -->
   <div class="px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
 
- <button
-  pButton
-  type="button"
-  label="New Subscription"
-  icon="pi pi-plus"
-  class="p-button-primary p-button-sm"
-  (click)="showDialog = true"
-></button>
+    <a routerLink="/customer/subscribe">
+      <button
+        pButton
+        type="button"
+        label="New Subscription"
+        icon="pi pi-plus"
+        class="p-button-primary p-button-sm"
+
+      ></button>
+    </a>
+
 
   </div>
 
@@ -71,7 +74,7 @@
       <div class="px-4 py-2 text-center text-sm">
         Loading subscriptions...
       </div>
-  
+
     }
 
     <div *ngIf="loading || error" class="px-4 py-2 text-center text-sm">
@@ -112,7 +115,7 @@
     <button
       pButton
       label="Create"
-      class="p-button-primary"  
+      class="p-button-primary"
       (click)="createSubscription()"
     ></button>
   </div>
