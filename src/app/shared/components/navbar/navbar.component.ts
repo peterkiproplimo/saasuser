@@ -1,58 +1,76 @@
-import {Component, inject} from '@angular/core';
-import {ButtonModule} from 'primeng/button';
-import {Router, RouterLink} from '@angular/router';
+import { Component, inject, computed } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
+import { CommonModule } from '@angular/common'; 
 import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
-import {Menu} from 'primeng/menu';
-import {User} from '../../../auth/models/responses/login-response';
-import {AuthService} from '../../../auth/services/auth.service';
+import { Menu } from 'primeng/menu';
+import { AuthService } from '../../../auth/services/auth.service';
+import { SolutionService } from '../navbar/services/navbar.service';
 
 @Component({
+  standalone: true,
   selector: 'app-navbar',
-  imports: [
-    ButtonModule, BadgeModule, RippleModule, AvatarModule, RouterLink, Menu
-  ],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrls: ['./navbar.component.scss'],
+  imports: [
+    ButtonModule,
+    CommonModule,
+    BadgeModule,
+    RippleModule,
+    AvatarModule,
+    Menu,
+    RouterLink
+  ]
 })
-export class NavbarComponent{
-
+export class NavbarComponent {
+  // -------------------- UI STATE --------------------
   items: MenuItem[] | undefined;
-
-  private router = inject(Router)
-  private auth_service = inject(AuthService);
-
   isDarkMode = false;
   isMenuOpen = false;
-  storedUser :User = JSON.parse(localStorage.getItem('user')!);
-  loggedIn = this.auth_service.loggedIn();
 
+  // -------------------- AUTH -----------------------
+  private auth = inject(AuthService);
+  loggedIn = this.auth.loggedIn();
+  storedUser = JSON.parse(localStorage.getItem('user')!);
+  private router = inject(Router);
+
+  // -------------------- THEME + MENU ---------------
   toggleDarkMode() {
-    const element = document.querySelector('html');
-    element?.classList.toggle('dark');
-    this.isDarkMode = element?.classList.contains('dark') ?? false;
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    this.isDarkMode = html.classList.contains('dark');
   }
-
-  logout() {
-    this.auth_service.sign_out();
-  }
-  signup() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/auth/signup']);
-  }
-
-  profile() {
-    this.router.navigate(['/member-profile']);
-  }
-
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
-
-  close_menu(){
+  close_menu() {
     this.isMenuOpen = false;
   }
 
+  logout() {
+    this.auth.sign_out();
+  }
+  profile() {
+    this.router.navigate(['/member-profile']);
+  }
+  getSolutionLink(appCode?: string): string[] {
+  const path = (appCode || '').toLowerCase().split(' ').join('');
+  return ['/', path];
+}
+
+
+  // -------------------- API (Solutions) ------------
+  private subSvc = inject(SolutionService);
+  readonly responseSig = this.subSvc.subscription_resource.value;
+  readonly solutions = computed(() => {
+  const data = this.responseSig()?.data ?? [];
+  console.log('💡 Solutions data in dropdown:', data); // <-- Add this
+  return data;
+});
+
+  readonly is_loading = this.subSvc.subscription_resource.isLoading;
+  readonly is_error   = this.subSvc.subscription_resource.statusCode;
 }
