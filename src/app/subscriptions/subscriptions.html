@@ -18,7 +18,7 @@
   <!-- Main scroll area -->
   <div class="flex-1 overflow-y-auto px-4 py-4 sm:px-6 lg:px-8">
     <p-table
-      [value]="list"
+      [value]="list().data!"
       [paginator]="true"
       [rows]="5"
       [rowsPerPageOptions]="[5, 10, 20]"
@@ -67,10 +67,18 @@
       </ng-template>
     </p-table>
 
+    @if (is_loading()) {
+      <div class="px-4 py-2 text-center text-sm">
+        Loading subscriptions...
+      </div>
+  
+    }
+
     <div *ngIf="loading || error" class="px-4 py-2 text-center text-sm">
       <span *ngIf="loading">Loading…</span>
       <span *ngIf="error" class="text-red-600">{{ error }}</span>
     </div>
+
   </div>
 
 <p-dialog
@@ -112,6 +120,12 @@
 
 </p-dialog>
 
+
+
+</div>
+
+
+<div>
 
 
 </div>

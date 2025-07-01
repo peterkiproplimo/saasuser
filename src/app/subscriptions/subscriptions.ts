@@ -1,8 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { finalize } from 'rxjs/operators';
-
-import { Subscription, SubscriptionResponse } from './subscription.model';
 import { SubscriptionService } from './subscription.service';
 
 // PrimeNG modules
@@ -28,8 +25,8 @@ import { FormsModule } from '@angular/forms';
     ButtonModule
   ]
 })
-export class SubscriptionsComponent implements OnInit {
-  list: Subscription[] = [];
+export class SubscriptionsComponent {
+  
   loading = false;
   error = '';
 
@@ -40,22 +37,12 @@ export class SubscriptionsComponent implements OnInit {
     qty: 1
   };
 
-  constructor(private svc: SubscriptionService) {}
+  subscription_service = inject(SubscriptionService);
 
-  ngOnInit(): void {
-    this.loadData();
-  }
+  list = this.subscription_service.subscription_resource.value; 
+  is_loading = this.subscription_service.subscription_resource.isLoading;
+  is_error = this.subscription_service.subscription_resource.statusCode;
 
-  loadData(): void {
-    this.loading = true;
-    this.error = '';
-    this.svc.getAll(1)
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe({
-        next: (res: SubscriptionResponse) => (this.list = res.data),
-        error: () => (this.error = 'Could not load subscriptions')
-      });
-  }
 
   statusSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' {
     switch (status) {

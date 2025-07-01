@@ -31,8 +31,8 @@ export interface Pagination {
 }
 
 export interface SubscriptionResponse {
-  status:   number;
-  message:  string;
-  data:     Subscription[];
-  pagination: Pagination;
+  status?:   number;
+  message?:  string;
+  data?:     Subscription[];
+  pagination?: Pagination;
 }
