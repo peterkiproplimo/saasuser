@@ -37,18 +37,16 @@
 <div
   class="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50"
 >
-  <ul class="text-sm divide-y divide-gray-100">
-    <li *ngFor="let sol of solutions()">
-      <a
-        [routerLink]="getSolutionLink(sol.app_code)"
-        class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
-      >
-        {{ sol.app_name }}
-        <span class="transition-transform group-hover:rotate-0">&rsaquo;</span>
-      </a>
+  <ul *ngIf="solutions() as apps" class="dropdown-menu">
+    <li *ngFor="let app of apps">
+      <a (click)="goToSolution(app)" class="block px-4 py-2 text-black hover:bg-gray-100">
+  {{ app.name }}
+</a>
+
     </li>
   </ul>
 </div>
+
 
 
 

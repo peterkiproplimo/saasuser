@@ -56,10 +56,18 @@ export class NavbarComponent {
   profile() {
     this.router.navigate(['/member-profile']);
   }
-  getSolutionLink(appCode?: string): string[] {
-  const path = (appCode || '').toLowerCase().split(' ').join('');
-  return ['/', path];
+  slugify(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, '-');
 }
+
+goToSolution(app: any) {
+  const appSlug = app.name.toLowerCase().replace(/\s+/g, '-');
+  this.router.navigate(['/solutions', this.slugify(app.name)], {
+  state: { solutionData: app }
+});
+}
+
+
 
 
   // -------------------- API (Solutions) ------------
