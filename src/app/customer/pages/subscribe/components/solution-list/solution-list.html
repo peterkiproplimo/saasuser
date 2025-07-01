@@ -1,0 +1,9 @@
+
+<div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    @for (solution of solutions().data; track solution.name) {
+      <app-solution-card [solution]="solution"></app-solution-card>
+    }
+
+  </div>
+</div>

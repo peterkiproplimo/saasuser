@@ -5,6 +5,7 @@ import {Dashboard} from './pages/dashboard/dashboard';
 import {Invoices} from './pages/invoices/invoices';
 import {BillingHistory} from './pages/billing-history/billing-history';
 import {SubscriptionsComponent} from '../subscriptions/subscriptions';
+import {Subscribe} from './pages/subscribe/subscribe';
 
 export const customerRoutes: Routes = [
 
@@ -30,6 +31,11 @@ export const customerRoutes: Routes = [
       {
         path: "subscriptions",
         component: SubscriptionsComponent
+      },
+
+      {
+        path: "subscribe",
+        component: Subscribe
       }
       ]
   }

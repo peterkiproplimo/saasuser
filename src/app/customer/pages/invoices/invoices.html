@@ -1,1 +1,148 @@
-<p>invoices works!</p>
+<div class="p-4 overflow-x-auto">
+  <div class="flow-root">
+    <div class="m-0">
+
+      <p-selectbutton [options]="stateOptions" [(ngModel)]="status" optionLabel="label" optionValue="value" aria-labelledby="basic">
+      </p-selectbutton>
+
+      <div class="inline-block min-w-full py-2 align-middle">
+        <div class="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg">
+
+          <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Invoice No
+              </th>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Posting Date
+              </th>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Due Date
+              </th>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Grand Total
+              </th>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Outstanding Amount
+              </th>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Currency
+              </th>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Status
+              </th>
+              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+                Type
+              </th>
+              <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6">
+                <span class="sr-only">Update</span>
+              </th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+            <!-- Loading State -->
+              @if (is_loading()) {
+                <tr class="w-full">
+                  <td colspan="9" class="text-center py-4">
+                    <div class="w-full flex justify-center">
+                      <p-progressSpinner
+                        class="text-gray-500 dark:text-gray-400"
+                        [style]="{ width: '40px', height: '40px' }">
+                      </p-progressSpinner>
+                    </div>
+                  </td>
+                </tr>
+              } @else {
+                @if (invoices().data?.length! > 0) {
+                  @for (invoice of invoices().data; track invoice.name) {
+                    <tr class="w-full">
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
+                        {{ invoice.name }}
+                      </td>
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
+                        {{ invoice.posting_date | date:'dd-MMM-yyyy' }}
+                      </td>
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
+                        {{ invoice.due_date | date:'dd-MMM-yyyy' }}
+                      </td>
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
+                        {{ invoice.grand_total | number:'1.2-2' }}
+                      </td>
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
+                        {{ invoice.outstanding_amount | number:'1.2-2' }}
+                      </td>
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
+                        {{ invoice.currency }}
+                      </td>
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
+                      [ngClass]="{
+                        'text-green-600 dark:text-green-400': invoice.status == 'Paid',
+                        'text-yellow-600 dark:text-yellow-400': invoice.status == 'Unpaid',
+                      }"
+                      >
+                        {{ invoice.status }}
+                      </td>
+                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
+                        {{ invoice.type }}
+                      </td>
+                      <td class="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
+                        @if (invoice.status != 'Paid') {
+                          <p-button
+                            icon="pi pi-dollar"
+                            size="small"
+                            severity="info"
+                            [rounded]="true"
+                            [outlined]="true"
+                            class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                            (click)="pay_invoice(invoice)"
+                          />
+                        }
+
+
+                      </td>
+                    </tr>
+                  }
+                } @else {
+                  <tr class="w-full">
+                    <td colspan="9" class="py-4">
+                      <div class="w-full flex justify-center">
+                        <app-empty-state
+                          class="text-center">
+                          <h3
+                            class="text-lg font-medium text-gray-700 dark:text-gray-300"
+                            slot="title">
+                            No Invoices Found
+                          </h3>
+                          <p
+                            class="text-gray-500 dark:text-gray-400 mt-2"
+                            slot="message">
+                            Try adjusting your search term or check back later for more Invoices.
+                          </p>
+                        </app-empty-state>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex justify-center w-full">
+  <p-paginator
+    (onPageChange)="onPageChange($event)"
+    [first]="first()"
+    [rows]="pageSize()"
+    [totalRecords]="totalRecords()"
+    [showCurrentPageReport]="true"
+    [showPageLinks]="false"
+    [showJumpToPageDropdown]="false"
+    [rowsPerPageOptions]="[5, 10, 20, 30]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+  />
+</div>

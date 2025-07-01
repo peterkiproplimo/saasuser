@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {Button} from 'primeng/button';
 import {Drawer} from 'primeng/drawer';
 import {SideBarItem} from './components/side-bar-item/side-bar-item';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {CustomerNavbar} from './components/customer-navbar/customer-navbar';
 import {User} from '../auth/models/responses/login-response';
 import {AuthService} from '../auth/services/auth.service';
@@ -15,7 +15,8 @@ import {AuthService} from '../auth/services/auth.service';
     SideBarItem,
     RouterLink,
     RouterOutlet,
-    CustomerNavbar
+    CustomerNavbar,
+    RouterLinkActive
   ],
   templateUrl: './customer.html',
   styleUrl: './customer.scss'
