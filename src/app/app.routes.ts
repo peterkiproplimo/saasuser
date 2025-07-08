@@ -54,7 +54,12 @@ export const routes: Routes = [
        {
         path: 'subscriptions',
         loadChildren: () => import('./subscriptions/routes').then(m => m.landingRoutes)
+      },
+      {
+        path: 'faqs',
+        loadChildren: () => import('./faq/routes').then(m => m.faqRoutes)
       }
+
     ]
   },
   {

@@ -1,0 +1,115 @@
+<div class="max-w-5xl mx-auto my-8">
+  <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden">
+
+    <!-- Header -->
+    <div class="bg-[#1476B7] p-4">
+      <h2 class="text-2xl font-semibold text-white">Checkout</h2>
+    </div>
+
+    <!-- Body -->
+    <div class="grid lg:grid-cols-3 gap-6 p-6">
+
+      <!-- 🛒 Order summary (left / top) -->
+      <section class="lg:col-span-2 overflow-auto max-h-[70vh]">
+        <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Order Summary</h3>
+
+        <div class="space-y-4">
+
+            @for (item of cartItems; track item.plan) {
+              <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <div>
+                  <p class="font-semibold text-gray-900 dark:text-gray-100">{{ item.plan }}</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ item.cost | number:'1.2-2' }} × {{ item.qty }}
+                  </p>
+                </div>
+                <p class="font-medium text-gray-900 dark:text-gray-100">
+                  {{ item.cost! * item.qty! | number:'1.2-2' }}
+                </p>
+              </div>
+            }
+
+        </div>
+
+        <!-- Totals -->
+        <div class="flex justify-end mt-6 text-lg font-bold">
+          <span class="text-gray-700 dark:text-gray-300">Total:</span>
+          <span class="ml-2 text-gray-900 dark:text-gray-100">
+           Ksh {{ totalCost | number:'1.2-2' }}
+
+          </span>
+        </div>
+      </section>
+
+      <!-- 🧾 Customer & payment form (right / bottom) -->
+      <section>
+        <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Billing Details</h3>
+
+        <form [formGroup]="checkoutForm" class="space-y-4 overflow-auto" (ngSubmit)="placeOrder()">
+
+          <!-- Full name -->
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Full Name *</label>
+            <input type="text"
+                   pInputText
+                   formControlName="fullName"
+                   class="w-full" />
+
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Email *</label>
+            <input type="email"
+                   pInputText
+                   formControlName="email"
+                   class="w-full" />
+
+          </div>
+
+          <!-- Phone -->
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
+            <input type="tel"
+                   pInputText
+                   formControlName="phone"
+                   class="w-full" />
+          </div>
+
+          <!-- Payment method -->
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method *</label>
+            <p-dropdown
+              appendTo="body"
+              [options]="[
+                {label: 'M‑Pesa', value: 'MPESA'},
+                {label: 'Bank Transfer', value: 'BANK'},
+                {label: 'PayPal', value: 'PAYPAL'}
+              ]"
+              formControlName="payMethod"
+              placeholder="Select method"
+              class="w-full">
+            </p-dropdown>
+          </div>
+
+          <!-- Terms -->
+          <div class="flex items-center gap-2">
+            <p-checkbox binary formControlName="acceptTerms"></p-checkbox>
+            <label class="text-sm text-gray-700 dark:text-gray-300">
+              I agree to the <a routerLink="/terms" class="underline">terms &amp; conditions</a> *
+            </label>
+          </div>
+
+          <!-- Submit -->
+          <button pButton
+                  type="submit"
+                  label="Place Order"
+                  icon="pi pi-check"
+                  severity="success"
+                  [disabled]="checkoutForm.invalid"
+                  class="w-full" ></button>
+        </form>
+      </section>
+    </div>
+  </div>
+</div>

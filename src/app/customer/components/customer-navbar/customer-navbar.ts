@@ -38,8 +38,4 @@ export class CustomerNavbar {
     this.auth_service.sign_out();
   }
 
-  profile() {
-    this.router.navigate(['/member-profile']);
-  }
-
 }

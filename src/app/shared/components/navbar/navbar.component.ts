@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { Menu } from 'primeng/menu';
@@ -52,9 +52,6 @@ export class NavbarComponent {
 
   logout() {
     this.auth.sign_out();
-  }
-  profile() {
-    this.router.navigate(['/member-profile']);
   }
   slugify(text: string): string {
   return text.toLowerCase().replace(/\s+/g, '-');

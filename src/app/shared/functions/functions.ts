@@ -1,10 +1,11 @@
 import {Location} from '@angular/common'
 
-import {inject} from "@angular/core";
+import {inject, Signal} from "@angular/core";
 import {AbstractControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 import {HttpParams} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
-import { FormGroup } from '@angular/forms';
+import {debounceTime} from 'rxjs';
+import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 
 
 export class Functions {
@@ -151,4 +152,11 @@ export function passwordMatchValidator(): ValidatorFn {
 
     return password === confirmPassword ? null : { passwordMismatch: true };
   };
+}
+
+export function debounceSignal<T>(signal: Signal<T>, time: number): Signal<T | undefined>  {
+  let debouncedObservable$ = toObservable(signal).pipe(
+    debounceTime(time)
+  );
+  return toSignal(debouncedObservable$);
 }

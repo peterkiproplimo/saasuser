@@ -24,6 +24,7 @@ export class ReactiveInputComponent {
   @Input() name: string="";
   @Input() classes: string = '';
   @Input() disabled: boolean=false;
+  @Input() readonly : boolean=false;
 
   shared_functions= new Functions()
 

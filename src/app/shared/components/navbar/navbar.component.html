@@ -97,6 +97,8 @@
   </div>
 </div>
       <a routerLink="/contactus" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">Contact Us</a>
+
+      <a routerLink="/faqs" class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400">FAQs</a>
     </nav>
   </div>
 </div>
@@ -105,8 +107,10 @@
       <div class="flex items-center space-x-4">
 
         @if (!loggedIn) {
-        <a routerLink="/auth/login" class="text-white font-medium hover:underline">Login</a>
-        <a routerLink="/auth/signup" class="text-white font-medium hover:underline">Sign Up</a>
+        <a routerLink="/auth/login" class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300">Login</a>
+        <a routerLink="/auth/signup" class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300">Sign Up</a>
+        } @else {
+          <a routerLink="/customer" class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300">Customer Portal</a>
         }
 
 
@@ -121,8 +125,7 @@
         @if (loggedIn) {
           <button (click)="menu.toggle($event)"
                   class="h-8 w-8 cursor-pointer text-white rounded-full ring-2 ring-indigo-500 flex items-center justify-center font-bold">
-            {{ storedUser.first_name!.charAt(0).toUpperCase() }}
-            {{ storedUser.last_name!.charAt(0).toUpperCase() }}
+            {{ storedUser.first_name!.charAt(0).toUpperCase() }}{{ storedUser.last_name!.charAt(0).toUpperCase() }}
           </button>
         }
 
@@ -156,16 +159,13 @@
         </span>
           </button>
 
-
-          <button
-            (click)="profile()"
-            pRipple
-            class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
+          <a routerLink="customer/profile"
+             class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
           >
         <span class="inline-flex flex-col">
           <span class="font-bold">Member Profile</span>
         </span>
-          </button>
+          </a>
         </div>
 
       </ng-template>

@@ -4,22 +4,23 @@ import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import {CartService} from './services/cart-service';
 import {DecimalPipe} from '@angular/common';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.html',
   standalone: true,
-  imports: [FormsModule, ButtonModule, InputNumberModule, DecimalPipe]
+  imports: [FormsModule, ButtonModule, InputNumberModule, DecimalPipe, RouterLink]
 })
 export class Cart {
   cartService = inject(CartService); // Inject the CartService
+  router = inject(Router);
 
   updateQuantity(id: string, quantity: number) {
     this.cartService.updateQuantity(id, quantity);
   }
 
   checkout() {
-    // Implement checkout logic (e.g., navigate to checkout page)
-    console.log('Proceed to checkout:', this.cartService.getCartItems());
+    this.router.navigate(['/customer/checkout']);
   }
 }

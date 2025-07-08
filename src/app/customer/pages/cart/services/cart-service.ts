@@ -1,51 +1,56 @@
-import {computed, Injectable, signal} from '@angular/core';
+// cart.service.ts
+import { Injectable, computed, signal } from '@angular/core';
 import {CartItem} from '../models/cart-iten';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CartService {
+  /** Source signal */
+  private readonly _items = signal<CartItem[]>([]);
 
-  private cartItems = signal<CartItem[]>([]);
+  /** Read‑only projection for components */
+  readonly getCartItems = this._items.asReadonly();
 
-  totalItems = computed(() => this.cartItems().reduce((sum, item) => sum + item.qty!, 0));
-  totalCost = computed(() =>
-    this.cartItems().reduce((sum, item) => sum + item.cost! * item.qty!, 0)
+  /** Derived totals */
+  readonly totalItems = computed(() =>
+    this._items().reduce((sum, i) => sum + i.qty!, 0)
+  );
+  readonly totalCost = computed(() =>
+    this._items().reduce((sum, i) => sum + i.qty! * i.cost!, 0)
   );
 
-  getCartItems = this.cartItems.asReadonly();
-
-  addToCart(item: Omit<CartItem, 'quantity'>) {
-    this.cartItems.update(items => {
-      const existingItem = items.find(i => i.plan === item.plan);
-      if (existingItem) {
-        // Update quantity if item exists
-        return items.map(i =>
-          i.plan === item.plan ? { ...i, quantity: (i.qty || 0) + 1 } : i
+  /** Add one unit (or first unit) of a plan */
+  addToCart(item: CartItem): void {
+    this._items.update(list => {
+      const found = list.find(i => i.plan === item["plan"]);
+      if (found) {
+        // bump existing qty
+        return list.map(i =>
+          i.plan === item["plan"] ? { ...i, qty: i.qty! + 1 } : i
         );
       }
-      // Add new item with quantity 1
-      return [...items, { ...item, quantity: 1 }];
+      // first time this plan is added
+      return [...list, { ...item, qty: 1 }];
     });
   }
 
-  updateQuantity(id: string, quantity: number) {
-    if (quantity < 1) {
-      this.removeFromCart(id);
+  /** Set an exact quantity for a plan (≤0 ⇒ remove) */
+  updateQuantity(plan: string, qty: number): void {
+    if (qty < 1) {
+      this.removeFromCart(plan);
       return;
     }
-    this.cartItems.update(items =>
-      items.map(item =>
-        item.plan === id ? { ...item, quantity } : item
-      )
+    this._items.update(list =>
+      list.map(i => (i.plan === plan ? { ...i, qty } : i))
     );
   }
 
-  removeFromCart(id: string) {
-    this.cartItems.update(items => items.filter(item => item.plan !== id));
-  }
-  clearCart() {
-    this.cartItems.set([]);
+  /** Remove a plan entirely */
+  removeFromCart(plan: string): void {
+    this._items.update(list => list.filter(i => i.plan !== plan));
   }
 
+  /** Empty the whole cart */
+  clearCart(): void {
+    this._items.set([]);
+  }
 }

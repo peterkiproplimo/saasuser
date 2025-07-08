@@ -1,0 +1,69 @@
+<div class="w-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl m-4 h-max">
+
+    <p-toolbar styleClass="mb-1">
+      <ng-template #start>
+        <div class="flex gap-6 items-center w-full justify-between">
+          <h5 class="m-0"> Frequently Asked Questions</h5>
+        </div>
+
+      </ng-template>
+
+      <ng-template #end>
+        <p-iconfield>
+          <p-inputicon styleClass="pi pi-search text-gray-500 dark:text-gray-400" />
+          <input
+            type="text"
+            pInputText
+            placeholder="Search FAQs"
+            [(ngModel)]="search"
+            class="p-2 w-full rounded"
+          />
+        </p-iconfield>
+      </ng-template>
+    </p-toolbar>
+
+    <!-- Loading State -->
+    @if (is_loading()) {
+      <div class="text-center py-4">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+    } @else {
+      @if (new_faqs().data?.length! > 0) {
+        <div class="faq-container">
+          @for (faq of new_faqs().data; track faq.name) {
+            <p-accordion [multiple]="true">
+              <app-faq-panel [faq]="faq" />
+            </p-accordion>
+          }
+        </div>
+      } @else {
+        <app-empty-state>
+          <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300" slot="title">
+            No FAQs Found
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400 mt-2" slot="message">
+            Try adjusting your search term or check back later for more FAQs.
+          </p>
+        </app-empty-state>
+      }
+    }
+
+    <div class="flex justify-center w-full">
+      <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="first()"
+        [rows]="pageSize()"
+        [totalRecords]="100"
+        dropdownAppendTo="body"
+        [showCurrentPageReport]="true"
+        [showPageLinks]="false"
+        [showJumpToPageDropdown]="false"
+        [rowsPerPageOptions]="[5, 10, 20, 50]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+      />
+    </div>
+
+  </div>
+
+</div>
