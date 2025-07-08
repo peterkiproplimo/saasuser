@@ -3,6 +3,7 @@ import {Customer} from './customer';
 import {Profile} from './pages/profile/profile';
 import {Dashboard} from './pages/dashboard/dashboard';
 import {Invoices} from './pages/invoices/invoices';
+import { PersonalSolutionsComponent } from '../techpersonalsols/techpersonalsols';
 import {BillingHistory} from './pages/billing-history/billing-history';
 import {SubscriptionsComponent} from '../subscriptions/subscriptions';
 import {Subscribe} from './pages/subscribe/subscribe';

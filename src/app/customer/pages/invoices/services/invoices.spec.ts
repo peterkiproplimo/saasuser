@@ -1,16 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Invoices } from './invoices';
+import { InvoicesService } from './invoices';
 
 describe('Invoices', () => {
-  let service: Invoices;
+  let service: InvoicesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(Invoices);
+    service = TestBed.inject(InvoicesService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 });
+

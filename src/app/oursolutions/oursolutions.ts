@@ -42,4 +42,15 @@ export class OursolutionsComponent implements OnInit {
       }
     });
   }
+  showDemoDialog: boolean = false;
+
+  openDemoDialog() {
+    this.showDemoDialog = true;
+  }
+
+  closeDemoDialog() {
+    this.showDemoDialog = false;
+  }
+
+
 }
