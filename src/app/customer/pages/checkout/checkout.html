@@ -10,7 +10,7 @@
     <div class="grid lg:grid-cols-3 gap-6 p-6">
 
       <!-- 🛒 Order summary (left / top) -->
-      <section class="lg:col-span-2 overflow-auto max-h-[70vh]">
+      <section class="lg:col-span-3 overflow-auto max-h-[70vh]">
         <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Order Summary</h3>
 
         <div class="space-y-4">
@@ -39,76 +39,94 @@
 
           </span>
         </div>
+
+        <div class="flex justify-end mt-4">
+
+          <button
+            (click)="placeOrder()"
+            class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
+         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
+         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
+            Save
+            @if (loading()) {
+              <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
+            } @else {
+              <i class="pi pi-save"></i>
+            }
+          </button>
+
+        </div>
+
       </section>
 
       <!-- 🧾 Customer & payment form (right / bottom) -->
       <section>
-        <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Billing Details</h3>
+<!--        <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Billing Details</h3>-->
 
-        <form [formGroup]="checkoutForm" class="space-y-4 overflow-auto" (ngSubmit)="placeOrder()">
+<!--        <form [formGroup]="checkoutForm" class="space-y-4 overflow-auto" (ngSubmit)="placeOrder()">-->
 
-          <!-- Full name -->
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Full Name *</label>
-            <input type="text"
-                   pInputText
-                   formControlName="fullName"
-                   class="w-full" />
+<!--          &lt;!&ndash; Full name &ndash;&gt;-->
+<!--          <div class="flex flex-col gap-1">-->
+<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Full Name *</label>-->
+<!--            <input type="text"-->
+<!--                   pInputText-->
+<!--                   formControlName="fullName"-->
+<!--                   class="w-full" />-->
 
-          </div>
+<!--          </div>-->
 
-          <!-- Email -->
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Email *</label>
-            <input type="email"
-                   pInputText
-                   formControlName="email"
-                   class="w-full" />
+<!--          &lt;!&ndash; Email &ndash;&gt;-->
+<!--          <div class="flex flex-col gap-1">-->
+<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Email *</label>-->
+<!--            <input type="email"-->
+<!--                   pInputText-->
+<!--                   formControlName="email"-->
+<!--                   class="w-full" />-->
 
-          </div>
+<!--          </div>-->
 
-          <!-- Phone -->
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
-            <input type="tel"
-                   pInputText
-                   formControlName="phone"
-                   class="w-full" />
-          </div>
+<!--          &lt;!&ndash; Phone &ndash;&gt;-->
+<!--          <div class="flex flex-col gap-1">-->
+<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>-->
+<!--            <input type="tel"-->
+<!--                   pInputText-->
+<!--                   formControlName="phone"-->
+<!--                   class="w-full" />-->
+<!--          </div>-->
 
-          <!-- Payment method -->
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method *</label>
-            <p-dropdown
-              appendTo="body"
-              [options]="[
-                {label: 'M‑Pesa', value: 'MPESA'},
-                {label: 'Bank Transfer', value: 'BANK'},
-                {label: 'PayPal', value: 'PAYPAL'}
-              ]"
-              formControlName="payMethod"
-              placeholder="Select method"
-              class="w-full">
-            </p-dropdown>
-          </div>
+<!--          &lt;!&ndash; Payment method &ndash;&gt;-->
+<!--          <div class="flex flex-col gap-1">-->
+<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method *</label>-->
+<!--            <p-dropdown-->
+<!--              appendTo="body"-->
+<!--              [options]="[-->
+<!--                {label: 'M‑Pesa', value: 'MPESA'},-->
+<!--                {label: 'Bank Transfer', value: 'BANK'},-->
+<!--                {label: 'PayPal', value: 'PAYPAL'}-->
+<!--              ]"-->
+<!--              formControlName="payMethod"-->
+<!--              placeholder="Select method"-->
+<!--              class="w-full">-->
+<!--            </p-dropdown>-->
+<!--          </div>-->
 
-          <!-- Terms -->
-          <div class="flex items-center gap-2">
-            <p-checkbox binary formControlName="acceptTerms"></p-checkbox>
-            <label class="text-sm text-gray-700 dark:text-gray-300">
-              I agree to the <a routerLink="/terms" class="underline">terms &amp; conditions</a> *
-            </label>
-          </div>
+<!--          &lt;!&ndash; Terms &ndash;&gt;-->
+<!--          <div class="flex items-center gap-2">-->
+<!--            <p-checkbox binary formControlName="acceptTerms"></p-checkbox>-->
+<!--            <label class="text-sm text-gray-700 dark:text-gray-300">-->
+<!--              I agree to the <a routerLink="/terms" class="underline">terms &amp; conditions</a> *-->
+<!--            </label>-->
+<!--          </div>-->
 
-          <!-- Submit -->
-          <button pButton
-                  type="submit"
-                  label="Place Order"
-                  icon="pi pi-check"
-                  severity="success"
-                  [disabled]="checkoutForm.invalid"
-                  class="w-full" ></button>
-        </form>
+<!--          &lt;!&ndash; Submit &ndash;&gt;-->
+<!--          <button pButton-->
+<!--                  type="submit"-->
+<!--                  label="Place Order"-->
+<!--                  icon="pi pi-check"-->
+<!--                  severity="success"-->
+<!--                  [disabled]="checkoutForm.invalid"-->
+<!--                  class="w-full" ></button>-->
+<!--        </form>-->
       </section>
     </div>
   </div>

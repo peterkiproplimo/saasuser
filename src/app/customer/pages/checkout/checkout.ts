@@ -1,12 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router, RouterLink} from '@angular/router';
+import {Component, OnInit, inject, signal} from '@angular/core';
+import {ReactiveFormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 import {CartService} from '../cart/services/cart-service';
 import {DecimalPipe} from '@angular/common';
-import {InputText} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
-import {Checkbox} from 'primeng/checkbox';
-import {ButtonDirective} from 'primeng/button';
+import {MessageService} from 'primeng/api';
+import {Functions} from '../../../shared/functions/functions';
+import {ProgressSpinner} from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-checkout',
@@ -14,45 +14,50 @@ import {ButtonDirective} from 'primeng/button';
   imports: [
     ReactiveFormsModule,
     DecimalPipe,
-    InputText,
     DropdownModule,
-    Checkbox,
-    ButtonDirective,
-    RouterLink
+    ProgressSpinner
   ],
+  providers: [MessageService],
   styleUrls: ['./checkout.scss']     // optional – can remove if you stay inlined
 })
 export class Checkout implements OnInit {
 
   private cartService = inject(CartService);
   private router      = inject(Router);
+  loading = signal<boolean>(false);
 
-  cartItems = this.cartService.getCartItems();   // snapshot is fine here
-  totalCost = this.cartService.totalCost();      // snapshot – updates already handled earlier
 
-  /** Reactive‑form group for billing / payment */
-  checkoutForm = new FormGroup({
-    fullName:     new FormControl('', [Validators.required]),
-    email:         new FormControl('', [Validators.required, Validators.email]),
-    phone:         new FormControl('', [Validators.required]),
-    payMethod:    new FormControl( 'MPESA', [Validators.required]),
-    acceptTerms:   new FormControl(false, [Validators.requiredTrue])
-  });
+  cartItems = this.cartService.getCartItems();
+  totalCost = this.cartService.totalCost();
+
+  private functions = new Functions();
 
   ngOnInit(): void {
-    // If someone tries to hit /checkout with an empty cart, send them back.
     if (!this.cartItems.length) this.router.navigate(['/customer/cart']);
   }
 
-  /** Confirm button */
   placeOrder(): void {
-    if (this.checkoutForm.invalid) {
-      this.checkoutForm.markAllAsTouched();
-      return;
-    }
+    let input = this.cartService.getCartItems();
 
-    // ❷ Clear cart & redirect
-    this.cartService.clearCart();
-    this.router.navigate(['/customer/thank-you'], { state: { order: true } });
+    const output = {
+      plans: input.map(item => ({
+        plan: item.plan,
+        qty: item.qty
+      }))
+    };
+    this.loading.set(true);
+    this.cartService.place_order(output).subscribe({
+      next: (response: any) => {
+        this.loading.set(false);
+        this.functions.show_toast("Order Placement Successful", 'success', response.message?.message!);
+        this.cartService.clearCart();
+        this.router.navigate(['/customer/thank-you']);
+      },
+      error: (error: any) => {
+        this.loading.set(false);
+        this.functions.show_toast("Order Placement Failed", 'error', error.error?.message);
+      }
+    })
+
   }
 }

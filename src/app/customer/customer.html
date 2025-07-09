@@ -28,6 +28,12 @@
              [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
             <app-side-bar-item item="My Subscriptions" icon="pi-sync"/>
           </a>
+
+          <a routerLink="/customer/subscribe" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
+            <app-side-bar-item item="Purchase" icon="pi-shopping-cart"/>
+          </a>
+
           <a routerLink="/customer/invoices" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}"
              class="font-medium block" (click)="close_drawer()">
@@ -74,6 +80,12 @@
                  [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
                 <app-side-bar-item item="My Subscriptions" icon="pi-sync"/>
               </a>
+
+              <a routerLink="/customer/subscribe" routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
+                <app-side-bar-item item="Purchase" icon="pi-shopping-cart"/>
+              </a>
+
               <a routerLink="/customer/invoices" routerLinkActive="active"
                  [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
                 <app-side-bar-item item="Invoices" icon="pi-receipt"/>

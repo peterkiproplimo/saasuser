@@ -19,10 +19,11 @@ export class SolutionsService {
     {defaultValue: {}}
   );
 
-  selected_solution = signal<Solution>({});
+  selected_solution = signal<String>('');
 
   plans_resource = httpResource<ListPlanResponse>(
-    () => `${this.base_url}.subscription.list_plans?application=${this.selected_solution().name}&page=${this.page()}&page_size=${this.page_size()}`,
+    () => `${this.base_url}.subscription.list_plans?application=${this.selected_solution()}&page=${this.page()}&page_size=${this.page_size()}`,
     {defaultValue: {}}
   )
+
 }

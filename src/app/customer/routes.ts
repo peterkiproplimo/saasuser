@@ -11,6 +11,7 @@ import {Cart} from './pages/cart/cart';
 import {Checkout} from './pages/checkout/checkout';
 import {Tickets} from './pages/tickets/tickets';
 import {TicketDetail} from './pages/tickets/components/ticket-detail/ticket-detail';
+import {ThankYou} from './pages/thank-you/thank-you';
 
 export const customerRoutes: Routes = [
 
@@ -44,7 +45,7 @@ export const customerRoutes: Routes = [
       },
 
       {
-        path: "solution",
+        path: "solution/:id",
         component: SolutionDetail
       },
 
@@ -66,7 +67,13 @@ export const customerRoutes: Routes = [
       {
         path: "checkout",
         component: Checkout
+      },
+
+      {
+        path: "thank-you",
+        component: ThankYou
       }
+
       ]
   }
 

@@ -8,13 +8,14 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import { authInterceptor } from './auth/interceptors/auth.interceptor';
+import {DatePipe} from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-
+    DatePipe,
     provideHttpClient(withInterceptors([
       authInterceptor
     ])),

@@ -29,11 +29,12 @@ export class Invoices {
 
   invoices_service = inject(InvoicesService);
 
-  status = signal('Unpaid');
-  stateOptions: any[] = [{ label: 'Paid', value: 'Paid' },{ label: 'UnPaid', value: 'UnPaid' }];
+
+  stateOptions: any[] = [{ label: 'Paid', value: 'Paid' },{ label: 'Unpaid', value: 'Unpaid' }, { label: 'All', value: '' }];
 
   pageNum = this.invoices_service.page;
   pageSize = this.invoices_service.page_size;
+  status = this.invoices_service.status;
   first = signal<number>(0);
 
   invoices = this.invoices_service.invoices_resource.value;
