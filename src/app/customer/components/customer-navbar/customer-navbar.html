@@ -6,9 +6,9 @@
       <div class="flex items-center space-x-4">
 
         <a routerLink="/customer/cart" class="relative">
-        <i class="pi pi-shopping-cart text-gray-700 hover:text-blue-600 text-2xl"></i>
-          <span class="absolute -top-2 -right-2 inline-flex items-center justify-center
-                               px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+        <i class="pi pi-shopping-cart text-gray-700 hover:text-blue-600 text-2xl size-5"></i>
+          <span class="absolute -top-2 -right-2 inline-flex items-center justify-center size-4
+                               py-1 text-[0.7rem] font-bold leading-none text-white bg-red-600 rounded-full">
         {{total_items()}}
         </span>
 
@@ -18,7 +18,7 @@
         <p-button
           [icon]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
           (onClick)="toggleDarkMode()"
-          styleClass="p-button-rounded p-button-text p-button-sm"
+          styleClass="p-button-rounded p-button-text p-button-md"
         ></p-button>
 
         <!-- Profile -->

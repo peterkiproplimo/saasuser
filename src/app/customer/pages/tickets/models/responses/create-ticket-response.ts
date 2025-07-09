@@ -1,4 +1,4 @@
-export type CreateTicketResponse = {
+export type CreateCommentResponse = {
   message?: Message;
 }
 

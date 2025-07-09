@@ -13,7 +13,7 @@ export class InvoicesService {
   page_size = signal(5);
 
   invoices_resource = httpResource<invoiceListResponse>(
-    ()=> `${this.base_url}.invoices.get_all_invoices?page=${this.page()}&page_size=${this.page_size()}`,
+    ()=> `${this.base_url}.invoices.get_invoices?page=${this.page()}&page_size=${this.page_size()}`,
     {defaultValue: {}}
   )
 

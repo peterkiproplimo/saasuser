@@ -93,7 +93,7 @@ export class TicketDetail {
 
     this.loading.set(true);
 
-    this.ticket_service.create_ticket(formData).subscribe({
+    this.ticket_service.create_comment(formData).subscribe({
       next: (response) => {
         this.loading.set(false);
         this.ticket_dialog.set(false);

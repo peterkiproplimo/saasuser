@@ -3,6 +3,16 @@
     <div class="m-0">
 
       <div class="w-full sm:max-w-3xl py-2 mx-auto">
+        <div class="px-4 py-4 sm:px-6 lg:px-8 flex justify-end items-center">
+            <button
+              (click)="open_dialog()"
+              pButton
+              type="button"
+              label="New Ticket"
+              icon="pi pi-plus"
+            ></button>
+        </div>
+
         <div class="overflow-x-auto shadow-sm ring-1 ring-black/5 sm:rounded-lg">
 
           <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
@@ -75,7 +85,7 @@
                           <h3
                             class="text-lg font-medium text-gray-700 dark:text-gray-300"
                             slot="title">
-                            No Invoices Found
+                            No Tickets Found
                           </h3>
                           <p
                             class="text-gray-500 dark:text-gray-400 mt-2"
@@ -90,6 +100,7 @@
               }
             </tbody>
           </table>
+
         </div>
       </div>
     </div>
@@ -111,4 +122,81 @@
   />
 </div>
 
-<!--    [totalRecords]="totalRecords()"-->
+<p-dialog [(visible)]="ticket_dialog" [style]="{ width: '450px' }" header="Add Comment" [modal]="true">
+  <form class="w-full space-y-6" enctype="multipart/form-data" (ngSubmit)="save_ticket()">
+
+    <div>
+      <app-reactive-select
+        [form]="ticket_form"
+        [id]="'ticket_type'"
+        [key]="'ticket_type'"
+        [label]="'Ticket Type'"
+        [choices]="ticket_types().ticket_types!"
+      >
+      </app-reactive-select>
+
+      <app-reactive-select
+        [form]="ticket_form"
+        [id]="'priority'"
+        [key]="'priority'"
+        [label]="'Ticket Priority'"
+        [choices]="priorities"
+      >
+      </app-reactive-select>
+
+      <app-reactive-input
+        [form]="ticket_form"
+        [id]="'subject'"
+        [key]="'subject'"
+        [label]="'Subject'"
+        [type]="'text'">
+      </app-reactive-input>
+
+
+      <app-reactive-text-area
+        [form]="ticket_form"
+        [id]="'description'"
+        [key]="'description'"
+        [label]="'Description'"
+        [type]="'text'">
+      </app-reactive-text-area>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">Attachments</label>
+      <p-fileUpload
+        name="files"
+        multiple
+        customUpload="true"
+        accept=".png,.jpg,.jpeg,.pdf"
+        (uploadHandler)="onFileUpload($event)"
+        [showUploadButton]="false"
+        [auto]="true"
+        [chooseLabel]="'Choose Files'"
+        [cancelLabel]="'Clear'"
+        [styleClass]="'w-full'">
+      </p-fileUpload>
+    </div>
+
+    <div class="flex w-full justify-end gap-2">
+      <button type="button" (click)="hideDialog()" class="flex justify-center items-center gap-2 rounded-md bg-red-600 dark:bg-red-700
+         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-red-500 dark:hover:bg-red-600
+         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:focus-visible:outline-red-700">
+        Cancel
+        <i class="pi pi-times"></i>
+      </button>
+      <button
+        class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
+         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
+         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
+        Save
+        @if (loading()) {
+          <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
+        } @else {
+          <i class="pi pi-save"></i>
+        }
+      </button>
+    </div>
+
+  </form>
+</p-dialog>
