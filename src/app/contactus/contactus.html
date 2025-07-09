@@ -2,18 +2,7 @@
 <section class="bg-white dark:bg-gray-900">
   <!-- GMap Section -->
  <!-- Map Display -->
-<div class="w-full h-[450px]">
-  <google-map
-    height="100%"
-    width="100%"
-    [center]="center"
-    [zoom]="zoom">
-    <map-marker
-      [position]="markerPosition"
-      [options]="markerOptions">
-    </map-marker>
-  </google-map>
-</div>
+
 
 
 
@@ -128,6 +117,18 @@
     </form>
   </div>
 
+</div>
+<div class="w-full h-[450px]">
+  <google-map
+    height="100%"
+    width="100%"
+    [center]="center"
+    [zoom]="zoom">
+    <map-marker
+      [position]="markerPosition"
+      [options]="markerOptions">
+    </map-marker>
+  </google-map>
 </div>
 
 </section>

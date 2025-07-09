@@ -7,11 +7,13 @@
       <div class="w-full md:w-1/2 flex justify-center">
         <div class="relative rounded-2xl border-[8px] border-gray-300 overflow-hidden">
           <div class="absolute inset-0 bg-black/40 dark:block hidden z-10 rounded-2xl"></div>
-          <img 
-            [src]="solutionData.app_logo" 
-            [alt]="solutionData.name" 
-            class="w-full h-150 object-contain rounded-2xl relative z-0"
-          />
+          <img
+  *ngIf="imageUrl"
+  [src]="imageUrl"
+  alt="{{ solutionData?.name }}"
+  class="w-full object-cover rounded"
+/>
+
         </div>
       </div>
 

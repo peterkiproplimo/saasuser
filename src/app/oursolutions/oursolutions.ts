@@ -41,5 +41,11 @@ export class OursolutionsComponent implements OnInit {
         console.log('🔁 Loaded from fallback service:', this.solutionData);
       }
     });
+    
   }
+  get imageUrl(): string | null {
+  if (!this.solutionData?.app_logo) return null;
+  return 'https://saas.techsavanna.technology' + this.solutionData.app_logo;
+}
+
 }

@@ -58,10 +58,9 @@ export class NavbarComponent {
 }
 
 goToSolution(app: any) {
-  const appSlug = app.name.toLowerCase().replace(/\s+/g, '-');
-  this.router.navigate(['/solutions', this.slugify(app.name)], {
-  state: { solutionData: app }
-});
+  this.router.navigate(['/solutions', app.name], {
+    state: { solutionData: app }
+  });
 }
 
 
