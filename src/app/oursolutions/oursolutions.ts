@@ -20,7 +20,6 @@ export class OursolutionsComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id')!;
-      console.log('🟨 Route param ID changed:', id);
 
       // Check router state for passed data
       const navigation = this.router.getCurrentNavigation();
@@ -28,7 +27,6 @@ export class OursolutionsComponent implements OnInit {
 
       if (stateData?.solutionData) {
         this.solutionData = stateData.solutionData;
-        console.log('✅ Loaded solutionData from router state:', this.solutionData);
       } else {
         // fallback: find from service
         const allData = this.subSvc.subscription_resource.value()?.data ?? [];
@@ -37,8 +35,6 @@ export class OursolutionsComponent implements OnInit {
           const slug = sol.name?.toLowerCase().replace(/\s+/g, '-');
           return slug === id;
         });
-
-        console.log('🔁 Loaded from fallback service:', this.solutionData);
       }
     });
     

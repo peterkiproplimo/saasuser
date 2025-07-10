@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ContactUsService } from './contactus.service';
+import { ContactUsPayload } from './contactus.model';
 
 @Component({
   selector: 'app-contactus',
@@ -21,48 +22,55 @@ export class ContactUsComponent implements OnInit {
   captchaQuestion = '';
   captchaToken = '';
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+  private contactUsService = inject(ContactUsService);
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      persona_name: [''],
-      email: [''],
-      phone_number: [''],
-      subject: [''],
-      message: [''],
-      captcha_answer: ['']
+      persona_name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone_number: ['', Validators.required],
+      subject: ['', Validators.required],
+      message: ['', Validators.required],
+      captcha_answer: ['', Validators.required]
     });
 
     this.getCaptcha();
   }
 
   getCaptcha(): void {
-    this.http.get<any>('https://saas.techsavanna.technology/api/method/saas.apis.contact_us.generate_captcha')
-      .subscribe((res) => {
+    this.contactUsService.generateCaptcha().subscribe({
+      next: (res) => {
         this.captchaQuestion = res.question;
         this.captchaToken = res.token;
-      });
+      },
+      error: () => {
+        alert('Failed to load CAPTCHA. Try refreshing.');
+      }
+    });
   }
 
   submitForm(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    const payload = {
+    const payload: ContactUsPayload = {
       ...this.form.value,
       token: this.captchaToken
     };
 
-    this.http.post('https://saas.techsavanna.technology/api/method/saas.apis.contact_us.create_contact_us', payload)
-      .subscribe({
-        next: () => {
-          alert('Message sent successfully!');
-          this.form.reset();
-          this.getCaptcha(); // refresh captcha
-        },
-        error: (err) => {
-          console.error(err);
-          alert('Failed to send message.');
-        }
-      });
+    this.contactUsService.sendMessage(payload).subscribe({
+      next: () => {
+        alert('✅ Message sent successfully!');
+        this.form.reset();
+        this.getCaptcha();
+      },
+      error: (err) => {
+        console.error('Submission failed:', err);
+        alert('❌ Failed to send message. Check CAPTCHA or try again.');
+      }
+    });
   }
 }

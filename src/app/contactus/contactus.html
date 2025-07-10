@@ -98,16 +98,27 @@
   <textarea formControlName="message" rows="5" placeholder="Enter Message" class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white"></textarea>
 
   <!-- CAPTCHA -->
-  <div class="flex items-center gap-2 mb-4">
-  <label class="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300">
-    CAPTCHA: {{ captchaQuestion }}
-  </label>
-  <i 
-    class="pi pi-refresh text-blue-600 hover:text-blue-800 text-xl cursor-pointer" 
-    (click)="getCaptcha()" 
-    title="Refresh CAPTCHA">
-  </i>
+<div class="mb-4">
+  <div class="flex items-center gap-2 mb-2">
+    <label class="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300">
+      {{ captchaQuestion }}
+    </label>
+    <i 
+      class="pi pi-refresh text-blue-600 hover:text-blue-800 text-xl cursor-pointer" 
+      (click)="getCaptcha()" 
+      title="Refresh CAPTCHA">
+    </i>
+  </div>
+  
+  <!-- Input appears below the label + icon -->
+  <input
+    formControlName="captcha_answer"
+    type="text"
+    placeholder="Enter answer"
+    class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white"
+  />
 </div>
+
 
 
   <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-md font-semibold">
