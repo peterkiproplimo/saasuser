@@ -4,26 +4,35 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { CommonModule } from '@angular/common';
 import { ContactUsService } from './contactus.service';
 import { ContactUsPayload } from './contactus.model';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ContactFeedbackDialogComponent } from './contact-feedback-dialog.component';
 
 @Component({
   selector: 'app-contactus',
   standalone: true,
-  imports: [CommonModule, GoogleMapsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    GoogleMapsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    ContactFeedbackDialogComponent
+  ],
   templateUrl: './contactus.html',
   styleUrls: ['./contactus.scss']
 })
 export class ContactUsComponent implements OnInit {
-  center: google.maps.LatLngLiteral = { lat: -1.2678, lng: 36.8050 };
-  zoom = 15;
-  markerOptions: google.maps.MarkerOptions = { draggable: false };
-  markerPosition: google.maps.LatLngLiteral = this.center;
+  private dialog = inject(MatDialog);
+  private fb = inject(FormBuilder);
+  private contactUsService = inject(ContactUsService);
 
   form!: FormGroup;
   captchaQuestion = '';
   captchaToken = '';
 
-  private fb = inject(FormBuilder);
-  private contactUsService = inject(ContactUsService);
+  center: google.maps.LatLngLiteral = { lat: -1.2678, lng: 36.8050 };
+  zoom = 15;
+  markerOptions: google.maps.MarkerOptions = { draggable: false };
+  markerPosition: google.maps.LatLngLiteral = this.center;
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -45,7 +54,12 @@ export class ContactUsComponent implements OnInit {
         this.captchaToken = res.token;
       },
       error: () => {
-        alert('Failed to load CAPTCHA. Try refreshing.');
+        this.dialog.open(ContactFeedbackDialogComponent, {
+          data: {
+            success: false,
+            message: 'Failed to load CAPTCHA. Please try again.'
+          }
+        });
       }
     });
   }
@@ -63,13 +77,23 @@ export class ContactUsComponent implements OnInit {
 
     this.contactUsService.sendMessage(payload).subscribe({
       next: () => {
-        alert('✅ Message sent successfully!');
+        this.dialog.open(ContactFeedbackDialogComponent, {
+          data: {
+            success: true,
+            message: '✅ Your message was sent successfully!'
+          }
+        });
         this.form.reset();
         this.getCaptcha();
       },
       error: (err) => {
         console.error('Submission failed:', err);
-        alert('❌ Failed to send message. Check CAPTCHA or try again.');
+        this.dialog.open(ContactFeedbackDialogComponent, {
+          data: {
+            success: false,
+            message: 'Failed to send message. Check CAPTCHA or try again.'
+          }
+        });
       }
     });
   }
