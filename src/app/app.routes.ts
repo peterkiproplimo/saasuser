@@ -7,7 +7,6 @@ export const routes: Routes = [
     path: '',
     component: Layout,
     children: [
-      // specific first
       {
         path: 'solutions/:id',
         loadComponent: () =>
