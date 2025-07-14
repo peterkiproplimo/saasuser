@@ -48,7 +48,8 @@
         ></div>
         <div class="flex flex-col sm:flex-row gap-4">
           <a
-            href="#"
+            href="javascript:void(0)"
+            (click)="openRequestDemo()"
             class="bg-blue-800 hover:bg-sky-400 text-white px-6 py-3 rounded-md font-semibold shadow-md text-center transition-colors duration-300"
           >
             Request Demo
@@ -197,3 +198,90 @@
 >
   <p>Solution not found.</p>
 </div>
+
+<p-dialog
+  [(visible)]="showRequestDialog"
+  modal="true"
+  header="Request a Demo"
+  [style]="{ width: '100vw', height: '100vh' }"
+  [contentStyle]="{ height: '100%', overflow: 'auto', padding: 0 }"
+  [dismissableMask]="true"
+  [breakpoints]="{ '960px': '100vw', '640px': '100vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="w-full h-full bg-[#e8fafd] overflow-y-auto p-8 sm:p-20">
+    <div class="max-w-4xl mx-auto bg-[#e8fafd] relative">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-center w-full text-blue-800">
+          Ready to Request a Demo?
+        </h2>
+        <button
+          class="text-gray-700 text-2xl absolute top-0 right-0"
+          (click)="closeRequestDemo()"
+        >
+          ×
+        </button>
+      </div>
+
+      <!-- Form Fields -->
+      <form>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <input
+            type="text"
+            placeholder="First Name *"
+            class="p-3 rounded border"
+          />
+          <input
+            type="text"
+            placeholder="Last Name *"
+            class="p-3 rounded border"
+          />
+          <input
+            type="email"
+            placeholder="Email Address *"
+            class="p-3 rounded border"
+          />
+          <select class="p-3 rounded border">
+            <option disabled selected>Select country</option>
+            <option>Kenya</option>
+            <option>Uganda</option>
+          </select>
+          <input type="text" placeholder="Phone *" class="p-3 rounded border" />
+          <input
+            type="text"
+            placeholder="Website (Optional)"
+            class="p-3 rounded border"
+          />
+          <input
+            type="text"
+            placeholder="Company Name *"
+            class="p-3 rounded border"
+          />
+          <input
+            type="number"
+            placeholder="Number of Employees *"
+            class="p-3 rounded border"
+          />
+        </div>
+
+        <div class="mt-6">
+          <label class="flex items-center space-x-2 text-sm">
+            <input type="checkbox" />
+            <span>Yes I’d like to receive email updates from Techsavanna</span>
+          </label>
+        </div>
+
+        <div class="mt-6 text-center">
+          <button
+            type="submit"
+            class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-sky-600 hover:to-cyan-500"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</p-dialog>

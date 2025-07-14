@@ -11,11 +11,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-oursolutions',
   standalone: true,
-  imports: [CommonModule, ProgressSpinnerModule],
+  imports: [CommonModule, ProgressSpinnerModule, DialogModule],
   templateUrl: './oursolutions.html',
   styleUrls: ['./oursolutions.scss'],
 })
@@ -32,6 +33,15 @@ export class OursolutionsComponent implements OnInit {
   solutionData: any = null;
   isLoading = true;
   hasError = false;
+  showRequestDialog = false;
+
+  openRequestDemo(): void {
+    this.showRequestDialog = true;
+  }
+
+  closeRequestDemo(): void {
+    this.showRequestDialog = false;
+  }
 
   ngOnInit(): void {
     // ✅ Prefer snapshot to avoid delay
