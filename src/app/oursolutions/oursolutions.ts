@@ -1,47 +1,77 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  DestroyRef,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { SolutionService } from '../shared/components/navbar/services/navbar.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-oursolutions',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ProgressSpinnerModule],
   templateUrl: './oursolutions.html',
   styleUrls: ['./oursolutions.scss'],
 })
 export class OursolutionsComponent implements OnInit {
+  // ✅ Inject services
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private subSvc = inject(SolutionService);
+  private http = inject(HttpClient);
+  private destroy = inject(DestroyRef);
+  private cd = inject(ChangeDetectorRef);
 
+  // ✅ State vars
+  base_url = environment.BASE_URL;
   solutionData: any = null;
+  isLoading = true;
+  hasError = false;
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id')!;
+    // ✅ Prefer snapshot to avoid delay
+    const id = this.route.snapshot.paramMap.get('id');
+    console.log('📦 Route param (app name):', id);
 
-      // Check router state for passed data
-      const navigation = this.router.getCurrentNavigation();
-      const stateData = navigation?.extras?.state as { solutionData: any };
-
-      if (stateData?.solutionData) {
-        this.solutionData = stateData.solutionData;
-      } else {
-        // fallback: find from service
-        const allData = this.subSvc.subscription_resource.value()?.data ?? [];
-
-        this.solutionData = allData.find(sol => {
-          const slug = sol.name?.toLowerCase().replace(/\s+/g, '-');
-          return slug === id;
-        });
-      }
-    });
-    
+    if (!id) return;
+    this.fetchSolutionData(id);
   }
-  get imageUrl(): string | null {
-  if (!this.solutionData?.app_logo) return null;
-  return 'https://saas.techsavanna.technology' + this.solutionData.app_logo;
-}
 
+  fetchSolutionData(id: string): void {
+    this.isLoading = true;
+    this.hasError = false;
+
+    const query = new HttpParams().set('app_id', id);
+    this.http
+      .get<{ data: any }>(
+        `${this.base_url}.subscription.get_saas_application_by_id`,
+        { params: query }
+      )
+      .pipe(takeUntilDestroyed(this.destroy))
+      .subscribe({
+        next: (res) => {
+          this.solutionData = res.data;
+          this.isLoading = false;
+          console.log('✅ Loaded from API:', this.solutionData);
+          this.cd.detectChanges(); // Ensure immediate view update
+        },
+        error: (err) => {
+          console.error('❌ Failed to fetch:', err);
+          this.isLoading = false;
+          this.hasError = true;
+          this.cd.detectChanges();
+        },
+      });
+  }
+
+  get imageUrl(): string | null {
+    return this.solutionData?.app_logo
+      ? `https://saas.techsavanna.technology${this.solutionData.app_logo}`
+      : null;
+  }
 }
