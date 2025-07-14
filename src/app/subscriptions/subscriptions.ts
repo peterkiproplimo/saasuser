@@ -9,7 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
-import {RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -24,11 +24,10 @@ import {RouterLink} from '@angular/router';
     DialogModule,
     InputTextModule,
     ButtonModule,
-    RouterLink
-  ]
+    RouterLink,
+  ],
 })
 export class SubscriptionsComponent {
-
   loading = false;
   error = '';
 
@@ -36,7 +35,7 @@ export class SubscriptionsComponent {
   form = {
     party: '',
     plan: '',
-    qty: 1
+    qty: 1,
   };
 
   subscription_service = inject(SubscriptionService);
@@ -45,19 +44,20 @@ export class SubscriptionsComponent {
   is_loading = this.subscription_service.subscription_resource.isLoading;
   is_error = this.subscription_service.subscription_resource.statusCode;
 
-
   statusSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' {
     switch (status) {
-      case 'Active': return 'success';
-      case 'Unpaid': return 'warn';
-      case 'Cancelled': return 'danger';
-      default: return 'info';
+      case 'Active':
+        return 'success';
+      case 'Unpaid':
+        return 'warn';
+      case 'Cancelled':
+        return 'danger';
+      default:
+        return 'info';
     }
   }
 
   createSubscription(): void {
-    // Replace with actual API logic
-    console.log('Creating subscription with:', this.form);
     this.showDialog = false;
   }
 }

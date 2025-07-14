@@ -6,7 +6,8 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -16,62 +17,63 @@ import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-oursolutions',
   standalone: true,
-  imports: [CommonModule, ProgressSpinnerModule, DialogModule],
+  imports: [CommonModule, FormsModule, ProgressSpinnerModule, DialogModule],
   templateUrl: './oursolutions.html',
   styleUrls: ['./oursolutions.scss'],
 })
 export class OursolutionsComponent implements OnInit {
-  // ✅ Inject services
+  // ▶ injections
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private http = inject(HttpClient);
-  private destroy = inject(DestroyRef);
   private cd = inject(ChangeDetectorRef);
+  private destroy = inject(DestroyRef);
 
-  // ✅ State vars
+  // ▶ state
   base_url = environment.BASE_URL;
   solutionData: any = null;
   isLoading = true;
   hasError = false;
   showRequestDialog = false;
 
-  openRequestDemo(): void {
-    this.showRequestDialog = true;
-  }
+  // ▶ CAPTCHA
+  captchaQuestion = '';
 
-  closeRequestDemo(): void {
-    this.showRequestDialog = false;
-  }
+  // ▶ demo form payload
+  demoForm = {
+    customer_name: '',
+    email: '',
+    phone: '',
+    application_name: '',
+    demo_type: '',
+    demo_date: '',
+    status: 'Open',
+    notes: '',
+    captcha_answer: '',
+    token: '', // set when we fetch CAPTCHA
+  };
 
+  /* --------------------------- lifecycle --------------------------- */
   ngOnInit(): void {
-    // ✅ Prefer snapshot to avoid delay
     const id = this.route.snapshot.paramMap.get('id');
-    console.log('📦 Route param (app name):', id);
-
-    if (!id) return;
-    this.fetchSolutionData(id);
+    if (id) this.fetchSolutionData(id);
   }
 
-  fetchSolutionData(id: string): void {
+  /* --------------------------- API calls -------------------------- */
+  private fetchSolutionData(id: string) {
     this.isLoading = true;
-    this.hasError = false;
-
-    const query = new HttpParams().set('app_id', id);
     this.http
       .get<{ data: any }>(
         `${this.base_url}.subscription.get_saas_application_by_id`,
-        { params: query }
+        { params: new HttpParams().set('app_id', id) }
       )
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: (res) => {
           this.solutionData = res.data;
           this.isLoading = false;
-          console.log('✅ Loaded from API:', this.solutionData);
-          this.cd.detectChanges(); // Ensure immediate view update
+          this.cd.detectChanges();
         },
-        error: (err) => {
-          console.error('❌ Failed to fetch:', err);
+        error: () => {
           this.isLoading = false;
           this.hasError = true;
           this.cd.detectChanges();
@@ -79,6 +81,68 @@ export class OursolutionsComponent implements OnInit {
       });
   }
 
+  /** GET /demo.generate_captcha */
+  private fetchCaptcha() {
+    this.captchaQuestion = '';
+    this.demoForm.captcha_answer = '';
+    this.demoForm.token = '';
+
+    this.http
+      .get<{
+        status: number;
+        question: string;
+        token: string;
+      }>(`${this.base_url}.demo.generate_captcha`)
+      .pipe(takeUntilDestroyed(this.destroy))
+      .subscribe({
+        next: (res) => {
+          this.captchaQuestion = res.question;
+          this.demoForm.token = res.token;
+          this.cd.detectChanges();
+        },
+        error: () => {
+          alert('Could not load CAPTCHA. Please try again.');
+          this.closeRequestDemo();
+        },
+      });
+  }
+
+  /* ----------------------- dialog helpers ------------------------- */
+  openRequestDemo(): void {
+    this.demoForm = {
+      ...this.demoForm,
+      application_name: this.solutionData?.name || '',
+    };
+    this.showRequestDialog = true;
+    this.fetchCaptcha(); // 👈 fetch new CAPTCHA each open
+  }
+
+  closeRequestDemo(): void {
+    this.showRequestDialog = false;
+  }
+
+  /* ------------------------- form submit -------------------------- */
+  submitDemoRequest(): void {
+    if (!this.demoForm.captcha_answer) {
+      alert('Please answer the CAPTCHA.');
+      return;
+    }
+
+    this.http
+      .post(`${this.base_url}demo/submit_request`, this.demoForm)
+      .pipe(takeUntilDestroyed(this.destroy))
+      .subscribe({
+        next: () => {
+          alert('✅ Demo request sent!');
+          this.closeRequestDemo();
+        },
+        error: () => {
+          alert('❌ Failed to submit demo request.');
+        },
+      });
+  }
+
+  /* ------------------------- utils -------------------------- */
   get imageUrl(): string | null {
     return this.solutionData?.app_logo
       ? `https://saas.techsavanna.technology${this.solutionData.app_logo}`

@@ -16,22 +16,18 @@ export class OursolutionsComponent implements OnInit {
   solutionId: string = '';
 
   ngOnInit(): void {
-  this.route.paramMap.subscribe(params => {
-    const id = decodeURIComponent(params.get('id')!);
-    console.log('🟨 Route param ID changed:', id);
+    this.route.paramMap.subscribe((params) => {
+      const id = decodeURIComponent(params.get('id')!);
 
-    const navigation = this.router.getCurrentNavigation();
-    const stateData = navigation?.extras?.state as { solutionData: any };
+      const navigation = this.router.getCurrentNavigation();
+      const stateData = navigation?.extras?.state as { solutionData: any };
 
-    if (stateData?.solutionData) {
-      this.solutionData = stateData.solutionData;
-      console.log('✅ Loaded solutionData from router state:', this.solutionData);
-    } else {
-      const allData = this.subSvc.subscription_resource.value()?.data ?? [];
-      this.solutionData = allData.find(sol => sol.name === id);
-      console.log('🔁 Loaded from fallback service:', this.solutionData);
-    }
-  });
-}
-
+      if (stateData?.solutionData) {
+        this.solutionData = stateData.solutionData;
+      } else {
+        const allData = this.subSvc.subscription_resource.value()?.data ?? [];
+        this.solutionData = allData.find((sol) => sol.name === id);
+      }
+    });
+  }
 }

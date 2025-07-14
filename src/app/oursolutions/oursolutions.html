@@ -202,86 +202,120 @@
 <p-dialog
   [(visible)]="showRequestDialog"
   modal="true"
-  header="Request a Demo"
   [style]="{ width: '100vw', height: '100vh' }"
-  [contentStyle]="{ height: '100%', overflow: 'auto', padding: 0 }"
+  [contentStyle]="{ height: '100%', overflow: 'auto', backgroundColor: '#e8fafd' }"
   [dismissableMask]="true"
-  [breakpoints]="{ '960px': '100vw', '640px': '100vw' }"
   [draggable]="false"
   [resizable]="false"
+  [closable]="false"
 >
-  <div class="w-full h-full bg-[#e8fafd] overflow-y-auto p-8 sm:p-20">
-    <div class="max-w-4xl mx-auto bg-[#e8fafd] relative">
-      <!-- Header -->
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-3xl font-bold text-center w-full text-blue-800">
-          Ready to Request a Demo?
-        </h2>
-        <button
-          class="text-gray-700 text-2xl absolute top-0 right-0"
-          (click)="closeRequestDemo()"
+  <div class="p-8 sm:p-20 h-full flex flex-col justify-between">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-blue-800">
+        Request a Demo of {{ solutionData?.name }}
+      </h2>
+      <button
+        class="text-gray-700 text-3xl"
+        (click)="closeRequestDemo()"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form
+      (ngSubmit)="submitDemoRequest()"
+      class="flex-1 overflow-y-auto space-y-6"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <input
+          type="text"
+          placeholder="Full Name *"
+          [(ngModel)]="demoForm.customer_name"
+          name="customer_name"
+          class="p-3 rounded border w-full"
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email *"
+          [(ngModel)]="demoForm.email"
+          name="email"
+          class="p-3 rounded border w-full"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Phone *"
+          [(ngModel)]="demoForm.phone"
+          name="phone"
+          class="p-3 rounded border w-full"
+          required
+        />
+        <select
+          [(ngModel)]="demoForm.demo_type"
+          name="demo_type"
+          class="p-3 rounded border w-full"
+          required
         >
-          ×
-        </button>
+          <option disabled selected value="">Select Demo Type</option>
+          <option>Online</option>
+          <option>Onsite</option>
+        </select>
+        <input
+          type="datetime-local"
+          placeholder="Demo Date *"
+          [(ngModel)]="demoForm.demo_date"
+          name="demo_date"
+          class="p-3 rounded border w-full"
+          required
+        />
+
+        <!-- CAPTCHA -->
+        <div class="col-span-1 md:col-span-2">
+          <label class="block mb-2 font-medium text-gray-700 text-sm">
+            CAPTCHA: {{ captchaQuestion }}
+          </label>
+          <input
+            type="text"
+            placeholder="Enter your answer"
+            [(ngModel)]="demoForm.captcha_answer"
+            name="captcha_answer"
+            class="p-3 rounded border w-full"
+            required
+          />
+        </div>
       </div>
 
-      <!-- Form Fields -->
-      <form>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <input
-            type="text"
-            placeholder="First Name *"
-            class="p-3 rounded border"
-          />
-          <input
-            type="text"
-            placeholder="Last Name *"
-            class="p-3 rounded border"
-          />
-          <input
-            type="email"
-            placeholder="Email Address *"
-            class="p-3 rounded border"
-          />
-          <select class="p-3 rounded border">
-            <option disabled selected>Select country</option>
-            <option>Kenya</option>
-            <option>Uganda</option>
-          </select>
-          <input type="text" placeholder="Phone *" class="p-3 rounded border" />
-          <input
-            type="text"
-            placeholder="Website (Optional)"
-            class="p-3 rounded border"
-          />
-          <input
-            type="text"
-            placeholder="Company Name *"
-            class="p-3 rounded border"
-          />
-          <input
-            type="number"
-            placeholder="Number of Employees *"
-            class="p-3 rounded border"
-          />
-        </div>
+      <!-- Notes -->
+      <textarea
+        rows="4"
+        placeholder="Additional Notes"
+        [(ngModel)]="demoForm.notes"
+        name="notes"
+        class="w-full mt-4 p-3 border rounded"
+      ></textarea>
 
-        <div class="mt-6">
-          <label class="flex items-center space-x-2 text-sm">
-            <input type="checkbox" />
-            <span>Yes I’d like to receive email updates from Techsavanna</span>
-          </label>
-        </div>
+      <!-- Hidden values -->
+      <input
+        type="hidden"
+        [(ngModel)]="demoForm.application_name"
+        name="application_name"
+      />
+      <input type="hidden" [(ngModel)]="demoForm.status" name="status" />
+      <input type="hidden" [(ngModel)]="demoForm.token" name="token" />
 
-        <div class="mt-6 text-center">
-          <button
-            type="submit"
-            class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-sky-600 hover:to-cyan-500"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+      <!-- Submit -->
+      <div class="text-center mt-6">
+        <button
+          type="submit"
+          class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-sky-600 hover:to-cyan-500"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
   </div>
 </p-dialog>

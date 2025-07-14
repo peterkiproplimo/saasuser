@@ -22,8 +22,8 @@ import { SolutionService } from '../navbar/services/navbar.service';
     RippleModule,
     AvatarModule,
     Menu,
-    RouterLink
-  ]
+    RouterLink,
+  ],
 })
 export class NavbarComponent {
   // -------------------- UI STATE --------------------
@@ -54,27 +54,23 @@ export class NavbarComponent {
     this.auth.sign_out();
   }
   slugify(text: string): string {
-  return text.toLowerCase().replace(/\s+/g, '-');
-}
+    return text.toLowerCase().replace(/\s+/g, '-');
+  }
 
-goToSolution(app: any) {
-  this.router.navigate(['/solutions', app.name], {
-    state: { solutionData: app }
-  });
-}
-
-
-
+  goToSolution(app: any) {
+    this.router.navigate(['/solutions', app.name], {
+      state: { solutionData: app },
+    });
+  }
 
   // -------------------- API (Solutions) ------------
   private subSvc = inject(SolutionService);
   readonly responseSig = this.subSvc.subscription_resource.value;
   readonly solutions = computed(() => {
-  const data = this.responseSig()?.data ?? [];
-  console.log('💡 Solutions data in dropdown:', data); // <-- Add this
-  return data;
-});
+    const data = this.responseSig()?.data ?? [];
+    return data;
+  });
 
   readonly is_loading = this.subSvc.subscription_resource.isLoading;
-  readonly is_error   = this.subSvc.subscription_resource.statusCode;
+  readonly is_error = this.subSvc.subscription_resource.statusCode;
 }
