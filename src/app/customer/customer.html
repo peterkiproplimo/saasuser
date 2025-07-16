@@ -1,115 +1,187 @@
 <div class="min-h-screen flex flex-col w-full overflow-hidden">
-
   <div>
-    <p-drawer class="sm:hidden" autoZIndex [(visible)]="drawerVisible" position="left" [modal]="true"
-              closable>
-
-
+    <p-drawer
+      class="sm:hidden"
+      autoZIndex
+      [(visible)]="drawerVisible"
+      position="left"
+      [modal]="true"
+      closable
+    >
       <ng-template #headless>
-      <div class="bg-gradient-to-b from-[#1476B7] to-[#093553] h-full p-4">
+        <div class="bg-gradient-to-b from-[#1476B7] to-[#093553] h-full p-4">
+          <div>
+            <div class="flex items-center justify-between">
+              <a routerLink="/">
+                <img
+                  src="/images/tech-savanna-logo.svg"
+                  alt="Logo"
+                  class="h-32 w-32 rounded-full text-white"
+                />
+              </a>
+              <i class="pi pi-times text-white" (click)="close_drawer()"></i>
+            </div>
+          </div>
 
-        <div>
-          <div class="flex items-center justify-between">
-            <a routerLink="/">
-              <img src="/images/tech-savanna-logo.svg" alt="Logo" class="h-32 w-32 rounded-full text-white"/>
-            </a>
-            <i class="pi pi-times text-white" (click)="close_drawer()"></i>
+          <div class="mb-6">
+            <div>
+              <a
+                routerLink="/customer"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="Dashboard" icon="pi-table" />
+              </a>
+              <a
+                routerLink="/customer/subscriptions"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="My Subscriptions" icon="pi-sync" />
+              </a>
+
+              <a
+                routerLink="/customer/subscribe"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="Purchase" icon="pi-shopping-cart" />
+              </a>
+
+              <a
+                routerLink="/customer/invoices"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="Invoices" icon="pi-receipt" />
+              </a>
+              <a
+                routerLink="/customer/profile"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="My Profile" icon="pi-user" />
+              </a>
+              <a
+                routerLink="/customer/billing"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="Billing History" icon="pi-dollar" />
+              </a>
+
+              <a
+                routerLink="/customer/tickets"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="Tickets" icon="pi-ticket" />
+              </a>
+            </div>
           </div>
         </div>
-
-      <div class="mb-6">
-
-        <div>
-          <a routerLink="/customer" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
-            <app-side-bar-item item="Dashboard" icon="pi-table"/>
-          </a>
-          <a routerLink="/customer/subscriptions" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
-            <app-side-bar-item item="My Subscriptions" icon="pi-sync"/>
-          </a>
-
-          <a routerLink="/customer/subscribe" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
-            <app-side-bar-item item="Purchase" icon="pi-shopping-cart"/>
-          </a>
-
-          <a routerLink="/customer/invoices" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}"
-             class="font-medium block" (click)="close_drawer()">
-            <app-side-bar-item item="Invoices" icon="pi-receipt"/>
-          </a>
-          <a routerLink="/customer/profile" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
-            <app-side-bar-item item="My Profile" icon="pi-user"/>
-          </a>
-          <a routerLink="/customer/billing" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
-            <app-side-bar-item item="Billing History" icon="pi-dollar"/>
-          </a>
-
-          <a routerLink="/customer/tickets" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}" class="font-medium block" (click)="close_drawer()">
-            <app-side-bar-item item="Tickets" icon="pi-ticket"/>
-          </a>
-        </div>
-      </div>
-      </div>
       </ng-template>
     </p-drawer>
     <div>
-
       <div class="flex min-h-screen">
-
-        <aside class="hidden sm:block sm:w-64 bg-gradient-to-b from-[#1476B7] to-[#093553] px-6">
+        <aside
+          class="hidden sm:block sm:w-64 bg-gradient-to-b from-[#1476B7] to-[#093553] px-6"
+        >
           <div class="inline-flex gap-4">
             <div class="hidden sm:flex items-center justify-between gap-12">
               <a routerLink="/">
-                <img src="/images/tech-savanna-logo.svg" alt="Logo" class="h-32 w-32 rounded-full text-white"/>
+                <img
+                  src="/images/tech-savanna-logo.svg"
+                  alt="Logo"
+                  class="h-32 w-32 rounded-full text-white"
+                />
               </a>
             </div>
           </div>
 
           <div class="mb-6">
             <div>
-              <a routerLink="/customer" routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}" class="font-medium block active:bg-blue-600 active:text-white">
-                <app-side-bar-item item="Dashboard" icon="pi-table"/>
+              <a
+                routerLink="/customer"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block active:bg-blue-600 active:text-white"
+              >
+                <app-side-bar-item item="Dashboard" icon="pi-table" />
               </a>
-              <a routerLink="/customer/subscriptions" routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
-                <app-side-bar-item item="My Subscriptions" icon="pi-sync"/>
-              </a>
-
-              <a routerLink="/customer/subscribe" routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
-                <app-side-bar-item item="Purchase" icon="pi-shopping-cart"/>
-              </a>
-
-              <a routerLink="/customer/invoices" routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
-                <app-side-bar-item item="Invoices" icon="pi-receipt"/>
-              </a>
-              <a routerLink="/customer/profile" routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
-                <app-side-bar-item item="My Profile" icon="pi-user"/>
-              </a>
-              <a routerLink="/customer/billing" routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}" class="font-medium block">
-                <app-side-bar-item item="Billing History" icon="pi-dollar"/>
+              <a
+                routerLink="/customer/subscriptions"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+              >
+                <app-side-bar-item item="My Subscriptions" icon="pi-sync" />
               </a>
 
-              <a routerLink="/customer/tickets" routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: false}" class="font-medium block">
-                <app-side-bar-item item="Tickets" icon="pi-ticket"/>
+              <a
+                routerLink="/customer/subscribe"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+              >
+                <app-side-bar-item item="Purchase" icon="pi-shopping-cart" />
               </a>
 
+              <a
+                routerLink="/customer/invoices"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+              >
+                <app-side-bar-item item="Invoices" icon="pi-receipt" />
+              </a>
+              <a
+                routerLink="/customer/profile"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+              >
+                <app-side-bar-item item="My Profile" icon="pi-user" />
+              </a>
+              <a
+                routerLink="/customer/billing"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+              >
+                <app-side-bar-item item="Billing History" icon="pi-dollar" />
+              </a>
+
+              <a
+                routerLink="/customer/tickets"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: false}"
+                class="font-medium block"
+              >
+                <app-side-bar-item item="Tickets" icon="pi-ticket" />
+              </a>
             </div>
           </div>
         </aside>
 
         <div class="flex-1 overflow-auto">
-          <div class="flex justify-between items-center border-b border-[#084c9c] dark:border-[#084c9c]">
+          <div
+            class="flex justify-between items-center border-b border-[#084c9c] dark:border-[#084c9c]"
+          >
             <div class="sm:hidden">
               <p-button
                 [icon]="drawerVisible ? 'pi pi-times' : 'pi pi-bars'"
@@ -120,22 +192,18 @@
             </div>
 
             @if (loggedIn) {
-              <div class="hidden sm:block px-4">
-
-                <p class="font-bold text-xl capitalize">Good {{ getTimeOfDay() }}, {{ storedUser.name }}</p>
-
-              </div>
+            <div class="hidden sm:block px-4">
+              <p class="font-bold text-xl capitalize">
+                Good {{ getTimeOfDay() }}, {{ storedUser.name }}
+              </p>
+            </div>
             }
-
 
             <app-customer-navbar></app-customer-navbar>
           </div>
           <router-outlet></router-outlet>
         </div>
-
       </div>
-
     </div>
   </div>
-
 </div>

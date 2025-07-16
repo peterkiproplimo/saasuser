@@ -1,9 +1,9 @@
 <!-- Full-screen wrapper -->
-<div class="w-full h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-white flex flex-col">
-
+<div
+  class="w-full h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-white flex flex-col"
+>
   <!-- Header bar with button -->
   <div class="px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-
     <a routerLink="/customer/subscribe">
       <button
         pButton
@@ -11,124 +11,215 @@
         label="New Subscription"
         icon="pi pi-plus"
         class="p-button-primary p-button-sm"
-
       ></button>
     </a>
-
-
   </div>
 
   <!-- Main scroll area -->
   <div class="flex-1 overflow-y-auto px-4 py-4 sm:px-6 lg:px-8">
-    <p-table
-      [value]="list().data!"
-      [paginator]="true"
-      [rows]="5"
-      [rowsPerPageOptions]="[5, 10, 20]"
-      [tableStyle]="{ 'min-width': '100%' }"
-      responsiveLayout="scroll"
-    >
-      <ng-template #header>
-        <tr>
-          <th>Subscription #</th>
-          <th>Party</th>
-          <th>Plan / Qty</th>
-          <th>Cost</th>
-          <th>Currency</th>
-          <th>Invoice Period</th>
-          <th>Latest Invoice</th>
-          <th>Status</th>
-        </tr>
-      </ng-template>
+    <div class="p-4 overflow-auto">
+      <div class="flow-root">
+        <div class="m-0">
+          <div class="inline-block min-w-full py-2 align-middle">
+            <div
+              class="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg"
+            >
+              <table
+                class="min-w-full divide-y divide-gray-300 dark:divide-gray-700"
+              >
+                <thead class="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Subscription #
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Party
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Plan / Qty
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Cost
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Currency
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Invoice Period
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Latest Invoice
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Status
+                    </th>
+                  </tr>
+                </thead>
 
-      <ng-template pTemplate="body" let-sub>
-        <tr>
-          <td>{{ sub.name }}</td>
-          <td>{{ sub.party }}</td>
-          <td>
-            {{ sub.plans[0]?.plan }}
-            <div class="text-xs text-gray-500 dark:text-gray-400">x{{ sub.plans[0]?.qty }}</div>
-          </td>
-          <td>{{ sub.plans[0]?.cost | number }}</td>
-          <td>{{ sub.plans[0]?.currency }}</td>
-          <td>{{ sub.current_invoice_start }} → {{ sub.current_invoice_end }}</td>
-          <td>
-            <div>{{ sub.latest_invoice?.name }}</div>
-            <div class="text-xs text-gray-500 dark:text-gray-400">
-              {{ sub.latest_invoice?.status }},
-              {{ sub.latest_invoice?.prorate_factor }} Prorate
+                <tbody
+                  class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900"
+                >
+                  <tr *ngFor="let sub of list()?.data">
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      {{ sub.name }}
+                    </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      {{ sub.party }}
+                    </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      {{ sub.plans[0]?.plan }}
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        x{{ sub.plans[0]?.qty }}
+                      </div>
+                    </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      {{ sub.plans[0]?.cost | number:'1.2-2' }}
+                    </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      {{ sub.plans[0]?.currency }}
+                    </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      {{ sub.current_invoice_start }} → {{
+                      sub.current_invoice_end }}
+                    </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      <div>{{ sub.latest_invoice?.name }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ sub.latest_invoice?.status }}, {{
+                        sub.latest_invoice?.prorate_factor }} Prorate
+                      </div>
+                    </td>
+                    <td class="px-4 py-3">
+                      <span
+                        class="inline-block px-2 py-1 text-xs font-semibold rounded-full capitalize"
+                        [ngClass]="{
+                          'bg-green-100 text-green-800': sub.status === 'active',
+                          'bg-yellow-100 text-yellow-800': sub.status === 'pending',
+                          'bg-red-100 text-red-800': sub.status === 'cancelled'
+                        }"
+                      >
+                        {{ sub.status }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+
+                <ng-template #noData>
+                  <tbody>
+                    <tr>
+                      <td colspan="8" class="py-4">
+                        <div class="w-full flex flex-col items-center">
+                          <h3
+                            class="text-lg font-medium text-gray-700 dark:text-gray-300"
+                          >
+                            No Subscriptions Found
+                          </h3>
+                          <p class="text-gray-500 dark:text-gray-400 mt-2">
+                            Try adjusting your filters or check back later.
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </ng-template>
+              </table>
             </div>
-          </td>
-          <td>
-            <p-badge
-              [value]="sub.status"
-              [severity]="statusSeverity(sub.status)"
-              class="capitalize"
-            ></p-badge>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-
-    @if (is_loading()) {
-      <div class="px-4 py-2 text-center text-sm">
-        Loading subscriptions...
+          </div>
+        </div>
       </div>
-
-    }
-
-    <div *ngIf="loading || error" class="px-4 py-2 text-center text-sm">
-      <span *ngIf="loading">Loading…</span>
-      <span *ngIf="error" class="text-red-600">{{ error }}</span>
     </div>
 
+    <!-- Pagination -->
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [first]="page * pageSize"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords()"
+      [showCurrentPageReport]="true"
+      [showPageLinks]="true"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} subscriptions"
+    ></p-paginator>
+
+    <!-- Loading & Error States -->
+    <div *ngIf="loading" class="px-4 py-2 text-center text-sm">
+      Loading subscriptions…
+    </div>
+    <div *ngIf="error" class="px-4 py-2 text-center text-sm text-red-600">
+      {{ error }}
+    </div>
   </div>
 
-<p-dialog
-  header="New Subscription"
-  [(visible)]="showDialog"
-  [modal]="true"
-  [style]="{ width: '30rem' }"
-  [contentStyle]="{ padding: '1.5rem 2rem' }"
->
-  <!-- Form Body -->
-  <div class="p-fluid space-y-4">
-    <div class="field">
-      <label for="plan" class="block text-sm font-medium text-gray-700">Plan</label>
-      <input id="plan" pInputText [(ngModel)]="form.plan" />
+  <!-- Dialog -->
+  <p-dialog
+    header="New Subscription"
+    [(visible)]="showDialog"
+    [modal]="true"
+    [style]="{ width: '30rem' }"
+    [contentStyle]="{ padding: '1.5rem 2rem' }"
+  >
+    <!-- Form Body -->
+    <div class="p-fluid space-y-4">
+      <div class="field">
+        <label for="plan" class="block text-sm font-medium text-gray-700"
+          >Plan</label
+        >
+        <input id="plan" pInputText [(ngModel)]="form.plan" />
+      </div>
+      <div class="field">
+        <label for="qty" class="block text-sm font-medium text-gray-700"
+          >Quantity</label
+        >
+        <input id="qty" type="number" pInputText [(ngModel)]="form.qty" />
+      </div>
     </div>
 
-    <div class="field">
-      <label for="qty" class="block text-sm font-medium text-gray-700">Quantity</label>
-      <input id="qty" type="number" pInputText [(ngModel)]="form.qty" />
-    </div>
-  </div>
-<!-- Footer -->
-<ng-template pTemplate="footer">
-  <div class="flex justify-center gap-4 py-2">
-    <button
-      pButton
-      label="Cancel"
-      class="p-button-text"
-      (click)="showDialog = false"
-    ></button>
-    <button
-      pButton
-      label="Create"
-      class="p-button-primary"
-      (click)="createSubscription()"
-    ></button>
-  </div>
-</ng-template>
-
-</p-dialog>
-
-
-
-</div>
-
-
-<div>
-
-
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+      <div class="flex justify-center gap-4 py-2">
+        <button
+          pButton
+          label="Cancel"
+          class="p-button-text"
+          (click)="showDialog = false"
+        ></button>
+        <button
+          pButton
+          label="Create"
+          class="p-button-primary"
+          (click)="createSubscription()"
+        ></button>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

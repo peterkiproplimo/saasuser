@@ -54,8 +54,14 @@ export class OursolutionsComponent implements OnInit {
 
   /* --------------------------- lifecycle --------------------------- */
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) this.fetchSolutionData(id);
+    this.route.paramMap
+      .pipe(takeUntilDestroyed(this.destroy))
+      .subscribe((params) => {
+        const id = params.get('id');
+        if (id) {
+          this.fetchSolutionData(id);
+        }
+      });
   }
 
   /* --------------------------- API calls -------------------------- */

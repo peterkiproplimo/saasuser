@@ -5,17 +5,29 @@ import { SubscriptionResponse } from './subscription.model';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionService {
-    url = environment.BASE_URL;
+  url = environment.BASE_URL;
 
   page = signal(1);
   pageSize = signal(20);
 
   http = inject(HttpClient);
 
-    subscription_resource = httpResource<SubscriptionResponse>(
-        () => `${this.url}.subscription.list_subscriptions?page=${this.page()}&page_size=${this.pageSize()}`,
-        {defaultValue: { } }
-    );
+  subscription_resource = httpResource<SubscriptionResponse>(
+    () => ({
+      method: 'GET',
+      url: `${
+        this.url
+      }.subscription.list_subscriptions?page=${this.page()}&page_size=${this.pageSize()}`,
+    }),
+    {
+      defaultValue: {
+        total: 0,
+        data: [],
+      },
+    }
+  );
 
-
+  refetch() {
+    this.page.set(this.page()); // Force httpResource to rerun
+  }
 }
