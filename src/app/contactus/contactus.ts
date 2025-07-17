@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,7 +9,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { CommonModule } from '@angular/common';
 import { ContactUsService } from './contactus.service';
 import { ContactUsPayload } from './contactus.model';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ContactFeedbackDialogComponent } from './contact-feedback-dialog.component';
 
 @Component({
@@ -19,25 +18,29 @@ import { ContactFeedbackDialogComponent } from './contact-feedback-dialog.compon
     CommonModule,
     GoogleMapsModule,
     ReactiveFormsModule,
-    MatDialogModule,
     ContactFeedbackDialogComponent,
   ],
   templateUrl: './contactus.html',
   styleUrls: ['./contactus.scss'],
 })
 export class ContactUsComponent implements OnInit {
-  private dialog = inject(MatDialog);
-  private fb = inject(FormBuilder);
-  private contactUsService = inject(ContactUsService);
-
   form!: FormGroup;
   captchaQuestion = '';
   captchaToken = '';
+
+  showDialog = false;
+  dialogMessage = '';
+  dialogSuccess = false;
 
   center: google.maps.LatLngLiteral = { lat: -1.2678, lng: 36.805 };
   zoom = 15;
   markerOptions: google.maps.MarkerOptions = { draggable: false };
   markerPosition: google.maps.LatLngLiteral = this.center;
+
+  constructor(
+    private fb: FormBuilder,
+    private contactUsService: ContactUsService
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -57,23 +60,11 @@ export class ContactUsComponent implements OnInit {
       next: (res) => {
         this.captchaQuestion = res.question;
         this.captchaToken = res.token;
-
-        // ✅ Open dialog after CAPTCHA is ready
-        this.dialog.open(ContactFeedbackDialogComponent, {
-          data: {
-            success: true,
-            captchaQuestion: this.captchaQuestion,
-            captchaToken: this.captchaToken,
-          },
-        });
       },
       error: () => {
-        this.dialog.open(ContactFeedbackDialogComponent, {
-          data: {
-            success: false,
-            message: 'Failed to load CAPTCHA. Please try again.',
-          },
-        });
+        this.dialogSuccess = false;
+        this.dialogMessage = 'Failed to load CAPTCHA. Please try again.';
+        this.showDialog = true;
       },
     });
   }
@@ -91,23 +82,17 @@ export class ContactUsComponent implements OnInit {
 
     this.contactUsService.sendMessage(payload).subscribe({
       next: () => {
-        this.dialog.open(ContactFeedbackDialogComponent, {
-          data: {
-            success: true,
-            message: '✅ Your message was sent successfully!',
-          },
-        });
+        this.dialogSuccess = true;
+        this.dialogMessage = '✅ Your message was sent successfully!';
+        this.showDialog = true;
         this.form.reset();
         this.getCaptcha();
       },
-      error: (err) => {
-        console.error('Submission failed:', err);
-        this.dialog.open(ContactFeedbackDialogComponent, {
-          data: {
-            success: false,
-            message: 'Failed to send message. Check CAPTCHA or try again.',
-          },
-        });
+      error: () => {
+        this.dialogSuccess = false;
+        this.dialogMessage =
+          'Failed to send message. Check CAPTCHA or try again.';
+        this.showDialog = true;
       },
     });
   }
