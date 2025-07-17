@@ -31,6 +31,7 @@ export class ContactUsComponent implements OnInit {
   showDialog = false;
   dialogMessage = '';
   dialogSuccess = false;
+  isSubmitted = false;
 
   center: google.maps.LatLngLiteral = { lat: -1.2678, lng: 36.805 };
   zoom = 15;
@@ -70,6 +71,7 @@ export class ContactUsComponent implements OnInit {
   }
 
   submitForm(): void {
+    this.isSubmitted = true;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

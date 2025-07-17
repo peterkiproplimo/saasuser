@@ -1,142 +1,139 @@
-<!-- contact-us.component.html -->
 <section class="bg-white dark:bg-gray-900">
-  <!-- GMap Section -->
- <!-- Map Display -->
-
-
-
-
-  <!-- Contact Info and Form -->
- <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 py-16 px-6 md:px-12 lg:px-24">
-
-  <!-- Contact Info -->
- <div>
-  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Find Us at:</h2>
-  <div class="space-y-4 text-gray-700 dark:text-gray-300">
-  <!-- Address -->
-  <div class="flex items-start gap-3">
-    <svg class="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" />
-      <circle cx="12" cy="9" r="2.5" />
-    </svg>
-    <div>
-      <p class="font-semibold">Address</p>
-      <p>Reliance Centre - 2nd Floor, Left Wing, Westlands Woodvale Grove, Nairobi, Kenya</p>
+  <div class="max-w-6xl mx-auto w-full space-y-10 py-16 px-6 md:px-12 lg:px-24">
+    <!-- Centered Logo -->
+    <div class="flex justify-center">
+      <img
+        src="/images/images.jpeg"
+        alt="Logo"
+        class="h-32 w-32 rounded-full object-cover"
+      />
     </div>
-  </div>
 
-  <!-- Phone -->
-  <div class="flex items-start gap-3">
-    <svg class="w-6 h-6 text-green-600 mt-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-      <path d="M22 16.92V21a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3 5.18 2 2 0 0 1 5 3h4.09a1 1 0 0 1 1 .72l1.13 4a1 1 0 0 1-.29 1L9.91 11.09a16 16 0 0 0 7 7l2.37-2.37a1 1 0 0 1 1-.29l4 1.13a1 1 0 0 1 .72 1Z" />
-    </svg>
-    <div>
-      <p class="font-semibold">Phone</p>
-      <p>0700106077</p>
+    <!-- Title -->
+    <div class="text-center -mt-4 lg:-mt-6">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+        Send Us a Message
+      </h2>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+        We'd love to hear from you!
+      </p>
     </div>
+
+    <!-- Contact Form -->
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submitForm()"
+      class="space-y-6"
+      novalidate
+    >
+      <!-- Name and Email -->
+      <div class="grid md:grid-cols-2 gap-4">
+        <input
+          formControlName="persona_name"
+          type="text"
+          placeholder="Enter Name"
+          [ngClass]="{
+        'border-red-500': isSubmitted && form.get('persona_name')?.invalid,
+        'border-sky-400': !isSubmitted || form.get('persona_name')?.valid
+      }"
+          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+        />
+
+        <input
+          formControlName="email"
+          type="email"
+          placeholder="Enter Email"
+          [ngClass]="{
+        'border-red-500': isSubmitted && form.get('email')?.invalid,
+        'border-sky-400': !isSubmitted || form.get('email')?.valid
+      }"
+          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+        />
+      </div>
+
+      <!-- Subject and Phone -->
+      <div class="grid md:grid-cols-2 gap-4">
+        <input
+          formControlName="subject"
+          type="text"
+          placeholder="Enter Subject"
+          [ngClass]="{
+        'border-red-500': isSubmitted && form.get('subject')?.invalid,
+        'border-sky-400': !isSubmitted || form.get('subject')?.valid
+      }"
+          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+        />
+
+        <input
+          formControlName="phone_number"
+          type="text"
+          placeholder="Enter Phone Number"
+          [ngClass]="{
+        'border-red-500': isSubmitted && form.get('phone_number')?.invalid,
+        'border-sky-400': !isSubmitted || form.get('phone_number')?.valid
+      }"
+          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+        />
+      </div>
+
+      <!-- Message -->
+      <textarea
+        formControlName="message"
+        rows="5"
+        placeholder="Enter Message"
+        [ngClass]="{
+      'border-red-500': isSubmitted && form.get('message')?.invalid,
+      'border-sky-400': !isSubmitted || form.get('message')?.valid
+    }"
+        class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+      ></textarea>
+
+      <!-- CAPTCHA -->
+      <div class="mb-4">
+        <div class="flex items-center gap-2 mb-2">
+          <label
+            class="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {{ captchaQuestion }}
+          </label>
+          <i
+            class="pi pi-refresh text-blue-600 hover:text-blue-800 text-xl cursor-pointer"
+            (click)="getCaptcha()"
+            title="Refresh CAPTCHA"
+          ></i>
+        </div>
+
+        <input
+          formControlName="captcha_answer"
+          type="text"
+          placeholder="Enter answer"
+          [ngClass]="{
+        'border-red-500': isSubmitted && form.get('captcha_answer')?.invalid,
+        'border-sky-400': !isSubmitted || form.get('captcha_answer')?.valid
+      }"
+          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+        />
+      </div>
+
+      <!-- Submit and Home Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button
+          type="submit"
+          class="flex-1 flex justify-center gap-2 rounded-md bg-sky-500 hover:bg-sky-600 focus:ring-2 focus:ring-sky-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-200"
+        >
+          SEND MESSAGE
+        </button>
+      </div>
+    </form>
+
+    <!-- Map Below -->
   </div>
-
-  <!-- WhatsApp -->
-  <div class="flex items-start gap-3">
-    <svg class="w-6 h-6 text-green-500 mt-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-      <path d="M16.72 13.06a8.52 8.52 0 0 0-1.51-.81.61.61 0 0 0-.71.14l-.69.85a.61.61 0 0 1-.73.18c-1.4-.58-2.5-1.68-3.08-3.08a.61.61 0 0 1 .18-.73l.85-.69a.61.61 0 0 0 .14-.71 8.52 8.52 0 0 0-.81-1.51.63.63 0 0 0-.93-.13l-1.01.83A3.07 3.07 0 0 0 7 9.8c0 3.52 2.87 6.39 6.39 6.39a3.07 3.07 0 0 0 2.15-.9l.83-1.01a.63.63 0 0 0-.13-.93Z" />
-      <path d="M22 12a10 10 0 1 1-19.49-3.5L2 22l4.38-1.51A10 10 0 1 1 22 12Z" />
-    </svg>
-    <div>
-      <p class="font-semibold">WhatsApp</p>
-      <p>0700106077</p>
-    </div>
+  <div class="w-full h-[450px] rounded-md overflow-hidden shadow-lg">
+    <google-map height="100%" width="100%" [center]="center" [zoom]="zoom">
+      <map-marker
+        [position]="markerPosition"
+        [options]="markerOptions"
+      ></map-marker>
+    </google-map>
   </div>
-
-  <!-- Email -->
-  <div class="flex items-start gap-3">
-    <svg class="w-6 h-6 text-red-600 mt-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z" />
-      <polyline points="22,6 12,13 2,6" />
-    </svg>
-    <div>
-      <p class="font-semibold">Email</p>
-     <p>info&#64;techsavanna.com</p>
-    </div>
-  </div>
-
-<div class="flex space-x-4 pt-4 text-gray-600 dark:text-gray-300 text-xl">
-  <a href="https://web.facebook.com/TechsavannaL?_rdc=1&_rdr#" target="_blank" class="hover:text-blue-600">
-    <i class="pi pi-facebook"></i>
-  </a>
-  <a href="https://x.com/techsavannal" target="_blank" class="hover:text-sky-500">
-    <i class="pi pi-twitter"></i>
-  </a>
-  <a href="https://www.instagram.com/techsavanna_software_company/" target="_blank" class="hover:text-pink-500">
-    <i class="pi pi-instagram"></i>
-  </a>
-  <a href="https://www.linkedin.com/company/techsavanna/posts/?feedView=all" target="_blank" class="hover:text-blue-700">
-    <i class="pi pi-linkedin"></i>
-  </a>
-  <a href="https://www.tiktok.com/@techsavannaltd" target="_blank" class="hover:text-gray-800">
-    <i class="pi pi-tiktok"></i>
-  </a>
-</div>
-
-
-  </div>
-</div>
-
-
-  <!-- Contact Form -->
-  <div>
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send us a Message:</h2>
-   <form [formGroup]="form" (ngSubmit)="submitForm()" class="space-y-4">
-  <div class="grid md:grid-cols-2 gap-4">
-    <input formControlName="persona_name" type="text" placeholder="Enter Name" class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white" />
-    <input formControlName="email" type="email" placeholder="Enter Email" class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white" />
-  </div>
-  <div class="grid md:grid-cols-2 gap-4">
-    <input formControlName="subject" type="text" placeholder="Enter Subject" class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white" />
-    <input formControlName="phone_number" type="text" placeholder="Enter Phone Number" class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white" />
-  </div>
-  <textarea formControlName="message" rows="5" placeholder="Enter Message" class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white"></textarea>
-
-<div class="mb-4">
-  <div class="flex items-center gap-2 mb-2">
-    <label class="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300">
-      {{ captchaQuestion }}
-    </label>
-    <i 
-      class="pi pi-refresh text-blue-600 hover:text-blue-800 text-xl cursor-pointer" 
-      (click)="getCaptcha()" 
-      title="Refresh CAPTCHA">
-    </i>
-  </div>
-  
-  <input
-    formControlName="captcha_answer"
-    type="text"
-    placeholder="Enter answer"
-    class="w-full p-3 border rounded-md dark:bg-gray-800 dark:text-white"
-  />
-</div>
-
-
-  <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-md font-semibold">
-    SEND MESSAGE
-  </button>
-</form>
-
-  </div>
-
-</div>
-<div class="w-full h-[450px]">
-  <google-map
-    height="100%"
-    width="100%"
-    [center]="center"
-    [zoom]="zoom">
-    <map-marker
-      [position]="markerPosition"
-      [options]="markerOptions">
-    </map-marker>
-  </google-map>
-</div>
-
 </section>
