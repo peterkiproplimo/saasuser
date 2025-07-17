@@ -199,15 +199,9 @@
   <p>Solution not found.</p>
 </div>
 
-<p-dialog
-  [(visible)]="showRequestDialog"
-  modal="true"
-  [style]="{ width: '100vw', height: '100vh' }"
-  [contentStyle]="{ height: '100%', overflow: 'auto', backgroundColor: '#e8fafd' }"
-  [dismissableMask]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [closable]="false"
+<div
+  *ngIf="showRequestDialog"
+  class="fixed inset-0 z-50 w-screen h-screen bg-[#e8fafd] flex flex-col justify-between overflow-y-auto"
 >
   <div class="p-8 sm:p-20 h-full flex flex-col justify-between">
     <!-- Header -->
@@ -224,81 +218,150 @@
       </button>
     </div>
 
-    <!-- Form -->
-    <form
-      (ngSubmit)="submitDemoRequest()"
-      class="flex-1 overflow-y-auto space-y-6"
-    >
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <input
-          type="text"
-          placeholder="Full Name *"
-          [(ngModel)]="demoForm.customer_name"
-          name="customer_name"
-          class="p-3 rounded border w-full"
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email *"
-          [(ngModel)]="demoForm.email"
-          name="email"
-          class="p-3 rounded border w-full"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Phone *"
-          [(ngModel)]="demoForm.phone"
-          name="phone"
-          class="p-3 rounded border w-full"
-          required
-        />
-        <select
-          [(ngModel)]="demoForm.demo_type"
-          name="demo_type"
-          class="p-3 rounded border w-full"
-          required
-        >
-          <option disabled selected value="">Select Demo Type</option>
-          <option>Online</option>
-          <option>Onsite</option>
-        </select>
-        <input
-          type="datetime-local"
-          placeholder="Demo Date *"
-          [(ngModel)]="demoForm.demo_date"
-          name="demo_date"
-          class="p-3 rounded border w-full"
-          required
-        />
-
-        <!-- CAPTCHA -->
-        <div class="col-span-1 md:col-span-2">
-          <label class="block mb-2 font-medium text-gray-700 text-sm">
-            CAPTCHA: {{ captchaQuestion }}
+    <form (ngSubmit)="submitDemoRequest()" class="space-y-6" novalidate>
+      <div class="grid md:grid-cols-2 gap-4">
+        <!-- Name -->
+        <div class="flex flex-col">
+          <label
+            for="customer_name"
+            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Full Name *
           </label>
           <input
             type="text"
-            placeholder="Enter your answer"
-            [(ngModel)]="demoForm.captcha_answer"
-            name="captcha_answer"
-            class="p-3 rounded border w-full"
+            id="customer_name"
+            name="customer_name"
+            [(ngModel)]="demoForm.customer_name"
+            placeholder="Enter your full name"
             required
+            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="flex flex-col">
+          <label
+            for="email"
+            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Email *
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="demoForm.email"
+            placeholder="Enter your email address"
+            required
+            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="flex flex-col">
+          <label
+            for="phone"
+            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Phone *
+          </label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            [(ngModel)]="demoForm.phone"
+            placeholder="Enter phone number"
+            required
+            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+
+        <!-- Demo Type -->
+        <div class="flex flex-col">
+          <label
+            for="demo_type"
+            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Demo Type *
+          </label>
+          <select
+            id="demo_type"
+            name="demo_type"
+            [(ngModel)]="demoForm.demo_type"
+            required
+            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          >
+            <option disabled selected value="">Select demo type</option>
+            <option>Online</option>
+            <option>Onsite</option>
+          </select>
+        </div>
+
+        <!-- Demo Date -->
+        <div class="flex flex-col md:col-span-2">
+          <label
+            for="demo_date"
+            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Preferred Demo Date & Time *
+          </label>
+          <input
+            type="datetime-local"
+            id="demo_date"
+            name="demo_date"
+            [(ngModel)]="demoForm.demo_date"
+            required
+            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
           />
         </div>
       </div>
 
       <!-- Notes -->
-      <textarea
-        rows="4"
-        placeholder="Additional Notes"
-        [(ngModel)]="demoForm.notes"
-        name="notes"
-        class="w-full mt-4 p-3 border rounded"
-      ></textarea>
+      <div>
+        <label
+          for="notes"
+          class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
+          Additional Notes
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows="4"
+          [(ngModel)]="demoForm.notes"
+          placeholder="Any specific requirements or questions?"
+          class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+        ></textarea>
+      </div>
 
-      <!-- Hidden values -->
+      <!-- CAPTCHA -->
+      <div>
+        <label
+          for="captcha_answer"
+          class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
+          CAPTCHA: {{ captchaQuestion }}
+        </label>
+        <div class="flex gap-2 items-center mb-2">
+          <input
+            type="text"
+            id="captcha_answer"
+            name="captcha_answer"
+            [(ngModel)]="demoForm.captcha_answer"
+            placeholder="Enter CAPTCHA answer"
+            required
+            class="flex-1 p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+          <i
+            class="pi pi-refresh text-blue-600 hover:text-blue-800 text-xl cursor-pointer"
+            (click)="fetchCaptcha()"
+            title="Refresh CAPTCHA"
+          ></i>
+        </div>
+      </div>
+
+      <!-- Hidden Fields -->
       <input
         type="hidden"
         [(ngModel)]="demoForm.application_name"
@@ -313,9 +376,9 @@
           type="submit"
           class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-sky-600 hover:to-cyan-500"
         >
-          Submit
+          Submit Demo Request
         </button>
       </div>
     </form>
   </div>
-</p-dialog>
+</div>

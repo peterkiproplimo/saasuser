@@ -13,11 +13,23 @@ import { environment } from '../../environments/environment';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-oursolutions',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProgressSpinnerModule, DialogModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ProgressSpinnerModule,
+    DialogModule,
+    ReactiveFormsModule, // 👈 add this
+  ],
   templateUrl: './oursolutions.html',
   styleUrls: ['./oursolutions.scss'],
 })
@@ -34,9 +46,36 @@ export class OursolutionsComponent implements OnInit {
   isLoading = true;
   hasError = false;
   showRequestDialog = false;
+  submitted = false;
 
   // ▶ CAPTCHA
   captchaQuestion = '';
+
+  submitForm() {
+    this.submitted = true;
+
+    // check required fields
+    const requiredFields = [
+      'customer_name',
+      'email',
+      'phone',
+      'application_name',
+      'demo_type',
+      'demo_date',
+      'captcha_answer',
+    ];
+
+    const missing = requiredFields.filter(
+      (key) => !this.demoForm[key as keyof typeof this.demoForm]?.trim()
+    );
+
+    if (missing.length) {
+      alert('Please fill all required fields.');
+      return;
+    }
+
+    // Proceed with submission
+  }
 
   // ▶ demo form payload
   demoForm = {
@@ -88,7 +127,7 @@ export class OursolutionsComponent implements OnInit {
   }
 
   /** GET /demo.generate_captcha */
-  private fetchCaptcha() {
+  public fetchCaptcha() {
     this.captchaQuestion = '';
     this.demoForm.captcha_answer = '';
     this.demoForm.token = '';
@@ -113,14 +152,13 @@ export class OursolutionsComponent implements OnInit {
       });
   }
 
-  /* ----------------------- dialog helpers ------------------------- */
   openRequestDemo(): void {
     this.demoForm = {
       ...this.demoForm,
       application_name: this.solutionData?.name || '',
     };
     this.showRequestDialog = true;
-    this.fetchCaptcha(); // 👈 fetch new CAPTCHA each open
+    this.fetchCaptcha();
   }
 
   closeRequestDemo(): void {
@@ -135,7 +173,7 @@ export class OursolutionsComponent implements OnInit {
     }
 
     this.http
-      .post(`${this.base_url}.demo/submit_request`, this.demoForm)
+      .post(`${this.base_url}.demo.create_demo_booking`, this.demoForm)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: () => {
