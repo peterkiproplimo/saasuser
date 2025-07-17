@@ -28,7 +28,7 @@ import {
     FormsModule,
     ProgressSpinnerModule,
     DialogModule,
-    ReactiveFormsModule, // 👈 add this
+    ReactiveFormsModule,
   ],
   templateUrl: './oursolutions.html',
   styleUrls: ['./oursolutions.scss'],
