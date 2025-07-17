@@ -135,7 +135,7 @@ export class OursolutionsComponent implements OnInit {
     }
 
     this.http
-      .post(`${this.base_url}demo/submit_request`, this.demoForm)
+      .post(`${this.base_url}.demo/submit_request`, this.demoForm)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: () => {
