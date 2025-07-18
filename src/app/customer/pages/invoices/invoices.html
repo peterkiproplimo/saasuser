@@ -36,6 +36,9 @@
                 Type
               </th>
               <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6">
+                Download
+              </th>
+              <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6">
                 Pay
                 <span class="sr-only">Update</span>
               </th>
@@ -87,7 +90,19 @@
                       <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
                         {{ invoice.type }}
                       </td>
-                      <td class="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
+
+                      <td class="relative pr-4 pl-3 text-center text-sm font-medium whitespace-nowrap sm:pr-6">
+                        <p-button
+                          icon="pi pi-download"
+                          size="small"
+                          severity="info"
+                          [rounded]="true"
+                          [outlined]="true"
+                          class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+
+                        />
+
+                      <td class="relative pr-4 pl-3 text-center text-sm font-medium whitespace-nowrap sm:pr-6">
                         @if (invoice.status != 'Paid') {
                           <p-button
                             icon="pi pi-dollar"

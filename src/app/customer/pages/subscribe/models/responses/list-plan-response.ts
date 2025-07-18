@@ -18,6 +18,7 @@ export type Plan = {
   item?:                   string;
   type?:                   string;
   application?:            Application;
+  features?:                any[];
 }
 
 export type Application = {

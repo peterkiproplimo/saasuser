@@ -2,7 +2,7 @@
   <div class="flow-root">
     <div class="m-0">
 
-      <div class="w-full sm:max-w-3xl py-2 mx-auto">
+      <div class="w-full py-2 mx-auto">
         <div class="px-4 py-4 sm:px-6 lg:px-8 flex justify-end items-center">
             <button
               (click)="open_dialog()"
@@ -122,7 +122,7 @@
   />
 </div>
 
-<p-dialog [(visible)]="ticket_dialog" [style]="{ width: '450px' }" header="Add Comment" [modal]="true">
+<p-dialog [(visible)]="ticket_dialog" [style]="{ width: '450px' }" header="Raise Ticket" [modal]="true">
   <form class="w-full space-y-6" enctype="multipart/form-data" (ngSubmit)="save_ticket()">
 
     <div>
@@ -189,7 +189,7 @@
         class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
          px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
-        Save
+        Raise
         @if (loading()) {
           <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
         } @else {

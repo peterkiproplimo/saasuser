@@ -12,7 +12,8 @@ export type Solution = {
   app_name?: string;
   app_code?: string;
   app_logo?: string;
-  describe?: string;
+  description?: string;
+  short_description?: string;
   features?: string[];
   creation?: Date;
   modified?: Date;

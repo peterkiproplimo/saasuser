@@ -63,15 +63,7 @@
               >
                 <app-side-bar-item item="Invoices" icon="pi-receipt" />
               </a>
-              <a
-                routerLink="/customer/profile"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="font-medium block"
-                (click)="close_drawer()"
-              >
-                <app-side-bar-item item="My Profile" icon="pi-user" />
-              </a>
+
               <a
                 routerLink="/customer/billing"
                 routerLinkActive="active"
@@ -90,6 +82,16 @@
                 (click)="close_drawer()"
               >
                 <app-side-bar-item item="Tickets" icon="pi-ticket" />
+              </a>
+
+              <a
+                routerLink="/customer/profile"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+                (click)="close_drawer()"
+              >
+                <app-side-bar-item item="My Profile" icon="pi-user" />
               </a>
             </div>
           </div>
@@ -150,14 +152,6 @@
                 <app-side-bar-item item="Invoices" icon="pi-receipt" />
               </a>
               <a
-                routerLink="/customer/profile"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="font-medium block"
-              >
-                <app-side-bar-item item="My Profile" icon="pi-user" />
-              </a>
-              <a
                 routerLink="/customer/billing"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{exact: true}"
@@ -173,6 +167,15 @@
                 class="font-medium block"
               >
                 <app-side-bar-item item="Tickets" icon="pi-ticket" />
+              </a>
+
+              <a
+                routerLink="/customer/profile"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="font-medium block"
+              >
+                <app-side-bar-item item="My Profile" icon="pi-user" />
               </a>
             </div>
           </div>
