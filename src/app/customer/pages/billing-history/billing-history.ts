@@ -5,6 +5,8 @@ import {Button} from 'primeng/button';
 import {DatePipe, DecimalPipe, JsonPipe} from '@angular/common';
 import {EmptyStateComponent} from '../../../shared/components/empty-state/empty-state.component';
 import {ProgressSpinner} from 'primeng/progressspinner';
+import {FormsModule} from '@angular/forms';
+import {Calendar} from 'primeng/calendar';
 
 @Component({
   selector: 'app-billing-history',
@@ -14,7 +16,9 @@ import {ProgressSpinner} from 'primeng/progressspinner';
     DecimalPipe,
     EmptyStateComponent,
     Paginator,
-    ProgressSpinner
+    ProgressSpinner,
+    FormsModule,
+    Calendar
   ],
   templateUrl: './billing-history.html',
   styleUrl: './billing-history.scss'
@@ -23,6 +27,7 @@ export class BillingHistory {
 
   invoices_service = inject(InvoicesService);
 
+  search_text = signal<string>('');
   pageNum = this.invoices_service.page;
   pageSize = this.invoices_service.page_size;
   start_date = this.invoices_service.start_date;

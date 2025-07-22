@@ -2,13 +2,70 @@
   <div class="flow-root">
     <div class="m-0">
 
-      <p-selectbutton [options]="stateOptions" [(ngModel)]="status" optionLabel="label" optionValue="value" aria-labelledby="basic">
-      </p-selectbutton>
+
+      <div class="mb-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+
+        <div class="w-full flex flex-col">
+          <label for="">Status</label>
+
+          <p-dropdown
+            [(ngModel)]="status"
+            [options]="status_options"
+            placeholder="Select Status"
+            class="w-full"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="label,value"
+            [styleClass]="'w-full'"
+            />
+
+          </div>
+
+        <div class="w-full">
+          <label for="">Search Term</label>
+          <input
+            [(ngModel)]="search_text"
+            placeholder="Search"
+            class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+          />
+        </div>
+
+        <div class="w-full">
+          <label for="">Start Date</label>
+          <p-calendar
+            appendTo="body"
+            [(ngModel)]="start_date"
+            [showIcon]="true"
+            [showButtonBar]="true"
+            [placeholder]="'Start Date'"
+            [dateFormat]="'mm/dd/yy'"
+            [maxDate]="end_date()"
+            styleClass="w-full"
+          />
+        </div>
+
+        <div class="w-full">
+          <label for="">End Date</label>
+          <p-calendar
+            appendTo="body"
+            [(ngModel)]="end_date"
+            [showIcon]="true"
+            [showButtonBar]="true"
+            [placeholder]="'End Date'"
+            [dateFormat]="'mm/dd/yy'"
+            [minDate]="start_date()"
+            styleClass="w-full"
+          />
+        </div>
+
+      </div>
 
       <div class="inline-block min-w-full py-2 align-middle">
         <div class="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg">
 
           <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+
+
             <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
               <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">

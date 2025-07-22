@@ -8,6 +8,8 @@ import {Invoice} from './models/responses/invoice-list-response';
 import {DatePipe, DecimalPipe, NgClass} from '@angular/common';
 import { SelectButton } from 'primeng/selectbutton';
 import {FormsModule} from '@angular/forms';
+import {Calendar} from 'primeng/calendar';
+import {DropdownModule} from 'primeng/dropdown';
 
 @Component({
   selector: 'app-invoices',
@@ -20,7 +22,9 @@ import {FormsModule} from '@angular/forms';
     DecimalPipe,
     NgClass,
     SelectButton,
-    FormsModule
+    FormsModule,
+    Calendar,
+    DropdownModule
   ],
   templateUrl: './invoices.html',
   styleUrl: './invoices.scss'
@@ -29,8 +33,20 @@ export class Invoices {
 
   invoices_service = inject(InvoicesService);
 
+  search_text = signal<string>('');
+  start_date = this.invoices_service.start_date;
+  end_date = this.invoices_service.end_date;
 
-  stateOptions: any[] = [{ label: 'Paid', value: 'Paid' },{ label: 'Unpaid', value: 'Unpaid' }, { label: 'All', value: '' }];
+
+  status_options: any[] = [
+    { label: 'Paid', value: 'Paid' },
+    { label: 'Unpaid', value: 'Unpaid' },
+    { label: 'All', value: '' },
+    { label: 'Partially Paid', value: 'Partially Paid' },
+    { label: 'Overdue', value: 'overdue' },
+    { label: 'Cancelled', value: 'cancelled' }
+
+  ];
 
   pageNum = this.invoices_service.page;
   pageSize = this.invoices_service.page_size;

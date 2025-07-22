@@ -47,7 +47,7 @@
             class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
          px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
-            Save
+            Place Order
             @if (loading()) {
               <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
             } @else {
@@ -59,74 +59,8 @@
 
       </section>
 
-      <!-- 🧾 Customer & payment form (right / bottom) -->
       <section>
-<!--        <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Billing Details</h3>-->
 
-<!--        <form [formGroup]="checkoutForm" class="space-y-4 overflow-auto" (ngSubmit)="placeOrder()">-->
-
-<!--          &lt;!&ndash; Full name &ndash;&gt;-->
-<!--          <div class="flex flex-col gap-1">-->
-<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Full Name *</label>-->
-<!--            <input type="text"-->
-<!--                   pInputText-->
-<!--                   formControlName="fullName"-->
-<!--                   class="w-full" />-->
-
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Email &ndash;&gt;-->
-<!--          <div class="flex flex-col gap-1">-->
-<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Email *</label>-->
-<!--            <input type="email"-->
-<!--                   pInputText-->
-<!--                   formControlName="email"-->
-<!--                   class="w-full" />-->
-
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Phone &ndash;&gt;-->
-<!--          <div class="flex flex-col gap-1">-->
-<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>-->
-<!--            <input type="tel"-->
-<!--                   pInputText-->
-<!--                   formControlName="phone"-->
-<!--                   class="w-full" />-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Payment method &ndash;&gt;-->
-<!--          <div class="flex flex-col gap-1">-->
-<!--            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method *</label>-->
-<!--            <p-dropdown-->
-<!--              appendTo="body"-->
-<!--              [options]="[-->
-<!--                {label: 'M‑Pesa', value: 'MPESA'},-->
-<!--                {label: 'Bank Transfer', value: 'BANK'},-->
-<!--                {label: 'PayPal', value: 'PAYPAL'}-->
-<!--              ]"-->
-<!--              formControlName="payMethod"-->
-<!--              placeholder="Select method"-->
-<!--              class="w-full">-->
-<!--            </p-dropdown>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Terms &ndash;&gt;-->
-<!--          <div class="flex items-center gap-2">-->
-<!--            <p-checkbox binary formControlName="acceptTerms"></p-checkbox>-->
-<!--            <label class="text-sm text-gray-700 dark:text-gray-300">-->
-<!--              I agree to the <a routerLink="/terms" class="underline">terms &amp; conditions</a> *-->
-<!--            </label>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Submit &ndash;&gt;-->
-<!--          <button pButton-->
-<!--                  type="submit"-->
-<!--                  label="Place Order"-->
-<!--                  icon="pi pi-check"-->
-<!--                  severity="success"-->
-<!--                  [disabled]="checkoutForm.invalid"-->
-<!--                  class="w-full" ></button>-->
-<!--        </form>-->
       </section>
     </div>
   </div>

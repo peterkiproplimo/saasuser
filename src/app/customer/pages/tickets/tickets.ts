@@ -15,6 +15,8 @@ import {
 import {ReactiveSelectComponent} from '../../../shared/components/form/reactive-select/reactive-select.component';
 import {MessageService} from 'primeng/api';
 import {Functions} from '../../../shared/functions/functions';
+import {DatePipe} from '@angular/common';
+import {Calendar} from 'primeng/calendar';
 
 @Component({
   selector: 'app-tickets',
@@ -30,12 +32,18 @@ import {Functions} from '../../../shared/functions/functions';
     ReactiveInputComponent,
     ReactiveTextAreaComponent,
     ReactiveSelectComponent,
+    DatePipe,
+    Calendar,
   ],
   providers: [MessageService],
   templateUrl: './tickets.html',
   styleUrl: './tickets.scss'
 })
 export class Tickets {
+
+  search_text = signal<string>('');
+  start_date = signal<Date | null>(null);
+  end_date = signal<Date | null>(null);
 
   ticker_service = inject(TicketService);
   tickets = this.ticker_service.ticket_resource.value;

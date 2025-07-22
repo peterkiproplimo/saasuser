@@ -1,5 +1,5 @@
 import {Component, DestroyRef, inject, signal} from '@angular/core';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {TicketService} from '../../services/ticket-service';
 import {ProgressSpinner} from 'primeng/progressspinner';
@@ -23,7 +23,8 @@ import {FileUpload} from 'primeng/fileupload';
     FormsModule,
     ReactiveTextAreaComponent,
     ReactiveInputComponent,
-    FileUpload
+    FileUpload,
+    NgClass
   ],
   providers: [MessageService],
   templateUrl: './ticket-detail.html',
@@ -46,6 +47,7 @@ export class TicketDetail {
       this.ticket_form.patchValue({ ticket_id: this.ticket_id });
     }
   }
+
 
   ticket_dialog = signal(false);
   loading = signal<boolean>(false);

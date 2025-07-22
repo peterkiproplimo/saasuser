@@ -63,32 +63,87 @@
         <div class="max-h-[60vh] overflow-y-auto">
 
           @for (comment of comments().data; track comment.id) {
-            <div class="mb-6 p-4 border rounded bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-              <div
-                class="flex flex-col md:flex-row justify-start md:gap-4 items-start md:items-center mb-2 text-sm text-gray-600 dark:text-gray-300">
-                <div class="capitalize"><strong>Author:</strong> {{ comment.author?.name }}</div>
-                <div><strong>Created:</strong> {{ comment.created | date:'short' }}</div>
-              </div>
-              <div class="mb-2"><strong>Direction:</strong> {{ comment.direction }}</div>
 
-              <!-- Attachments -->
-              @if (comment.has_attachments) {
-                <div class="mt-3">
-                  <strong class="text-gray-700 dark:text-gray-300"> Attachments:</strong>
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-                    @for (attachment of comment.attachments; track attachment.name) {
-                      <div class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded p-2">
-                        <a [href]="attachment.url" target="_blank">
-                          <img [src]="attachment.url" alt="{{ attachment.name }}"
-                               class="w-full h-32 object-cover rounded shadow">
-                          <p class="mt-2 text-sm text-center text-blue-600 truncate">{{ attachment.name }}</p>
-                        </a>
-                      </div>
-                    }
-                  </div>
+            <div
+              class="mb-6 flex"
+              [ngClass]="{
+    'justify-start': comment.direction === 'inbound',
+    'justify-end': comment.direction === 'outbound'
+  }"
+            >
+              <div
+                class="p-4 mx-4 border rounded-lg w-full max-w-2xl"
+                [ngClass]="{
+      'bg-green-100 border-green-400 text-green-900 dark:bg-green-900 dark:border-green-600 dark:text-green-100': comment.direction === 'inbound',
+      'bg-blue-100 border-blue-400 text-blue-900 dark:bg-blue-900 dark:border-blue-600 dark:text-blue-100': comment.direction === 'outbound'
+    }"
+              >
+                <!-- Metadata -->
+                <div class="flex flex-col md:flex-row justify-between md:gap-4 items-start md:items-center mb-2 text-sm">
+                  <div class="capitalize"><strong>Author:</strong> {{ comment.author?.name }}</div>
+                  <div><strong>Created:</strong> {{ comment.created | date:'short' }}</div>
                 </div>
-              }
+
+                <!-- Comment Text -->
+                <div class="mb-2">{{ comment.comment_text }}</div>
+
+                <!-- Attachments -->
+                @if (comment.has_attachments) {
+                  <div class="mt-3">
+                    <strong class="text-gray-700 dark:text-gray-300">Attachments:</strong>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                      @for (attachment of comment.attachments; track attachment.name) {
+                        <div class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded p-2">
+                          <a [href]="attachment.url" target="_blank">
+                            <img
+                              [src]="attachment.url"
+                              alt="{{ attachment.name }}"
+                              class="w-full h-32 object-cover rounded shadow"
+                            />
+                            <p class="mt-2 text-sm text-center text-blue-600 truncate">{{ attachment.name }}</p>
+                          </a>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
+
+
+
+            <!--            <div-->
+<!--              class="mb-6 p-4 border rounded"-->
+<!--              [ngClass]="{-->
+<!--    'bg-green-100 border-green-400 dark:bg-green-500 dark:border-green-600': comment.direction === 'inbound',-->
+<!--    'bg-blue-100 border-blue-400 dark:bg-blue-500 dark:border-blue-600': comment.direction === 'outbound'-->
+<!--  }"-->
+<!--            >-->
+<!--              <div-->
+<!--                class="flex flex-col md:flex-row justify-start md:gap-4 items-start md:items-center mb-2 text-sm text-gray-600 dark:text-gray-300">-->
+<!--                <div class="capitalize"><strong>Author:</strong> {{ comment.author?.name }}</div>-->
+<!--                <div><strong>Created:</strong> {{ comment.created | date:'short' }}</div>-->
+<!--              </div>-->
+<!--              <div class="mb-2"> {{ comment.comment_text }}</div>-->
+
+<!--              &lt;!&ndash; Attachments &ndash;&gt;-->
+<!--              @if (comment.has_attachments) {-->
+<!--                <div class="mt-3">-->
+<!--                  <strong class="text-gray-700 dark:text-gray-300"> Attachments:</strong>-->
+<!--                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">-->
+<!--                    @for (attachment of comment.attachments; track attachment.name) {-->
+<!--                      <div class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded p-2">-->
+<!--                        <a [href]="attachment.url" target="_blank">-->
+<!--                          <img [src]="attachment.url" alt="{{ attachment.name }}"-->
+<!--                               class="w-full h-32 object-cover rounded shadow">-->
+<!--                          <p class="mt-2 text-sm text-center text-blue-600 truncate">{{ attachment.name }}</p>-->
+<!--                        </a>-->
+<!--                      </div>-->
+<!--                    }-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              }-->
+<!--            </div>-->
           }
 
         </div>

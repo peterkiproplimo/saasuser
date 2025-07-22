@@ -12,6 +12,7 @@ export type Comment = {
   created?:         Date;
   modified?:        Date;
   type?:            string;
+  comment_text?:    string;
   author?:          Author;
   direction?:       string;
   attachments?:     Attachment[];

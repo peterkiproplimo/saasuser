@@ -1,1 +1,200 @@
-<p>dashboard works!</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+
+  <div class="bg-white shadow-md rounded-lg p-6 overflow-auto">
+    <h3 class="text-lg font-semibold mb-2">Recent Orders</h3>
+    <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+      <thead class="bg-gray-50 dark:bg-gray-800">
+      <tr>
+        <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+          Invoice No
+        </th>
+        <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+          Party
+        </th>
+      </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+      <!-- Loading State -->
+        @if (subscriptions_loading()) {
+          <tr class="w-full">
+            <td colspan="4" class="text-center py-4">
+              <div class="w-full flex justify-center">
+                <p-progressSpinner
+                  class="text-gray-500 dark:text-gray-400"
+                  [style]="{ width: '40px', height: '40px' }">
+                </p-progressSpinner>
+              </div>
+            </td>
+          </tr>
+        } @else {
+          @if (subscriptions().data?.length! > 0) {
+            @for (subscription of subscriptions().data; track subscription.name) {
+              <tr class="w-full">
+                <td class="py-4 pl-4 pr-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 sm:pl-6">
+                  {{ subscription.name }}
+                </td>
+                <td class="py-4 pl-4 pr-3 text-sm text-gray-500 dark:text-gray-400 sm:pl-6">
+                  {{ subscription.party }}
+                </td>
+              </tr>
+            }
+          } @else {
+            <tr class="w-full">
+              <td colspan="4" class="text-center py-4">No Subscriptions found.</td>
+            </tr>
+          }
+        }
+
+      </tbody>
+
+    </table>
+
+
+  </div>
+
+  <div class="bg-white shadow-md rounded-lg p-6 overflow-auto">
+    <h3 class="text-lg font-semibold mb-2">Unpaid Invoices</h3>
+
+    <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+      <thead class="bg-gray-50 dark:bg-gray-800">
+      <tr>
+      <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+        Invoice No
+      </th>
+      <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+        Grand Total
+      </th>
+      <th scope="col" class="py-3.5 pr-3 pl-4 whitespace-nowrap text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+        Outstanding Amount
+      </th>
+      <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+        Status
+      </th>
+      </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+      <!-- Loading State -->
+      @if (invoices_loading()) {
+        <tr class="w-full">
+          <td colspan="4" class="text-center py-4">
+            <div class="w-full flex justify-center">
+              <p-progressSpinner
+                class="text-gray-500 dark:text-gray-400"
+                [style]="{ width: '40px', height: '40px' }">
+              </p-progressSpinner>
+            </div>
+          </td>
+        </tr>
+      } @else {
+        @if (invoices().data?.length! > 0) {
+          @for (invoice of invoices().data; track invoice.name) {
+            <tr class="w-full">
+              <td class="py-4 pl-4 pr-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 sm:pl-6">
+                {{ invoice.name }}
+              </td>
+              <td class="py-4 pl-4 pr-3 text-sm text-gray-500 dark:text-gray-400 sm:pl-6">
+                {{ invoice.grand_total | currency }}
+              </td>
+              <td class="py-4 pl-4 pr-3 text-sm text-gray-500 dark:text-gray-400 sm:pl-6">
+                {{ invoice.outstanding_amount | currency }}
+              </td>
+              <td class="py-4 pl-4 pr-3 text-sm text-gray-500 dark:text-gray-400 sm:pl-6">
+                {{ invoice.status }}
+              </td>
+            </tr>
+          }
+        } @else {
+          <tr class="w-full">
+            <td colspan="4" class="text-center py-4">No unpaid invoices found.</td>
+          </tr>
+        }
+      }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="bg-white shadow-md rounded-lg p-6 overflow-auto">
+    <h3 class="text-lg font-semibold mb-2">Recent Transactions</h3>
+
+    <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700 overflow-x-auto">
+      <thead class="bg-gray-50 dark:bg-gray-800 w-full">
+
+      <tr class="w-full">
+        <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+          Posting Date
+        </th>
+        <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+          Voucher No
+        </th>
+        <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+          Debit
+        </th>
+        <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
+          Credit
+        </th>
+      </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+      <!-- Loading State -->
+        @if (ledger_loading()) {
+          <tr class="w-full">
+            <td colspan="9" class="text-center py-4">
+              <div class="w-full flex justify-center">
+                <p-progressSpinner
+                  class="text-gray-500 dark:text-gray-400"
+                  [style]="{ width: '40px', height: '40px' }">
+                </p-progressSpinner>
+              </div>
+            </td>
+          </tr>
+        } @else {
+          @if (ledger().data?.length! > 0) {
+            @for (ledger_entry of ledger().data; track ledger_entry.name) {
+
+              <tr class="w-full">
+                <td class="py-3 pr-3 pl-4 text-sm  whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">{{ ledger_entry.posting_date | date: 'yyyy-MM-dd' }}</td>
+                <td class="py-3 pr-3 pl-4 text-sm whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">{{ ledger_entry.voucher_no }}</td>
+                <td class="py-3 pr-3 pl-4 text-sm  whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">{{ ledger_entry.debit | number: '1.2-2' }}</td>
+                <td class="py-3 pr-3 pl-4 text-sm  whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">{{ ledger_entry.credit | number: '1.2-2' }}</td>
+
+              </tr>
+
+            }
+          } @else {
+            <tr class="w-full">
+              <td colspan="9" class="py-4">
+                <div class="w-full flex justify-center">
+                  <app-empty-state
+                    class="text-center">
+                    <h3
+                      class="text-lg font-medium text-gray-700 dark:text-gray-300"
+                      slot="title">
+                      No Billing History
+                    </h3>
+                    <p
+                      class="text-gray-500 dark:text-gray-400 mt-2"
+                      slot="message">
+                      Try adjusting your search term or check back later for more.
+                    </p>
+                  </app-empty-state>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+
+    </table>
+
+
+  </div>
+
+</div>
+
