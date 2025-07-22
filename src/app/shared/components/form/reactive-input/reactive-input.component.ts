@@ -28,6 +28,19 @@ export class ReactiveInputComponent {
 
   shared_functions= new Functions()
 
+  isPasswordVisible: boolean = false;
+
+  togglePasswordVisibility() {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  get effectiveInputType(): string {
+    if (this.type === 'password') {
+      return this.isPasswordVisible ? 'text' : 'password';
+    }
+    return this.type;
+  }
+
   hasPatternError(): boolean {
     return this.shared_functions.hasPatternError(this.form,this.key);
   }

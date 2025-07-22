@@ -81,6 +81,8 @@ export class TicketDetail {
     this.ticket_form?.markAllAsTouched();
     if (this.ticket_form?.invalid) return;
 
+    this.loading.set(true);
+
     const formData = new FormData();
 
     let ticket_id = this.ticket_form.get('ticket_id')?.value;
@@ -93,7 +95,6 @@ export class TicketDetail {
       formData.append('files', file);
     }
 
-    this.loading.set(true);
 
     this.ticket_service.create_comment(formData).subscribe({
       next: (response) => {

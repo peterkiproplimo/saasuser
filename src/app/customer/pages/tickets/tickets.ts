@@ -101,6 +101,8 @@ export class Tickets {
     this.ticket_form?.markAllAsTouched();
     if (this.ticket_form?.invalid) return;
 
+    this.loading.set(true);
+
     const formData = new FormData();
 
     let ticket_type = this.ticket_form.get('ticket_type')?.value;
@@ -114,7 +116,6 @@ export class Tickets {
     for (const file of this.selectedFiles) {
       formData.append('files', file);
     }
-    this.loading.set(true);
     this.ticker_service.create_ticket(formData).subscribe({
       next: (response) => {
         this.loading.set(false);
