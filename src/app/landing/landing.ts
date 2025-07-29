@@ -1,59 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { SaasService } from './service/saas.service';
-import { Service } from './models/service';
-import { SolutionCard } from './components/solution-card/solution-card';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { SolutionCardComponent } from '../shared/components/solution-card/solution-card.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [SolutionCard],
+  imports: [CommonModule, SolutionCardComponent],
   templateUrl: './landing.html',
-  styleUrl: './landing.scss',
+  styleUrls: ['./landing.scss'],
 })
 export class Landing implements OnInit {
-  services: Service[] = [];
+  services: any[] = [];
 
-  constructor(private saasService: SaasService) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.saasService.getSaasApplications(1, 100).subscribe((response) => {
-      if (response?.status === 200) {
-        this.services = response.data.map((item: any) => ({
-          title: item.app_name,
-          description:
-            item.short_description ||
-            item.description ||
-            'No description available',
-          icon: this.mapIcon(item.app_code),
-        }));
-        console.log(this.services); // ✅ Confirm it's not empty
-      }
+    this.fetchSolutions();
+  }
+
+  fetchSolutions() {
+    const url = `${environment.BASE_URL}.subscription.list_saas_application?page=1&page_size=10`;
+    this.http.get<any>(url).subscribe({
+      next: (res) => {
+        if (res.status === 200) {
+          this.services = res.data;
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching SaaS applications:', err);
+      },
     });
   }
 
-  trackByTitle(index: number, item: Service): string {
-    return item.title;
-  }
-
-  private mapIcon(appCode: string): string {
-    const lower = appCode.toLowerCase();
-    if (lower.includes('pos')) return 'pi-credit-card';
-    if (lower.includes('property')) return 'pi-building';
-    if (lower.includes('crm')) return 'pi-chart-line';
-    if (lower.includes('support')) return 'pi-headphones';
-    if (lower.includes('inventory')) return 'pi-box';
-    if (lower.includes('procure')) return 'pi-shopping-cart';
-    if (lower.includes('account')) return 'pi-wallet';
-    if (lower.includes('manufacture')) return 'pi-cog';
-    if (lower.includes('project')) return 'pi-folder';
-    if (lower.includes('asset')) return 'pi-desktop';
-    if (lower.includes('attendance') || lower.includes('leave'))
-      return 'pi-calendar-clock';
-    if (lower.includes('payroll') || lower.includes('hr'))
-      return 'pi-briefcase';
-    if (lower.includes('learn')) return 'pi-book';
-    if (lower.includes('web') || lower.includes('e-commerce'))
-      return 'pi-globe';
-    return 'pi-sliders-h'; // default icon
+  trackByTitle(index: number, item: any): string {
+    return item.name;
   }
 }

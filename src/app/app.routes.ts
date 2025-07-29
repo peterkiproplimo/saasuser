@@ -21,11 +21,6 @@ export const routes: Routes = [
           import('./aboutus/routes').then((m) => m.landingRoutes),
       },
       {
-        path: 'our',
-        loadChildren: () =>
-          import('./ourcompany/routes').then((m) => m.landingRoutes),
-      },
-      {
         path: 'contactus',
         loadChildren: () =>
           import('./contactus/routes').then((m) => m.landingRoutes),
