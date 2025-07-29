@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-solution-card',
@@ -10,4 +11,11 @@ import { CommonModule } from '@angular/common';
 })
 export class SolutionCardComponent {
   @Input() solution: any;
+  private router = inject(Router);
+
+  goToSolution(app: any) {
+    this.router.navigate(['/solutions', app.name], {
+      state: { solutionData: app },
+    });
+  }
 }

@@ -5,3 +5,19 @@
 :host(:hover) {
   transform: translateY(-5px);
 }
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+img {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
