@@ -1,4 +1,4 @@
-export type Service = {
+export interface Service {
   title: string;
   description: string;
   icon: string;

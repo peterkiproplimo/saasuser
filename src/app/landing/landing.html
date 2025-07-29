@@ -38,9 +38,10 @@
     </h2>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
-      @for (solution of services; track solution.title) {
-      <app-solution-card [solution]="solution"></app-solution-card>
-      }
+      <app-solution-card
+        *ngFor="let solution of services; trackBy: trackByTitle"
+        [solution]="solution"
+      ></app-solution-card>
     </div>
 
     <!-- Call to Action -->
