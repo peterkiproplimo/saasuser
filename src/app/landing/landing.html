@@ -1,41 +1,59 @@
+<!-- Hero Section with Banner -->
 <div
-  class="relative h-max md:h-screen bg-[url('/images/Rect.png')] bg-no-repeat bg-cover bg-center bg-fixed flex items-start md:items-center justify-center dark:brightness-80"
+  class="relative h-[60vh] md:h-[50vh] bg-[url('/images/banner-bg.jpg')] bg-no-repeat bg-cover bg-center flex items-center"
 >
-  <div
-    class="absolute inset-0 bg-gradient-to-b from-sky-600/90 to-transparent z-10"
-  ></div>
-  <section
-    class="relative z-20 flex-1 text-center text-gray-900 dark:text-white"
-  >
-    <div
-      class="container mx-auto px-6 md:px-12 lg:px-20 py-4 md:py-16 text-center"
-    >
-      <h1
-        class="text-xl md:text-6xl font-extrabold text-white drop-shadow-xl leading-tight mb-10"
-      >
-        Unlock Limitless Growth with<br /><span class="text-sky-300"
-          >Techsavanna ERPs</span
-        >
-      </h1>
+  <!-- Optional dark overlay if needed -->
+  <div class="absolute inset-0 bg-black/20 z-0"></div>
 
-      <p
-        class="text-lg md:text-2xl text-gray-200 max-w-3xl mx-auto mb-12 leading-relaxed drop-shadow"
-      >
-        Discover a suite of powerful, intuitive tools tailored for ambitious
-        businesses.<br />
-        From operations and CRM to HR and analytics, Techsavanna empowers you to
-        work smarter, grow faster, and lead with confidence—anywhere, anytime.
-      </p>
+  <div class="container mx-auto px-6 md:px-12 lg:px-20 z-10">
+    <div class="grid md:grid-cols-2 gap-10 items-center relative z-10">
+      <!-- Text Content -->
+      <div class="text-white space-y-6 text-center md:text-left">
+        <h1 class="text-3xl md:text-5xl font-bold leading-tight">
+          Tailored Software
+          <span class="text-cyan-300">Solutions</span> and<br />
+          expert <span class="text-cyan-300">IT Consulting.</span>
+        </h1>
+        <p class="text-lg md:text-xl max-w-xl mx-auto md:mx-0">
+          We create innovative solutions that bring convenience, efficiency, and
+          security to the digital world. From strategy to implementation, our
+          team is dedicated to your success.
+        </p>
+      </div>
+
+      <!-- Illustration Image -->
+      <div class="hidden md:block">
+        <img
+          src="/images/software-infographic.svg"
+          alt="Hero Illustration"
+          class="w-full max-w-md mx-auto drop-shadow-xl w-64 sm:w-96 lgh-[90vh] md:h-[75vh] :max-w-4xl animate-float-reverse bounce-y z-10"
+        />
+      </div>
     </div>
-  </section>
+  </div>
 </div>
+
+<!-- Trusted Clients Section -->
+<section class="bg-gray-100 py-10 px-6 md:px-12 lg:px-24 text-center">
+  <div class="flex flex-wrap justify-center items-center gap-8">
+    <img src="/images/safaricom.png" alt="Safaricom" class="h-12" />
+    <img src="/images/equity.png" alt="Equity" class="h-12" />
+    <img src="/images/icealion.jpg" alt="ICEA Lion" class="h-12" />
+    <img src="/images/kcb.png" alt="KCB" class="h-12" />
+    <img src="/images/NCBA.jpg" alt="NCBA" class="h-12" />
+    <img src="/images/cellulant.jpeg" alt="Cellulant" class="h-12" />
+  </div>
+</section>
+
 <section
   class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24 space-y-16"
 >
   <div class="max-w-6xl mx-auto space-y-10">
-    <h2 class="text-4xl font-bold text-center mb-12">
-      Smarter Software. Stronger Business.
-    </h2>
+    <img
+      src="/images/solutions.svg"
+      alt="solutions"
+      class="max-w-[800px] w-full h-auto mx-auto"
+    />
 
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
       <app-solution-card
