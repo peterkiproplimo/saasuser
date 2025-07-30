@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
 })
 export class PdfService {
 
-  private gotenbergUrl = 'https://gotenberg.andsons.co.ke/forms/chromium/convert/html';
+  private gotenbergUrl = 'http://197.248.2.144:8004/forms/chromium/convert/html';
   private http =  inject(HttpClient);
 
   generatePdf(htmlContent: string): Observable<Blob> {

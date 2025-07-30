@@ -41,10 +41,6 @@ import {Calendar} from 'primeng/calendar';
 })
 export class Tickets {
 
-  search_text = signal<string>('');
-  start_date = signal<Date | null>(null);
-  end_date = signal<Date | null>(null);
-
   ticker_service = inject(TicketService);
   tickets = this.ticker_service.ticket_resource.value;
   private functions = new Functions();
@@ -53,6 +49,9 @@ export class Tickets {
 
   pageNum = this.ticker_service.page;
   pageSize = this.ticker_service.page_size;
+  search_text = this.ticker_service.search;
+  start_date = this.ticker_service.start_date;
+  end_date = this.ticker_service.end_date;
   is_loading = this.ticker_service.ticket_resource.isLoading;
   first = signal<number>(0);
   totalRecords = computed(() => this.tickets().pagination?.total_records ?? 0);

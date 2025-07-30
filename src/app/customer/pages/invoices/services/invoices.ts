@@ -19,29 +19,32 @@ export class InvoicesService {
   start_date = signal<Date | null>(null);
   end_date = signal<Date | null>(null);
 
+  id = signal<string>('');
+
   status = signal('');
 
   invoices_resource = httpResource<invoiceListResponse>(
-    ()=> `${this.base_url}.invoices.get_invoices?page=${this.page()}&page_size=${this.page_size()}&status=${this.status()}`,
+    ()=> {
+
+      const params = new URLSearchParams();
+      params.set('page', this.page().toString());
+      params.set('page_size', this.page_size().toString());
+      params.set('status', this.status());
+
+      const start = this.start_date();
+      if (start) {
+        params.set('start_date', this.datePipe.transform(start, 'yyyy-MM-dd') || '');
+      }
+
+      const end = this.end_date();
+      if (end) {
+        params.set('end_date', this.datePipe.transform(end, 'yyyy-MM-dd') || '');
+      }
+
+      return `${this.base_url}.invoices.get_invoices?${params.toString()}`
+    },
     {defaultValue: {}}
   )
-
-  // ledger_resource = httpResource<LedgerListResponse>(
-  //   () => {
-  //     const formattedStartDate = this.start_date()
-  //       ? this.datePipe.transform(this.start_date(), 'yyyy-MM-dd')
-  //       : '';
-  //     const formattedEndDate = this.end_date()
-  //       ? this.datePipe.transform(this.end_date(), 'yyyy-MM-dd')
-  //       : '';
-  //     return `${this.base_url}.invoices.get_customer_ledger?get_customer_ledger?
-  //     &page=${this.page()}
-  //     &start_date=${formattedStartDate}
-  //     &end_date=${formattedEndDate}
-  //     &page_size=${this.page_size()}`;
-  //   },
-  //   { defaultValue: {} }
-  // );
 
   ledger_resource = httpResource<LedgerListResponse>(
     () => {
@@ -61,6 +64,16 @@ export class InvoicesService {
       }
 
       return `${this.base_url}.invoices.get_customer_ledger?${params.toString()}`;
+    },
+    { defaultValue: {} }
+  );
+
+  invoice_by_id_resource = httpResource<any>(
+    () => {
+      if (!this.id()) {
+        return '';
+      }
+      return `${this.base_url}.invoices.get_invoice_by_id?invoice_id=${this.id()}`;
     },
     { defaultValue: {} }
   );

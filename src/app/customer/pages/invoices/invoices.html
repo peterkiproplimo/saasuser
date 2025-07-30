@@ -150,14 +150,17 @@
 
                       <td class="relative pr-4 pl-3 text-center text-sm font-medium whitespace-nowrap sm:pr-6">
                         <p-button
-                          icon="pi pi-download"
+                          (click)="handle_invoice_download(invoice.name!)"
+                          [icon]="isRowLoading(invoice.name!) ? 'pi pi-spin pi-spinner' : 'pi pi-download'"
+                          [disabled]="isRowLoading(invoice.name!)"
                           size="small"
                           severity="info"
                           [rounded]="true"
                           [outlined]="true"
                           class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-
                         />
+
+                      </td>
 
                       <td class="relative pr-4 pl-3 text-center text-sm font-medium whitespace-nowrap sm:pr-6">
                         @if (invoice.status != 'Paid') {
@@ -219,3 +222,6 @@
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
   />
 </div>
+
+
+
