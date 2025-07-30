@@ -28,70 +28,116 @@
     >
       <!-- Name and Email -->
       <div class="grid md:grid-cols-2 gap-4">
-        <input
-          formControlName="persona_name"
-          type="text"
-          placeholder="Enter Name"
-          [ngClass]="{
+        <div class="space-y-1">
+          <label
+            for="persona_name"
+            class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >Name</label
+          >
+          <input
+            id="persona_name"
+            name="persona_name"
+            formControlName="persona_name"
+            type="text"
+            placeholder="Enter Name"
+            [ngClass]="{
         'border-red-500': isSubmitted && form.get('persona_name')?.invalid,
         'border-sky-400': !isSubmitted || form.get('persona_name')?.valid
       }"
-          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
-        />
+            class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+        </div>
 
-        <input
-          formControlName="email"
-          type="email"
-          placeholder="Enter Email"
-          [ngClass]="{
+        <div class="space-y-1">
+          <label
+            for="email"
+            class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >Email</label
+          >
+          <input
+            id="email"
+            name="email"
+            formControlName="email"
+            type="email"
+            placeholder="Enter Email"
+            [ngClass]="{
         'border-red-500': isSubmitted && form.get('email')?.invalid,
         'border-sky-400': !isSubmitted || form.get('email')?.valid
       }"
-          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
-        />
+            class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+        </div>
       </div>
 
       <!-- Subject and Phone -->
       <div class="grid md:grid-cols-2 gap-4">
-        <input
-          formControlName="subject"
-          type="text"
-          placeholder="Enter Subject"
-          [ngClass]="{
+        <div class="space-y-1">
+          <label
+            for="subject"
+            class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >Subject</label
+          >
+          <input
+            id="subject"
+            name="subject"
+            formControlName="subject"
+            type="text"
+            placeholder="Enter Subject"
+            [ngClass]="{
         'border-red-500': isSubmitted && form.get('subject')?.invalid,
         'border-sky-400': !isSubmitted || form.get('subject')?.valid
       }"
-          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
-        />
+            class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+        </div>
 
-        <input
-          formControlName="phone_number"
-          type="text"
-          placeholder="Enter Phone Number"
-          [ngClass]="{
+        <div class="space-y-1">
+          <label
+            for="phone_number"
+            class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >Phone Number</label
+          >
+          <input
+            id="phone_number"
+            name="phone_number"
+            formControlName="phone_number"
+            type="text"
+            placeholder="Enter Phone Number"
+            [ngClass]="{
         'border-red-500': isSubmitted && form.get('phone_number')?.invalid,
         'border-sky-400': !isSubmitted || form.get('phone_number')?.valid
       }"
-          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
-        />
+            class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          />
+        </div>
       </div>
 
       <!-- Message -->
-      <textarea
-        formControlName="message"
-        rows="5"
-        placeholder="Enter Message"
-        [ngClass]="{
+      <div class="space-y-1">
+        <label
+          for="message"
+          class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >Message</label
+        >
+        <textarea
+          id="message"
+          name="message"
+          formControlName="message"
+          rows="5"
+          placeholder="Enter Message"
+          [ngClass]="{
       'border-red-500': isSubmitted && form.get('message')?.invalid,
       'border-sky-400': !isSubmitted || form.get('message')?.valid
     }"
-        class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
-      ></textarea>
+          class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+        ></textarea>
+      </div>
 
       <!-- CAPTCHA -->
-      <div class="mb-4">
-        <div class="flex items-center gap-2 mb-2">
+      <div class="mb-4 space-y-1">
+        <div class="flex items-center gap-2 mb-1">
           <label
+            for="captcha_answer"
             class="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300"
           >
             {{ captchaQuestion }}
@@ -104,13 +150,15 @@
         </div>
 
         <input
+          id="captcha_answer"
+          name="captcha_answer"
           formControlName="captcha_answer"
           type="text"
           placeholder="Enter answer"
           [ngClass]="{
-        'border-red-500': isSubmitted && form.get('captcha_answer')?.invalid,
-        'border-sky-400': !isSubmitted || form.get('captcha_answer')?.valid
-      }"
+      'border-red-500': isSubmitted && form.get('captcha_answer')?.invalid,
+      'border-sky-400': !isSubmitted || form.get('captcha_answer')?.valid
+    }"
           class="w-full p-3 border focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
         />
       </div>

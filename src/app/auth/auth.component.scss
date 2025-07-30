@@ -1,0 +1,14 @@
+@keyframes bounce-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-25px);
+  }
+}
+
+.bounce-y {
+  -webkit-animation: bounce-y 5s infinite linear;
+  animation: bounce-y 5s infinite linear;
+}

@@ -1,11 +1,17 @@
-import {Component, DestroyRef, inject} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../services/auth.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {Functions} from '../../../shared/functions/functions';
-import {ProgressSpinner} from 'primeng/progressspinner';
-import {ReactiveInputComponent} from '../../../shared/components/form/reactive-input/reactive-input.component';
-import {RouterLink} from '@angular/router';
+import { Component, DestroyRef, inject } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Functions } from '../../../shared/functions/functions';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { ReactiveInputComponent } from '../../../shared/components/form/reactive-input/reactive-input.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
@@ -14,10 +20,10 @@ import {RouterLink} from '@angular/router';
     ProgressSpinner,
     ReactiveInputComponent,
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './forgot-password.html',
-  styleUrl: './forgot-password.scss'
+  styleUrl: './forgot-password.scss',
 })
 export class ForgotPassword {
   loading: boolean = false;
@@ -26,10 +32,8 @@ export class ForgotPassword {
   functions = new Functions();
 
   forgot_form = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-    }
-  )
-
+    email: new FormControl('', [Validators.required, Validators.email]),
+  });
   forgot_password() {
     this.forgot_form?.markAllAsTouched();
     if (this.forgot_form?.invalid) return;
@@ -37,25 +41,30 @@ export class ForgotPassword {
     this.loading = true;
 
     let forgot_password_request = {
-      email: this.forgot_form.value.email!
-    }
+      email: this.forgot_form.value.email!,
+    };
 
-    this.auth_service.forgot_password(forgot_password_request).pipe(
-      takeUntilDestroyed(this.destroyRef)
-    )
+    this.auth_service
+      .forgot_password(forgot_password_request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: data => {
+        next: (data) => {
           this.loading = false;
-          // Show success message
-          this.functions.show_toast("Password Reset Successful", 'success',data.message!);
+          this.functions.show_toast(
+            'Password Reset Successful',
+            'success',
+            data.message!
+          );
         },
-        error: error => {
+        error: (error) => {
           this.loading = false;
-          this.functions.show_toast("Failed to send password reset link", 'error', error.error.message);
+          this.functions.show_toast(
+            'Failed to send password reset link',
+            'error',
+            error.error.message
+          );
         },
-        complete: () => {}
+        complete: () => {},
       });
-
   }
-
 }
