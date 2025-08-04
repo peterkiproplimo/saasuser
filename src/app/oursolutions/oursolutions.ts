@@ -47,6 +47,7 @@ export class OursolutionsComponent implements OnInit {
   hasError = false;
   showRequestDialog = false;
   submitted = false;
+  feature = '';
 
   // ▶ CAPTCHA
   captchaQuestion = '';
