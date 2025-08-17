@@ -171,7 +171,7 @@
                             [rounded]="true"
                             [outlined]="true"
                             class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                            (click)="pay_invoice(invoice)"
+                            (click)="open_invoice_dialog(invoice)"
                           />
                         }
 
@@ -223,5 +223,58 @@
   />
 </div>
 
+<p-dialog [(visible)]="payment_dialog" [style]="{ width: '450px' }" header="Make Payment" [modal]="true">
 
+  <form class="w-full space-y-6" (ngSubmit)="pay_invoice()" [formGroup]="payment_form">
+
+    <app-reactive-input
+      [form]="payment_form"
+      [id]="'email'"
+      [key]="'email'"
+      [label]="'Email Address'"
+      [type]="'email'"
+    ></app-reactive-input>
+
+    <app-reactive-input
+      [form]="payment_form"
+      [id]="'amount'"
+      [key]="'amount'"
+      [label]="'Amount'"
+      [minval]="1"
+      [type]="'number'"
+    ></app-reactive-input>
+
+    <app-reactive-input
+      [form]="payment_form"
+      [id]="'phone'"
+      [key]="'phone'"
+      [label]="'Phone Number'"
+      [type]="'text'"
+    ></app-reactive-input>
+
+
+    <div class="flex w-full justify-end gap-2 mt-3">
+      <button type="button" (click)="hideDialog()" class="flex justify-center items-center gap-2 rounded-md bg-red-600 dark:bg-red-700
+         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-red-500 dark:hover:bg-red-600
+         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:focus-visible:outline-red-700">
+        Cancel
+        <i class="pi pi-times"></i>
+      </button>
+      <button
+        [disabled]="payment_loading()"
+        class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
+         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
+         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
+        Raise
+        @if (payment_loading()) {
+          <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
+        } @else {
+          <i class="pi pi-save"></i>
+        }
+      </button>
+    </div>
+
+  </form>
+
+</p-dialog>
 

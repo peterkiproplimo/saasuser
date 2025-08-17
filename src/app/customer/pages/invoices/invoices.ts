@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, Signal, signal} from '@angular/core';
+import {Component, computed, DestroyRef, effect, inject, Signal, signal} from '@angular/core';
 import {InvoicesService} from './services/invoices';
 import {Paginator, PaginatorState} from 'primeng/paginator';
 import {ProgressSpinner} from 'primeng/progressspinner';
@@ -6,12 +6,18 @@ import {Button} from 'primeng/button';
 import {EmptyStateComponent} from '../../../shared/components/empty-state/empty-state.component';
 import {Invoice} from './models/responses/invoice-list-response';
 import {DatePipe, DecimalPipe, NgClass} from '@angular/common';
-import { SelectButton } from 'primeng/selectbutton';
-import {FormsModule} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Calendar} from 'primeng/calendar';
 import {DropdownModule} from 'primeng/dropdown';
 import {PdfService} from './services/pdf-service';
 import {getHtmlContent} from './pdf-templates/invoice-pdf';
+import {PaymentRequest} from './models/requests/payment_request';
+import {Dialog} from 'primeng/dialog';
+import {ReactiveInputComponent} from '../../../shared/components/form/reactive-input/reactive-input.component';
+import {MessageService} from 'primeng/api';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Functions} from '../../../shared/functions/functions';
+import {min} from 'rxjs';
 
 @Component({
   selector: 'app-invoices',
@@ -23,11 +29,14 @@ import {getHtmlContent} from './pdf-templates/invoice-pdf';
     DatePipe,
     DecimalPipe,
     NgClass,
-    SelectButton,
     FormsModule,
     Calendar,
-    DropdownModule
+    DropdownModule,
+    Dialog,
+    ReactiveInputComponent,
+    ReactiveFormsModule
   ],
+  providers: [MessageService],
   templateUrl: './invoices.html',
   styleUrl: './invoices.scss'
 })
@@ -35,17 +44,14 @@ export class Invoices {
 
   invoices_service = inject(InvoicesService);
   pdf_service = inject(PdfService);
-  pdf_loading = signal(false);
 
-  search_text = signal<string>('');
+  private destroyRef = inject(DestroyRef);
+
+  payment_loading = signal<boolean>(false);
+
   start_date = this.invoices_service.start_date;
   end_date = this.invoices_service.end_date;
-
-  selected_invoice_id = signal<string | null>(null);
-
   invoiceRowLoading = signal<Record<string, boolean>>({});
-
-
 
   status_options: any[] = [
     { label: 'Paid', value: 'Paid' },
@@ -60,7 +66,11 @@ export class Invoices {
   pageNum = this.invoices_service.page;
   pageSize = this.invoices_service.page_size;
   status = this.invoices_service.status;
+  search_text = this.invoices_service.search;
   first = signal<number>(0);
+  payment_dialog = signal(false);
+
+  selected_invoice = signal<Invoice|null>(null);
 
   invoices = this.invoices_service.invoices_resource.value;
   is_loading = this.invoices_service.invoices_resource.isLoading;
@@ -69,6 +79,14 @@ export class Invoices {
 
   invoice = this.invoices_service.invoice_by_id_resource.value;
   invoice_loading = this.invoices_service.invoice_by_id_resource.isLoading;
+  functions = new Functions();
+
+  payment_form = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required]),
+      amount: new FormControl('', [Validators.required, Validators.min(1)]),
+    }
+  )
 
   onPageChange(event: PaginatorState) {
     this.first.set(event.first ?? 0);
@@ -80,12 +98,60 @@ export class Invoices {
     return this.invoiceRowLoading()[invoiceName];
   }
 
-  pay_invoice(invoice: Invoice) {
+  open_invoice_dialog(invoice: Invoice){
+    this.payment_dialog.set(true);
+    this.selected_invoice.set(invoice);
+    this.payment_form.patchValue({
+      amount: this.selected_invoice()?.outstanding_amount?.toString()
+    })
+  }
+
+  pay_invoice() {
+
+    this.payment_form?.markAllAsTouched();
+    if (this.payment_form?.invalid) return;
+    this.payment_loading.set(true);
+
+    let payment_request : PaymentRequest = {
+      invoice_name: this.selected_invoice()?.name,
+      payment_amount: this.payment_form.value.amount!,
+      payment_mode: "PesaPal",
+      customer_email: this.payment_form.value.email!,
+      customer_phone: this.payment_form.value.phone!,
+    }
+
+    this.invoices_service.pay_invoice(payment_request).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    )
+      .subscribe({
+        next: data => {
+          this.hideDialog();
+          let win: Window|null = window.open('', '_blank');
+          if (win && data.data?.payment_url) {
+            win.location.href = data.data.payment_url;
+          }
+
+          this.payment_loading.set(false);
+          this.functions.show_toast("Payment Request Successful", 'success', "You have initiated a payment.");
+        },
+        error: (error) => {
+          this.payment_loading.set(false);
+          this.functions.show_toast("Payment Failed", 'error', error.error.message);
+        },
+        complete: () => {
+          this.payment_loading.set(false);
+        }
+      });
+
+  }
+
+  hideDialog() {
+    this.payment_form.reset();
+    this.payment_dialog.set(false);
+    this.payment_form.markAsUntouched();
   }
 
   download_invoice(invoice: any) {
-
-    console.log(invoice)
 
     this.pdf_service.generatePdf(getHtmlContent(invoice)).subscribe({
       next: (pdfBlob) => {

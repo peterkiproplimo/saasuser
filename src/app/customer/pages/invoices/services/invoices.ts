@@ -4,6 +4,10 @@ import {environment} from '../../../../../environments/environment';
 import {invoiceListResponse} from '../models/responses/invoice-list-response';
 import {LedgerListResponse} from '../models/responses/ledger-list-response';
 import {DatePipe} from '@angular/common';
+import {debounceSignal} from '../../../../shared/functions/functions';
+import {Observable} from 'rxjs';
+import {PaymentResponse} from '../models/responses/payment_response';
+import {PaymentRequest} from '../models/requests/payment_request';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +15,7 @@ import {DatePipe} from '@angular/common';
 export class InvoicesService {
   base_url = environment.BASE_URL;
 
-  constructor(private datePipe : DatePipe) {}
+  constructor(private datePipe : DatePipe, private http: HttpClient) {}
 
   page = signal(1);
   page_size = signal(5);
@@ -22,6 +26,8 @@ export class InvoicesService {
   id = signal<string>('');
 
   status = signal('');
+  search = signal('');
+  debounced_search = debounceSignal<string>(this.search, 500);
 
   invoices_resource = httpResource<invoiceListResponse>(
     ()=> {
@@ -30,6 +36,8 @@ export class InvoicesService {
       params.set('page', this.page().toString());
       params.set('page_size', this.page_size().toString());
       params.set('status', this.status());
+      params.set('search', this.debounced_search()!);
+
 
       const start = this.start_date();
       if (start) {
@@ -77,6 +85,10 @@ export class InvoicesService {
     },
     { defaultValue: {} }
   );
+
+  pay_invoice(invoice: PaymentRequest) :Observable<PaymentResponse>{
+    return this.http.post<PaymentResponse>(`${this.base_url}.invoices.pay_invoice`, invoice)
+  }
 
 
 }
