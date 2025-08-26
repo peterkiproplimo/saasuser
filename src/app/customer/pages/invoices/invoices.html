@@ -1,13 +1,10 @@
 <div class="p-4 overflow-auto">
   <div class="flow-root">
     <div class="m-0">
-
-
+      <!-- Filters -->
       <div class="mb-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-
         <div class="w-full flex flex-col">
           <label for="">Status</label>
-
           <p-dropdown
             [(ngModel)]="status"
             [options]="status_options"
@@ -17,9 +14,8 @@
             [filter]="true"
             filterBy="label,value"
             [styleClass]="'w-full'"
-            />
-
-          </div>
+          />
+        </div>
 
         <div class="w-full">
           <label for="">Search Term</label>
@@ -57,150 +53,177 @@
             styleClass="w-full"
           />
         </div>
-
       </div>
 
+      <!-- Table -->
       <div class="inline-block min-w-full py-2 align-middle">
-        <div class="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg">
-
-          <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
-
-
+        <div
+          class="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg"
+        >
+          <table
+            class="min-w-full divide-y divide-gray-300 dark:divide-gray-700"
+          >
             <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Invoice No
-              </th>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Posting Date
-              </th>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Due Date
-              </th>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Grand Total
-              </th>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Outstanding Amount
-              </th>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Currency
-              </th>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Status
-              </th>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                Type
-              </th>
-              <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6">
-                Download
-              </th>
-              <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6">
-                Pay
-                <span class="sr-only">Update</span>
-              </th>
-            </tr>
+              <tr>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Invoice No
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Posting Date
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Due Date
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Grand Total
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Outstanding Amount
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Currency
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  Type
+                </th>
+                <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6">
+                  Download
+                </th>
+                <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6">
+                  Pay
+                </th>
+              </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
-            <!-- Loading State -->
+
+            <tbody
+              class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900"
+            >
+              <!-- Loading State -->
               @if (is_loading()) {
-                <tr class="w-full">
-                  <td colspan="9" class="text-center py-4">
-                    <div class="w-full flex justify-center">
-                      <p-progressSpinner
-                        class="text-gray-500 dark:text-gray-400"
-                        [style]="{ width: '40px', height: '40px' }">
-                      </p-progressSpinner>
-                    </div>
-                  </td>
-                </tr>
-              } @else {
-                @if (invoices().data?.length! > 0) {
-                  @for (invoice of invoices().data; track invoice.name) {
-                    <tr class="w-full">
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ invoice.name }}
-                      </td>
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ invoice.posting_date | date:'dd-MMM-yyyy' }}
-                      </td>
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ invoice.due_date | date:'dd-MMM-yyyy' }}
-                      </td>
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ invoice.grand_total | number:'1.2-2' }}
-                      </td>
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ invoice.outstanding_amount | number:'1.2-2' }}
-                      </td>
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ invoice.currency }}
-                      </td>
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
-                      [ngClass]="{
-                        'text-green-600 dark:text-green-400': invoice.status == 'Paid',
-                        'text-yellow-600 dark:text-yellow-400': invoice.status == 'Unpaid',
-                      }"
-                      >
-                        {{ invoice.status }}
-                      </td>
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ invoice.type }}
-                      </td>
+              <tr class="w-full">
+                <td colspan="9" class="text-center py-4">
+                  <div class="w-full flex justify-center">
+                    <p-progressSpinner
+                      class="text-gray-500 dark:text-gray-400"
+                      [style]="{ width: '40px', height: '40px' }"
+                    >
+                    </p-progressSpinner>
+                  </div>
+                </td>
+              </tr>
+              } @else { @if (invoices().data?.length! > 0) { @for (invoice of
+              invoices().data; track invoice.name) {
+              <tr class="w-full">
+                <td
+                  class="py-3 px-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100"
+                >
+                  {{ invoice.name }}
+                </td>
+                <td class="py-3 px-4 text-sm whitespace-nowrap">
+                  {{ invoice.posting_date | date:'dd-MMM-yyyy' }}
+                </td>
+                <td class="py-3 px-4 text-sm whitespace-nowrap">
+                  {{ invoice.due_date | date:'dd-MMM-yyyy' }}
+                </td>
+                <td class="py-3 px-4 text-sm whitespace-nowrap">
+                  {{ invoice.grand_total | number:'1.2-2' }}
+                </td>
+                <td class="py-3 px-4 text-sm whitespace-nowrap">
+                  {{ invoice.outstanding_amount | number:'1.2-2' }}
+                </td>
+                <td class="py-3 px-4 text-sm whitespace-nowrap">
+                  {{ invoice.currency }}
+                </td>
+                <td
+                  class="py-3 px-4 text-sm whitespace-nowrap"
+                  [ngClass]="{
+                            'text-green-600 dark:text-green-400': invoice.status == 'Paid',
+                            'text-yellow-600 dark:text-yellow-400': invoice.status == 'Unpaid',
+                          }"
+                >
+                  {{ invoice.status }}
+                </td>
+                <td class="py-3 px-4 text-sm whitespace-nowrap">
+                  {{ invoice.type }}
+                </td>
 
-                      <td class="relative pr-4 pl-3 text-center text-sm font-medium whitespace-nowrap sm:pr-6">
-                        <p-button
-                          (click)="handle_invoice_download(invoice.name!)"
-                          [icon]="isRowLoading(invoice.name!) ? 'pi pi-spin pi-spinner' : 'pi pi-download'"
-                          [disabled]="isRowLoading(invoice.name!)"
-                          size="small"
-                          severity="info"
-                          [rounded]="true"
-                          [outlined]="true"
-                          class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                        />
+                <td class="px-3 py-2 text-center">
+                  <p-button
+                    (click)="handle_invoice_download(invoice.name!)"
+                    [icon]="isRowLoading(invoice.name!) ? 'pi pi-spin pi-spinner' : 'pi pi-download'"
+                    [disabled]="isRowLoading(invoice.name!)"
+                    size="small"
+                    severity="info"
+                    [rounded]="true"
+                    [outlined]="true"
+                    class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  />
+                </td>
 
-                      </td>
-
-                      <td class="relative pr-4 pl-3 text-center text-sm font-medium whitespace-nowrap sm:pr-6">
-                        @if (invoice.status != 'Paid') {
-                          <p-button
-                            icon="pi pi-dollar"
-                            size="small"
-                            severity="info"
-                            [rounded]="true"
-                            [outlined]="true"
-                            class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                            (click)="open_invoice_dialog(invoice)"
-                          />
-                        }
-
-
-                      </td>
-                    </tr>
+                <td class="px-3 py-2 text-center">
+                  @if (invoice.status != 'Paid') {
+                  <p-button
+                    icon="pi pi-dollar"
+                    size="small"
+                    severity="info"
+                    [rounded]="true"
+                    [outlined]="true"
+                    class="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                    (click)="open_invoice_dialog(invoice)"
+                  />
                   }
-                } @else {
-                  <tr class="w-full">
-                    <td colspan="9" class="py-4">
-                      <div class="w-full flex justify-center">
-                        <app-empty-state
-                          class="text-center">
-                          <h3
-                            class="text-lg font-medium text-gray-700 dark:text-gray-300"
-                            slot="title">
-                            No Invoices Found
-                          </h3>
-                          <p
-                            class="text-gray-500 dark:text-gray-400 mt-2"
-                            slot="message">
-                            Try adjusting your search term or check back later for more Invoices.
-                          </p>
-                        </app-empty-state>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              }
+                </td>
+              </tr>
+              } } @else {
+              <tr class="w-full">
+                <td colspan="9" class="py-4">
+                  <div class="w-full flex justify-center">
+                    <app-empty-state class="text-center">
+                      <h3
+                        class="text-lg font-medium text-gray-700 dark:text-gray-300"
+                        slot="title"
+                      >
+                        No Invoices Found
+                      </h3>
+                      <p
+                        class="text-gray-500 dark:text-gray-400 mt-2"
+                        slot="message"
+                      >
+                        Try adjusting your search term or check back later for
+                        more Invoices.
+                      </p>
+                    </app-empty-state>
+                  </div>
+                </td>
+              </tr>
+              } }
             </tbody>
           </table>
         </div>
@@ -209,6 +232,7 @@
   </div>
 </div>
 
+<!-- Paginator -->
 <div class="flex justify-center w-full">
   <p-paginator
     (onPageChange)="onPageChange($event)"
@@ -223,17 +247,26 @@
   />
 </div>
 
-<p-dialog [(visible)]="payment_dialog" [style]="{ width: '450px' }" header="Make Payment" [modal]="true">
-
-  <form class="w-full space-y-6" (ngSubmit)="pay_invoice()" [formGroup]="payment_form">
-
+<!-- Payment Form Dialog -->
+<p-dialog
+  [(visible)]="payment_dialog"
+  [style]="{ width: '450px' }"
+  header="Make Payment"
+  [modal]="true"
+>
+  <form
+    class="w-full space-y-6"
+    (ngSubmit)="pay_invoice()"
+    [formGroup]="payment_form"
+  >
     <app-reactive-input
       [form]="payment_form"
       [id]="'email'"
       [key]="'email'"
       [label]="'Email Address'"
       [type]="'email'"
-    ></app-reactive-input>
+    >
+    </app-reactive-input>
 
     <app-reactive-input
       [form]="payment_form"
@@ -242,7 +275,8 @@
       [label]="'Amount'"
       [minval]="1"
       [type]="'number'"
-    ></app-reactive-input>
+    >
+    </app-reactive-input>
 
     <app-reactive-input
       [form]="payment_form"
@@ -250,31 +284,49 @@
       [key]="'phone'"
       [label]="'Phone Number'"
       [type]="'text'"
-    ></app-reactive-input>
-
+    >
+    </app-reactive-input>
 
     <div class="flex w-full justify-end gap-2 mt-3">
-      <button type="button" (click)="hideDialog()" class="flex justify-center items-center gap-2 rounded-md bg-red-600 dark:bg-red-700
-         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-red-500 dark:hover:bg-red-600
-         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:focus-visible:outline-red-700">
-        Cancel
-        <i class="pi pi-times"></i>
+      <button
+        type="button"
+        (click)="hideDialog()"
+        class="flex justify-center items-center gap-2 rounded-md bg-red-600 dark:bg-red-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 dark:hover:bg-red-600"
+      >
+        Cancel <i class="pi pi-times"></i>
       </button>
       <button
         [disabled]="payment_loading()"
-        class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
-         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
-         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
-        Raise
-        @if (payment_loading()) {
-          <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
+        class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-green-500 dark:hover:bg-green-600"
+      >
+        Raise @if (payment_loading()) {
+        <p-progress-spinner
+          strokeWidth="8"
+          fill="transparent"
+          animationDuration=".5s"
+          [style]="{ width: '20px', height: '20px' }"
+        />
         } @else {
-          <i class="pi pi-save"></i>
+        <i class="pi pi-save"></i>
         }
       </button>
     </div>
-
   </form>
-
 </p-dialog>
 
+<!-- Payment Iframe Dialog -->
+<p-dialog
+  [(visible)]="iframe_dialog"
+  [style]="{ width: '800px', height: '700px' }"
+  header="Complete Payment"
+  [modal]="true"
+>
+  @if (payment_iframe_url()) {
+  <iframe
+    [src]="payment_iframe_url()"
+    width="100%"
+    height="650px"
+    frameborder="0"
+  ></iframe>
+  }
+</p-dialog>
