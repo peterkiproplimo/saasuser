@@ -1,38 +1,58 @@
 <div class="mx-auto h-max">
+  <div
+    class="relative rounded-3xl bg-gray-200 dark:bg-gray-900 px-8 shadow-2xl ring-1 ring-gray-900/10 sm:px-10 py-6"
+  >
+    <h3
+      id="tier-enterprise"
+      class="text-xl font-bold text-indigo-600 line-clamp-2"
+    >
+      {{ plan()?.name }}
+    </h3>
 
-  <div class="relative rounded-3xl bg-gray-200 dark:bg-gray-900 px-8 shadow-2xl ring-1 ring-gray-900/10 sm:px-10 py-6">
-    <h3 id="tier-enterprise" class="text-xl font-bold text-indigo-600 line-clamp-2">{{ plan()?.name }}</h3>
-          <p class="mt-8 flex items-baseline gap-x-2">
-            <span class="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-200">
-              {{  plan()?.cost | number:'1.2-2' }} {{  plan()?.currency }}</span>
-            <span class="text-base capitalize text-gray-700 dark:text-gray-300">/{{plan()?.billing_interval}}</span>
-          </p>
+    <p class="mt-8 flex items-baseline gap-x-2">
+      <span
+        class="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-200"
+      >
+        {{ plan()?.cost | number:'1.2-2' }} {{ plan()?.currency }}
+      </span>
+      <span class="text-base capitalize text-gray-700 dark:text-gray-300"
+        >/{{ plan()?.billing_interval }}</span
+      >
+    </p>
+
+    <!-- VAT info -->
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">VAT inclusive</p>
 
     <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-300 sm:mt-10">
-
       @for (planFeature of plan()?.features; track planFeature) {
-        <li class="flex gap-x-3">
-          <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-indigo-400">
-            <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
-          </svg>
-          <span class="text-base capitalize text-gray-700 dark:text-gray-300">{{ planFeature.description }}</span>
-        </li>
-
+      <li class="flex gap-x-3">
+        <svg
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          data-slot="icon"
+          aria-hidden="true"
+          class="h-6 w-5 flex-none text-indigo-400"
+        >
+          <path
+            d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+            clip-rule="evenodd"
+            fill-rule="evenodd"
+          />
+        </svg>
+        <span class="text-base capitalize text-gray-700 dark:text-gray-300"
+          >{{ planFeature.description }}</span
+        >
+      </li>
       }
-
     </ul>
-          <button class="mt-8 w-full rounded-md bg-indigo-500 dark:bg-indigo-900
-           px-3.5 py-2.5 text-center text-sm font-semibold text-white
-           shadow-xs hover:bg-indigo-700 focus-visible:outline-2
-           focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10"
-          (click)="add_to_cart(plan()!)">
-            Add to Cart
-          </button>
+
+    <button
+      class="mt-8 w-full rounded-md bg-indigo-500 dark:bg-indigo-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10"
+      (click)="add_to_cart(plan()!)"
+    >
+      Add to Cart
+    </button>
   </div>
-
-
 </div>
 
-<p-toast position="top-right"/>
-
-
+<p-toast position="top-right" />
