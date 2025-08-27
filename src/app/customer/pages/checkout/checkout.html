@@ -1,6 +1,5 @@
 <div class="max-w-5xl mx-auto my-8">
   <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden">
-
     <!-- Header -->
     <div class="bg-[#1476B7] p-4">
       <h2 class="text-2xl font-semibold text-white">Checkout</h2>
@@ -8,60 +7,66 @@
 
     <!-- Body -->
     <div class="grid lg:grid-cols-3 gap-6 p-6">
-
       <!-- 🛒 Order summary (left / top) -->
       <section class="lg:col-span-3 overflow-auto max-h-[70vh]">
-        <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">Order Summary</h3>
+        <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200 mb-4">
+          Order Summary
+        </h3>
 
         <div class="space-y-4">
-
-            @for (item of cartItems; track item.plan) {
-              <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <div>
-                  <p class="font-semibold text-gray-900 dark:text-gray-100">{{ item.plan }}</p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ item.cost | number:'1.2-2' }} × {{ item.qty }}
-                  </p>
-                </div>
-                <p class="font-medium text-gray-900 dark:text-gray-100">
-                  {{ item.cost! * item.qty! | number:'1.2-2' }}
-                </p>
-              </div>
-            }
-
+          @for (item of cartItems; track item.plan) {
+          <div
+            class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-4 rounded-lg"
+          >
+            <div>
+              <p class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ item.plan }}
+              </p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {{ item.cost | number:'1.2-2' }} × {{ item.qty }}
+              </p>
+            </div>
+            <p class="font-medium text-gray-900 dark:text-gray-100">
+              {{ item.cost! * item.qty! | number:'1.2-2' }}
+            </p>
+          </div>
+          }
         </div>
 
         <!-- Totals -->
-        <div class="flex justify-end mt-6 text-lg font-bold">
-          <span class="text-gray-700 dark:text-gray-300">Total:</span>
-          <span class="ml-2 text-gray-900 dark:text-gray-100">
-           Ksh {{ totalCost | number:'1.2-2' }}
-
-          </span>
+        <div class="flex flex-col items-end mt-6 text-lg font-bold">
+          <div class="flex items-center gap-2">
+            <span class="text-gray-700 dark:text-gray-300">Total:</span>
+            <span class="text-gray-900 dark:text-gray-100">
+              Ksh {{ totalCost | number:'1.2-2' }}
+            </span>
+          </div>
+          <!-- VAT info -->
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            VAT inclusive
+          </p>
         </div>
 
         <div class="flex justify-end mt-4">
-
           <button
             (click)="placeOrder()"
-            class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
-         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
-         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
-            Place Order
-            @if (loading()) {
-              <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
+            class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700"
+          >
+            Place Order @if (loading()) {
+            <p-progress-spinner
+              strokeWidth="8"
+              fill="transparent"
+              animationDuration=".5s"
+              [style]="{ width: '20px', height: '20px' }"
+            />
             } @else {
-              <i class="pi pi-save"></i>
+            <i class="pi pi-save"></i>
             }
           </button>
-
         </div>
-
       </section>
 
-      <section>
-
-      </section>
+      <section></section>
     </div>
   </div>
 </div>
