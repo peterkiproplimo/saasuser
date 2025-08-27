@@ -1,15 +1,14 @@
 <div class="p-4 overflow-auto">
   <div class="flow-root">
     <div class="m-0">
-
       <div class="w-full py-2 mx-auto">
-
-        <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <h2
+          class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4"
+        >
           Tickets
         </h2>
 
         <div class="mb-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-
           <div class="w-full">
             <label for="">Search Term</label>
             <input
@@ -47,7 +46,6 @@
             />
           </div>
           <div class="w-full flex flex-col justify-end items-end">
-
             <button
               (click)="open_dialog()"
               pButton
@@ -57,107 +55,128 @@
               styleClass="w-full"
             ></button>
           </div>
-
-
         </div>
 
-        <div class="overflow-x-auto shadow-sm ring-1 ring-black/5 sm:rounded-lg">
-
-          <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+        <div
+          class="overflow-x-auto shadow-sm ring-1 ring-black/5 sm:rounded-lg"
+        >
+          <table
+            class="min-w-full divide-y divide-gray-300 dark:divide-gray-700"
+          >
             <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
-              <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6">
-                ID
-              </th>
-                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    Subject
+              <tr>
+                <th
+                  scope="col"
+                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  ID
                 </th>
-              <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
-                Priority
-              </th>
-              <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
-                Created At
-              </th>
+                <th
+                  scope="col"
+                  class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                >
+                  Subject
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                >
+                  Priority
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                >
+                  Created At
+                </th>
 
-              <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
-                Type
-              </th>
-              <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
-                Status
-              </th>
-
-
-            </tr>
+                <th
+                  scope="col"
+                  class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                >
+                  Type
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                >
+                  Status
+                </th>
+              </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
-            <!-- Loading State -->
+            <tbody
+              class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900"
+            >
+              <!-- Loading State -->
               @if (is_loading()) {
-                <tr class="w-full">
-                  <td colspan="9" class="text-center py-4">
-                    <div class="w-full flex justify-center">
-                      <p-progressSpinner
-                        class="text-gray-500 dark:text-gray-400"
-                        [style]="{ width: '40px', height: '40px' }">
-                      </p-progressSpinner>
-                    </div>
-                  </td>
-                </tr>
-              } @else {
+              <tr class="w-full">
+                <td colspan="9" class="text-center py-4">
+                  <div class="w-full flex justify-center">
+                    <p-progressSpinner
+                      class="text-gray-500 dark:text-gray-400"
+                      [style]="{ width: '40px', height: '40px' }"
+                    >
+                    </p-progressSpinner>
+                  </div>
+                </td>
+              </tr>
+              } @else { @if (tickets().data?.length! > 0) { @for (ticket of
+              tickets().data; track ticket.name) {
 
-                @if (tickets().data?.length! > 0) {
-                  @for (ticket of tickets().data; track ticket.name) {
+              <tr
+                [routerLink]="['/customer/tickets', ticket.name]"
+                class="w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <td
+                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
+                >
+                  {{ ticket.name }}
+                </td>
+                <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
+                  {{ ticket.subject }}
+                </td>
 
-                    <tr [routerLink]="['/customer/tickets', ticket.name]" class="w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-                      <td class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6">
-                        {{ ticket.name }}
-                      </td>
-                        <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
-                            {{ ticket.subject }}
-                        </td>
+                <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
+                  {{ ticket.priority }}
+                </td>
 
-                        <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
-                            {{ ticket.priority }}
-                        </td>
+                <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
+                  {{ ticket.creation | date: 'medium' }}
+                </td>
 
-                        <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
-                            {{ ticket.creation | date: 'medium' }}
-                        </td>
+                <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
+                  {{ ticket.ticket_type }}
+                </td>
+                <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
+                  {{ ticket.status }}
+                </td>
+              </tr>
 
-                        <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
-                            {{ ticket.ticket_type }}
-                        </td>
-                        <td class="py-3 px-3 text-sm text-gray-500 dark:text-gray-400">
-                            {{ ticket.status }}
-                        </td>
-
-                    </tr>
-
-                  }
-                } @else {
-                  <tr class="w-full">
-                    <td colspan="9" class="py-4">
-                      <div class="w-full flex justify-center">
-                        <app-empty-state
-                          class="text-center">
-                          <h3
-                            class="text-lg font-medium text-gray-700 dark:text-gray-300"
-                            slot="title">
-                            No Tickets Found
-                          </h3>
-                          <p
-                            class="text-gray-500 dark:text-gray-400 mt-2"
-                            slot="message">
-                            Try adjusting your search term or check back later for more Invoices.
-                          </p>
-                        </app-empty-state>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              }
+              } } @else {
+              <tr class="w-full">
+                <td colspan="9" class="py-4">
+                  <div class="w-full flex justify-center">
+                    <app-empty-state class="text-center">
+                      <h3
+                        class="text-lg font-medium text-gray-700 dark:text-gray-300"
+                        slot="title"
+                      >
+                        No Tickets Found
+                      </h3>
+                      <p
+                        class="text-gray-500 dark:text-gray-400 mt-2"
+                        slot="message"
+                      >
+                        Try adjusting your search term or check back later for
+                        more Invoices.
+                      </p>
+                    </app-empty-state>
+                  </div>
+                </td>
+              </tr>
+              } }
             </tbody>
           </table>
-
         </div>
       </div>
     </div>
@@ -179,9 +198,17 @@
   />
 </div>
 
-<p-dialog [(visible)]="ticket_dialog" [style]="{ width: '450px' }" header="Raise Ticket" [modal]="true">
-  <form class="w-full space-y-6" enctype="multipart/form-data" (ngSubmit)="save_ticket()">
-
+<p-dialog
+  [(visible)]="ticket_dialog"
+  [style]="{ width: '450px' }"
+  header="Raise Ticket"
+  [modal]="true"
+>
+  <form
+    class="w-full space-y-6"
+    enctype="multipart/form-data"
+    (ngSubmit)="save_ticket()"
+  >
     <div>
       <app-reactive-select
         [form]="ticket_form"
@@ -206,21 +233,24 @@
         [id]="'subject'"
         [key]="'subject'"
         [label]="'Subject'"
-        [type]="'text'">
+        [type]="'text'"
+      >
       </app-reactive-input>
-
 
       <app-reactive-text-area
         [form]="ticket_form"
         [id]="'description'"
         [key]="'description'"
         [label]="'Description'"
-        [type]="'text'">
+        [type]="'text'"
+      >
       </app-reactive-text-area>
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">Attachments</label>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+        >Attachments</label
+      >
       <p-fileUpload
         name="files"
         multiple
@@ -231,30 +261,32 @@
         [auto]="true"
         [chooseLabel]="'Choose Files'"
         [cancelLabel]="'Clear'"
-        [styleClass]="'w-full'">
+        [styleClass]="'w-full'"
+      >
       </p-fileUpload>
     </div>
 
     <div class="flex w-full justify-end gap-2">
-      <button type="button" (click)="hideDialog()" class="flex justify-center items-center gap-2 rounded-md bg-red-600 dark:bg-red-700
-         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-red-500 dark:hover:bg-red-600
-         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:focus-visible:outline-red-700">
+      <button
+        type="button"
+        (click)="hideDialog()"
+        class="flex justify-center items-center gap-2 rounded-md bg-red-600 dark:bg-red-700 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-red-500 dark:hover:bg-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:focus-visible:outline-red-700"
+      >
         Cancel
-        <i class="pi pi-times"></i>
       </button>
       <button
         [disabled]="loading()"
-        class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700
-         px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600
-         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700">
-        Raise
-        @if (loading()) {
-          <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
-        } @else {
-          <i class="pi pi-save"></i>
-        }
+        class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-green-500 dark:hover:bg-green-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 dark:focus-visible:outline-green-700"
+      >
+        Raise Ticket @if (loading()) {
+        <p-progress-spinner
+          strokeWidth="8"
+          fill="transparent"
+          animationDuration=".5s"
+          [style]="{ width: '20px', height: '20px' }"
+        />
+        } @else { }
       </button>
     </div>
-
   </form>
 </p-dialog>
