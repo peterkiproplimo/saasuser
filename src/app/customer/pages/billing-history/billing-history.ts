@@ -11,7 +11,7 @@ import { Calendar } from 'primeng/calendar';
 
 @Component({
   selector: 'app-billing-history',
-  standalone: true, // ✅ important for standalone component imports to work
+  standalone: true,
   imports: [
     Button,
     DatePipe,
@@ -51,21 +51,19 @@ export class BillingHistory {
   }
 
   // dialog state
-  voucherDialogVisible: boolean = false;
-  selectedVoucher: any = {};
+  voucherDialogVisible = false;
+  selectedVoucher: any = null;
 
   // open dialog with voucher data
-  openVoucherDialog(voucher: any) {
-    if (voucher) {
-      this.selectedVoucher = { ...voucher }; // shallow copy so it’s always fresh
-      this.voucherDialogVisible = true;
-    }
+  openVoucherDialog(entry: any) {
+    this.selectedVoucher = { ...entry }; // shallow copy keeps data fresh
+    this.voucherDialogVisible = true;
   }
 
-  // optional close method
+  // close dialog
   closeVoucherDialog() {
     this.voucherDialogVisible = false;
-    this.selectedVoucher = {};
+    this.selectedVoucher = null;
   }
 
   // stubbed out until you add logic

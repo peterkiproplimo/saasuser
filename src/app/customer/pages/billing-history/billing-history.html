@@ -204,19 +204,19 @@
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
   />
 </div>
-
 <p-dialog
   header="Voucher Details"
   [(visible)]="voucherDialogVisible"
   [modal]="true"
   [style]="{ width: '600px' }"
+  (onHide)="closeVoucherDialog()"
 >
   <div *ngIf="selectedVoucher">
     <p><strong>Reference:</strong> {{ selectedVoucher.voucher_type }}</p>
     <p><strong>Reference No:</strong> {{ selectedVoucher.voucher_no }}</p>
     <p>
-      <strong>Posting Date:</strong> {{ selectedVoucher.posting_date | date:
-      'yyyy-MM-dd' }}
+      <strong>Posting Date:</strong>
+      {{ selectedVoucher.posting_date | date: 'yyyy-MM-dd' }}
     </p>
     <p><strong>Debit:</strong> {{ selectedVoucher.debit | number: '1.2-2' }}</p>
     <p>
