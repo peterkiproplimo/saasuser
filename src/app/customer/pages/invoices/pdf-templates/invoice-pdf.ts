@@ -90,8 +90,7 @@ export function getHtmlContent(report: any) {
       </div>
       <div class="text-right">
         <p class="font-bold">${report.type || 'INVOICE'} #${report.name}</p>
-        <p>INVOICE DATE: ${postingDate}</p>
-        <p>DUE DATE: ${dueDate}</p>
+     
       </div>
     </div>
 
@@ -100,8 +99,6 @@ export function getHtmlContent(report: any) {
       <thead class="bg-gray-300">
         <tr>
           <th class="border px-3 py-2 text-left">Service</th>
-          <th class="border px-3 py-2 text-left">Period</th>
-          <th class="border px-3 py-2 text-left">Months</th>
           <th class="border px-3 py-2 text-right">Rate</th>
           <th class="border px-3 py-2 text-right">Amount</th>
         </tr>
@@ -133,7 +130,7 @@ export function getHtmlContent(report: any) {
     <div class="text-sm mb-4">
       <p class="font-bold">VAT Provision Notice</p>
       <p>Please note: All services are subject to applicable VAT regulations under VAT No. ${
-        report.vat_no ?? '12345678'
+        report.vat_no
       }.</p>
     </div>
 
