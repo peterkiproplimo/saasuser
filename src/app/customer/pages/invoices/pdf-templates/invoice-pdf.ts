@@ -69,12 +69,15 @@ export function getHtmlContent(report: any) {
     <!-- Payment Info -->
     <div class="mb-6 text-sm">
       <p class="mb-1">Transfer the amount to the business account below. Please include Invoice number on your payment.</p>
-      <p class="font-semibold">MPESA Paybill: <span class="text-gray-800">${
-        report.mpesa_paybill ?? 'xxxxxxxxxx'
-      }</span></p>
-      <p class="font-semibold">Acc: <span class="text-gray-800">${
-        report.account_no ?? 'GB82-1111-2222-3333'
-      }</span></p>
+     <p class="font-semibold">
+  MPESA 
+</p>
+<p class="text-sm text-gray-600">
+  Enter Business no. <strong>220222</strong><br />
+  Enter Account No. as <strong>47796595</strong>
+</p>
+
+    
     </div>
 
     <!-- Recipient Info -->

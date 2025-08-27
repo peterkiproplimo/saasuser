@@ -42,7 +42,12 @@
                     <th
                       class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
                     >
-                      Plan / Qty
+                      Plan
+                    </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Quantity
                     </th>
                     <th
                       class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
@@ -69,6 +74,11 @@
                     >
                       Status
                     </th>
+                    <th
+                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    >
+                      Due
+                    </th>
                   </tr>
                 </thead>
 
@@ -90,10 +100,13 @@
                       class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
                     >
                       {{ sub.plans[0]?.plan }}
-                      <div class="text-xs text-gray-500 dark:text-gray-400">
-                        x{{ sub.plans[0]?.qty }}
-                      </div>
                     </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
+                      {{ sub.plans[0]?.qty }}
+                    </td>
+
                     <td
                       class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
                     >
@@ -114,9 +127,12 @@
                       class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
                     >
                       <div>{{ sub.latest_invoice?.name }}</div>
+                    </td>
+                    <td
+                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
+                    >
                       <div class="text-xs text-gray-500 dark:text-gray-400">
-                        {{ sub.latest_invoice.status }}, {{
-                        sub.latest_invoice.prorate_factor }} Prorate
+                        {{ sub.latest_invoice.status }},
                       </div>
                     </td>
                     <td class="px-4 py-3">
