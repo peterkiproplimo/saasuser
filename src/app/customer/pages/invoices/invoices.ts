@@ -62,6 +62,8 @@ export class Invoices {
   end_date = this.invoices_service.end_date;
   invoiceRowLoading = signal<Record<string, boolean>>({});
   selected_invoice = signal<Invoice | null>(null);
+  error_dialog = signal(false);
+  error_message = signal('');
 
   status_options: any[] = [
     { label: 'Paid', value: 'Paid' },
@@ -130,27 +132,24 @@ export class Invoices {
         next: (res) => {
           const url = res?.data?.payment_url;
           if (url) {
-            // sanitize for iframe src
+            // Success → iframe dialog
             this.payment_iframe_url.set(
               this.sanitizer.bypassSecurityTrustResourceUrl(url)
             );
             this.iframe_dialog.set(true);
+            this.payment_dialog.set(false);
+          } else {
+            // Any other "success" response without payment_url → show in error dialog
+            this.error_message.set(res?.message || 'Payment request failed');
+            this.error_dialog.set(true);
           }
-          this.payment_loading.set(false);
-          this.payment_dialog.set(false);
-          this.functions.show_toast(
-            'Payment Request Successful',
-            'success',
-            'You have initiated a payment.'
-          );
         },
         error: (err) => {
-          this.payment_loading.set(false);
-          this.functions.show_toast(
-            'Payment Failed',
-            'error',
-            err?.error?.message ?? 'Payment request failed'
+          // API error response (like 409)
+          this.error_message.set(
+            err?.error?.message || 'Payment request failed'
           );
+          this.error_dialog.set(true);
         },
         complete: () => this.payment_loading.set(false),
       });
