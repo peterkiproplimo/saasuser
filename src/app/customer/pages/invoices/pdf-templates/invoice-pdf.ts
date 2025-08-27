@@ -1,28 +1,43 @@
 export function getHtmlContent(report: any) {
+  // Get customer profile from localStorage
+  const customerProfile = JSON.parse(localStorage.getItem('user') || '{}');
+
   const statusColors: Record<string, string> = {
-    'paid': 'bg-green-600',
-    'unpaid': 'bg-red-600',
+    paid: 'bg-green-600',
+    unpaid: 'bg-red-600',
     'partially paid': 'bg-yellow-500',
-    'overdue': 'bg-orange-600',
-    'cancelled': 'bg-gray-500',
-    'all': 'bg-blue-600',
+    overdue: 'bg-orange-600',
+    cancelled: 'bg-gray-500',
+    all: 'bg-blue-600',
   };
 
   const status = report.status?.toLowerCase() || 'all';
   const ribbonColorClass = statusColors[status] || 'bg-blue-600';
 
-  const postingDate = new Date(report.posting_date).toDateString();
-  const dueDate = new Date(report.due_date).toDateString();
+  const postingDate = report.posting_date
+    ? new Date(report.posting_date).toDateString()
+    : 'N/A';
+  const dueDate = report.due_date
+    ? new Date(report.due_date).toDateString()
+    : 'N/A';
 
-  const itemsHtml = (report.items || []).map((item: any) => `
+  const itemsHtml = (report.items || [])
+    .map(
+      (item: any) => `
     <tr>
       <td class="border px-3 py-2">${item.item_name}</td>
       <td class="border px-3 py-2">N/A</td>
       <td class="border px-3 py-2">N/A</td>
-      <td class="border px-3 py-2 text-right">${item.rate.toLocaleString()} ${report.currency}</td>
-      <td class="border px-3 py-2 text-right">${(item.rate * item.qty).toLocaleString()} ${report.currency}</td>
+      <td class="border px-3 py-2 text-right">${item.rate.toLocaleString()} ${
+        report.currency
+      }</td>
+      <td class="border px-3 py-2 text-right">${(
+        item.rate * item.qty
+      ).toLocaleString()} ${report.currency}</td>
     </tr>
-  `).join('');
+  `
+    )
+    .join('');
 
   return `
 <!DOCTYPE html>
@@ -30,7 +45,7 @@ export function getHtmlContent(report: any) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Invoice</title>
+  <title>${report.type || 'Invoice'}</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style>
     .new-page { page-break-before: always; }
@@ -41,6 +56,7 @@ export function getHtmlContent(report: any) {
 
 <body class="bg-gray-100 text-gray-900">
   <div class="max-w-3xl mx-auto px-8 py-6 rounded shadow">
+    <!-- Header -->
     <div class="flex justify-between items-center">
       <img src="https://techsavanna.co.ke/wp-content/themes/techsavanna/assets/images/logo-dark.svg" alt="Techsavanna Logo" class="h-12 mb-2"/>
       <div class="relative w-40 h-32">
@@ -50,27 +66,33 @@ export function getHtmlContent(report: any) {
       </div>
     </div>
 
+    <!-- Payment Info -->
     <div class="mb-6 text-sm">
-      <p class="mb-1">Transfer the amount to the business account below. Please include Invoice number on your check.</p>
-      <p class="font-semibold">MPESA Paybill: <span class="text-gray-800">xxxxxxxxxx</span></p>
-      <p class="font-semibold">Acc: <span class="text-gray-800">GB82-1111-2222-3333</span></p>
+      <p class="mb-1">Transfer the amount to the business account below. Please include Invoice number on your payment.</p>
+      <p class="font-semibold">MPESA Paybill: <span class="text-gray-800">${
+        report.mpesa_paybill ?? 'xxxxxxxxxx'
+      }</span></p>
+      <p class="font-semibold">Acc: <span class="text-gray-800">${
+        report.account_no ?? 'GB82-1111-2222-3333'
+      }</span></p>
     </div>
 
+    <!-- Recipient Info -->
     <div class="flex justify-between text-sm mb-6">
       <div>
         <p class="font-bold">RECIPIENT</p>
-        <p>THE CLAN LTD</p>
-        <p>RAPHTA RD</p>
-        <p>WESTLANDS, NAIROBI</p>
-        <p>VAT NO: 12345678</p>
+        <p>${customerProfile.customer || customerProfile.name}</p>
+        <p>${customerProfile.organization}</p>
+        <p>Email: ${customerProfile.email}</p>
       </div>
       <div class="text-right">
-        <p class="font-bold">INVOICE #${report.name}</p>
+        <p class="font-bold">${report.type || 'INVOICE'} #${report.name}</p>
         <p>INVOICE DATE: ${postingDate}</p>
         <p>DUE DATE: ${dueDate}</p>
       </div>
     </div>
 
+    <!-- Items -->
     <table class="w-full text-sm mb-6 border border-gray-200">
       <thead class="bg-gray-300">
         <tr>
@@ -86,6 +108,7 @@ export function getHtmlContent(report: any) {
       </tbody>
     </table>
 
+    <!-- Totals -->
     <div class="mb-6 text-sm">
       <div class="flex justify-between">
         <span>SUBTOTAL</span>
@@ -93,24 +116,32 @@ export function getHtmlContent(report: any) {
       </div>
       <div class="flex justify-between font-bold text-lg mt-2">
         <span>TOTAL</span>
-        <span class="text-blue-600">${report.grand_total.toLocaleString()} ${report.currency}</span>
+        <span class="text-blue-600">${report.grand_total.toLocaleString()} ${
+    report.currency
+  }</span>
       </div>
     </div>
 
-    <div class="text-right text-red-600 font-bold text-lg mb-6">BALANCE: ${report.outstanding_amount.toLocaleString()} ${report.currency}</div>
-
-    <div class="text-sm mb-4">
-      <p class="font-bold">VAT Provision Notice</p>
-      <p>Please note: All services are subject to applicable VAT regulations under VAT No. 12345678. If VAT is applicable, it should be accounted for based on your local tax requirements.</p>
+    <div class="text-right text-red-600 font-bold text-lg mb-6">
+      BALANCE: ${report.outstanding_amount.toLocaleString()} ${report.currency}
     </div>
 
+    <!-- VAT Note -->
+    <div class="text-sm mb-4">
+      <p class="font-bold">VAT Provision Notice</p>
+      <p>Please note: All services are subject to applicable VAT regulations under VAT No. ${
+        report.vat_no ?? '12345678'
+      }.</p>
+    </div>
+
+    <!-- Footer -->
     <div class="text-sm">
       <p class="font-bold mb-1">HOW TO CONFIRM PAYMENT FOR BANK TRANSFERS</p>
       <ul class="list-disc pl-6 space-y-1">
         <li>TECHSAVANNA will automatically allocate payments to your account once it reflects on TECHSAVANNA's bank account.</li>
-        <li>Ensure you make use of your account holder's email address as reference.</li>
+        <li>Use your account holder's email address as reference.</li>
         <li>You can use the Invoice Number to allocate the payment to a certain invoice.</li>
-        <li>Please do not send us Proof of Payments unless requested.</li>
+        <li>Please do not send Proof of Payments unless requested.</li>
       </ul>
     </div>
 
