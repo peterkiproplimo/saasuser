@@ -26,8 +26,6 @@ export function getHtmlContent(report: any) {
       (item: any) => `
     <tr>
       <td class="border px-3 py-2">${item.item_name}</td>
-      <td class="border px-3 py-2">N/A</td>
-      <td class="border px-3 py-2">N/A</td>
       <td class="border px-3 py-2 text-right">${item.rate.toLocaleString()} ${
         report.currency
       }</td>
