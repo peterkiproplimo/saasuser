@@ -299,16 +299,14 @@
         [disabled]="payment_loading()"
         class="flex justify-center items-center gap-2 rounded-md bg-green-600 dark:bg-green-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-green-500 dark:hover:bg-green-600"
       >
-        Raise @if (payment_loading()) {
+        Make Payment @if (payment_loading()) {
         <p-progress-spinner
           strokeWidth="8"
           fill="transparent"
           animationDuration=".5s"
           [style]="{ width: '20px', height: '20px' }"
         />
-        } @else {
-        <i class="pi pi-save"></i>
-        }
+        } @else { }
       </button>
     </div>
   </form>
