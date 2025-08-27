@@ -1,30 +1,32 @@
 <nav class="bg-[#084c9c] text-white shadow sticky top-0 z-50">
   <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
-      <div class="inline-flex gap-4">
-        <!-- Left: Logo + Nav Container -->
-        <div class="hidden sm:flex items-center justify-between gap-12">
-          <!-- Logo -->
-          <a routerLink="/">
-            <img
-              src="/images/tech-savanna-logo.svg"
-              alt="Logo"
-              class="h-32 w-32 rounded-full text-white"
-            />
-          </a>
+      <!-- Left: Logo + Nav -->
+      <div class="inline-flex gap-4 items-center">
+        <!-- Logo -->
+        <a routerLink="/">
+          <img
+            src="/images/tech-savanna-logo.svg"
+            alt="Logo"
+            class="h-32 w-32 rounded-full text-white"
+          />
+        </a>
 
-          <!-- Navigation Links -->
+        <!-- Desktop Navigation Links -->
+        <div class="hidden sm:flex items-center gap-12">
           <nav class="space-x-6 font-semibold">
             <a
               routerLink="/propose-member"
-              class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
-              >Home</a
+              class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
             >
+              Home
+            </a>
+
             <!-- Solutions Dropdown -->
             <div class="relative group inline-block">
               <a
                 href="#"
-                class="flex items-center gap-1 text-white font-semibold group-hover:text-sky-600 transition"
+                class="flex items-center gap-1 text-white font-semibold group-hover:text-sky-600 transition cursor-pointer"
               >
                 Solutions
                 <svg
@@ -42,15 +44,14 @@
                 </svg>
               </a>
 
-              <!-- Dropdown -->
               <div
                 class="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50"
               >
-                <ul *ngIf="solutions() as apps" class="dropdown-menu">
+                <ul *ngIf="solutions() as apps">
                   <li *ngFor="let app of apps">
                     <a
                       (click)="goToSolution(app)"
-                      class="block px-4 py-2 text-black hover:bg-gray-100"
+                      class="block px-4 py-2 text-black hover:bg-gray-100 cursor-pointer"
                     >
                       {{ app.name }}
                     </a>
@@ -58,80 +59,50 @@
                 </ul>
               </div>
             </div>
-            <div class="relative group inline-block">
-              <a
-                href="#"
-                class="flex items-center gap-1 text-white font-semibold group-hover:text-sky-600 transition"
-              >
-                About Us
-                <!-- Arrow Icon -->
-                <svg
-                  class="w-4 h-4 transform transition-transform duration-200 group-hover:rotate-90 text-white group-hover:text-sky-600"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </a>
 
-              <!-- Dropdown -->
-              <div
-                class="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50"
-              >
-                <ul class="text-sm divide-y divide-gray-100">
-                  <!-- Menu Items -->
-                  <li>
-                    <a
-                      routerLink="/about"
-                      class="flex justify-between items-center px-4 py-2 text-black hover:bg-sky-100 hover:text-sky-600 transition"
-                    >
-                      About Us
-                      <span class="transition-transform group-hover:rotate-0"
-                        >&rsaquo;</span
-                      >
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <!-- About Us Link -->
+            <a
+              routerLink="/about"
+              class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 font-semibold cursor-pointer"
+            >
+              About Us
+            </a>
+
             <a
               routerLink="/contactus"
-              class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
-              >Contact Us</a
+              class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
             >
+              Contact Us
+            </a>
 
             <a
               routerLink="/faqs"
-              class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
-              >FAQs</a
+              class="text-gray-50 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
             >
+              FAQs
+            </a>
           </nav>
         </div>
       </div>
 
-      <!-- Right: Dark mode + profile -->
+      <!-- Right: Login / Dark Mode / Profile -->
       <div class="flex items-center space-x-4">
+        <!-- Auth Links -->
         @if (!loggedIn) {
         <a
           routerLink="/auth/login"
-          class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300"
+          class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300 cursor-pointer"
           >Login</a
         >
         <a
           routerLink="/auth/signup"
-          class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300"
+          class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300 cursor-pointer"
           >Sign Up</a
         >
         } @else {
         <a
           routerLink="/customer"
-          class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300"
+          class="text-white font-medium hover:text-gray-200 dark:hover:text-gray-300 cursor-pointer"
           >Customer Portal</a
         >
         }
@@ -143,7 +114,7 @@
           styleClass="p-button-rounded p-button-text p-button-sm"
         ></p-button>
 
-        <!-- Profile -->
+        <!-- Profile Menu -->
         @if (loggedIn) {
         <button
           (click)="menu.toggle($event)"
@@ -154,7 +125,7 @@
         </button>
         }
 
-        <!-- Mobile menu button (hamburger) -->
+        <!-- Mobile menu button -->
         <div class="sm:hidden">
           <p-button
             [icon]="isMenuOpen ? 'pi pi-times' : 'pi pi-bars'"
@@ -166,6 +137,7 @@
     </div>
   </div>
 
+  <!-- Profile Menu (Popup) -->
   <div class="card">
     <p-menu
       #menu
@@ -178,60 +150,71 @@
           <button
             (click)="logout()"
             pRipple
-            class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
+            class="w-full bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-pointer rounded-none font-bold transition-colors duration-200"
           >
-            <span class="inline-flex flex-col">
-              <span class="font-bold">Logout</span>
-            </span>
+            Logout
           </button>
-
           <a
             routerLink="customer/profile"
-            class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-none cursor-pointer transition-colors duration-200"
+            class="w-full bg-transparent flex items-start p-2 pl-4 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-pointer rounded-none font-bold transition-colors duration-200"
           >
-            <span class="inline-flex flex-col">
-              <span class="font-bold">Member Profile</span>
-            </span>
+            Member Profile
           </a>
         </div>
       </ng-template>
     </p-menu>
   </div>
 
+  <!-- Mobile Menu -->
   @if (isMenuOpen) {
   <div
-    class="sm:hidden bg-[0082cc] dark:bg-gray-800 px-4 pt-4 pb-3 space-y-2"
+    class="sm:hidden bg-[#0082cc] dark:bg-gray-800 px-4 pt-4 pb-3 space-y-2"
     (click)="close_menu()"
   >
     <a
       routerLink="/"
-      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 hover:bg-white dark:hover:text-blue-400"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 hover:bg-white dark:hover:text-blue-400 cursor-pointer"
       >Home</a
     >
     <a
       routerLink="/propose-member"
-      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
       >Propose Member</a
     >
     <a
       routerLink="/member-card"
-      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
       >Member Card</a
     >
     <a
       routerLink="/book-event"
-      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
       >Events</a
     >
     <a
       routerLink="/book-tee-time"
-      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
       >Book Tee Time</a
     >
     <a
       routerLink="/reserve-table"
-      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
       >Reserve Table</a
+    >
+    <a
+      routerLink="/about"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
+      >About Us</a
+    >
+    <a
+      routerLink="/contactus"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
+      >Contact Us</a
+    >
+    <a
+      routerLink="/faqs"
+      class="block text-gray-100 dark:text-gray-300 hover:text-gray-300 dark:hover:text-blue-400 cursor-pointer"
+      >FAQs</a
     >
   </div>
   }
