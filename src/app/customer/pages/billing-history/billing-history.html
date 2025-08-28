@@ -238,19 +238,19 @@
   (onHide)="closeVoucherDialog()"
 >
   <div *ngIf="selectedVoucher">
-    <p><strong>Reference:</strong> {{ selectedVoucher.voucher_type }}</p>
-    <p><strong>Reference No:</strong> {{ selectedVoucher.voucher_no }}</p>
+    <p><strong>Reference:</strong> {{ selectedVoucher?.voucher_type }}</p>
+    <p><strong>Reference No:</strong> {{ selectedVoucher?.voucher_no }}</p>
     <p>
-      <strong>Posting Date:</strong>
-      {{ selectedVoucher.posting_date | date: 'yyyy-MM-dd' }}
+      <strong>Posting Date:</strong> {{ selectedVoucher?.posting_date |
+      date:'yyyy-MM-dd' }}
     </p>
-    <p><strong>Debit:</strong> {{ selectedVoucher.debit | number: '1.2-2' }}</p>
+    <p><strong>Debit:</strong> {{ selectedVoucher?.debit | number:'1.2-2' }}</p>
     <p>
-      <strong>Credit:</strong> {{ selectedVoucher.credit | number: '1.2-2' }}
+      <strong>Credit:</strong> {{ selectedVoucher?.credit | number:'1.2-2' }}
     </p>
     <p>
-      <strong>Balance:</strong> {{ selectedVoucher.balance | number: '1.2-2' }}
+      <strong>Balance:</strong> {{ selectedVoucher?.balance | number:'1.2-2' }}
     </p>
-    <p><strong>Remarks:</strong> {{ selectedVoucher.remarks }}</p>
+    <p><strong>Remarks:</strong> {{ selectedVoucher?.remarks }}</p>
   </div>
 </p-dialog>

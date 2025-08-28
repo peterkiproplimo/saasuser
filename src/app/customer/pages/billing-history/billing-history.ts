@@ -8,6 +8,7 @@ import { ProgressSpinner } from 'primeng/progressspinner';
 import { FormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { Calendar } from 'primeng/calendar';
+import { CommonModule } from '@angular/common';
 
 // 📌 import jsPDF & autoTable
 import jsPDF from 'jspdf';
@@ -20,6 +21,7 @@ import autoTable from 'jspdf-autotable';
     Button,
     DatePipe,
     DecimalPipe,
+    CommonModule,
     EmptyStateComponent,
     Paginator,
     ProgressSpinner,
@@ -61,7 +63,15 @@ export class BillingHistory {
   selectedVoucher: any = null;
 
   openVoucherDialog(entry: any) {
-    this.selectedVoucher = { ...entry };
+    this.selectedVoucher = {
+      voucher_type: entry.voucher_type,
+      voucher_no: entry.voucher_no,
+      posting_date: entry.posting_date,
+      debit: entry.debit,
+      credit: entry.credit,
+      balance: entry.balance,
+      remarks: entry.remarks,
+    };
     this.voucherDialogVisible = true;
   }
 
