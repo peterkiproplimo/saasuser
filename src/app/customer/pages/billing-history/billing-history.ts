@@ -9,6 +9,10 @@ import { FormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { Calendar } from 'primeng/calendar';
 
+// 📌 import jsPDF & autoTable
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 @Component({
   selector: 'app-billing-history',
   standalone: true,
@@ -56,18 +60,51 @@ export class BillingHistory {
   voucherDialogVisible = false;
   selectedVoucher: any = null;
 
-  // open dialog with voucher data
   openVoucherDialog(entry: any) {
-    this.selectedVoucher = { ...entry }; // shallow copy keeps data fresh
+    this.selectedVoucher = { ...entry };
     this.voucherDialogVisible = true;
   }
 
-  // close dialog
   closeVoucherDialog() {
     this.voucherDialogVisible = false;
     this.selectedVoucher = null;
   }
 
-  // stubbed out until you add logic
+  // 📌 Export table to PDF
+  exportToPdf() {
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text('Billing History', 14, 15);
+
+    // Define table headers
+    const head = [
+      [
+        'Posting Date',
+        'Reference',
+        'Reference No',
+        'Debit',
+        'Credit',
+        'Balance',
+        'Remarks',
+      ],
+    ];
+
+    // Extract rows from ledger
+    const body =
+      this.ledger().data?.map((entry) => [
+        new Date(entry.posting_date ?? '').toLocaleDateString(),
+        entry.voucher_type ?? '',
+        entry.voucher_no ?? '',
+        entry.debit?.toFixed(2) ?? '0.00',
+        entry.credit?.toFixed(2) ?? '0.00',
+        entry.balance?.toFixed(2) ?? '0.00',
+        entry.remarks ?? '',
+      ]) ?? [];
+
+    doc.save('billing-history.pdf');
+  }
+
+  // stub
   pay_invoice() {}
 }
