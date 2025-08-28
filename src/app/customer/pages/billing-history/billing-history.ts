@@ -71,11 +71,12 @@ export class BillingHistory {
   }
 
   // 📌 Export table to PDF
+  // 📌 Export table to PDF
   exportToPdf() {
     const doc = new jsPDF();
 
+    // Title
     doc.setFontSize(16);
-    doc.text('Billing History', 14, 15);
 
     // Define table headers
     const head = [
@@ -102,6 +103,43 @@ export class BillingHistory {
         entry.remarks ?? '',
       ]) ?? [];
 
+    // 📌 This is what was missing
+    autoTable(doc, {
+      head,
+      body,
+      startY: 25,
+      styles: {
+        fontSize: 9,
+        cellPadding: 4,
+        halign: 'center', // horizontal alignment ('left' | 'right' | 'center')
+        valign: 'middle', // vertical alignment
+        lineColor: [44, 62, 80], // border color
+        lineWidth: 0.1, // border width
+      },
+      headStyles: {
+        fillColor: [8, 76, 156], // blue header background
+        textColor: [255, 255, 255], // white header text
+        fontStyle: 'bold',
+        halign: 'center',
+      },
+      bodyStyles: {
+        textColor: [50, 50, 50],
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245], // zebra striping
+      },
+      columnStyles: {
+        0: { halign: 'left', cellWidth: 25 }, // Posting Date column
+        1: { halign: 'left', cellWidth: 25 }, // Reference
+        2: { halign: 'center', cellWidth: 30 }, // Reference No
+        3: { halign: 'right', cellWidth: 20 }, // Debit
+        4: { halign: 'right', cellWidth: 20 }, // Credit
+        5: { halign: 'right', cellWidth: 20 }, // Balance
+        6: { halign: 'left', cellWidth: 40 }, // Remarks
+      },
+    });
+
+    // Save PDF
     doc.save('billing-history.pdf');
   }
 
