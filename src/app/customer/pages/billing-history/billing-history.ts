@@ -35,6 +35,8 @@ export class BillingHistory {
   pageSize = this.invoices_service.page_size;
   start_date = this.invoices_service.start_date;
   end_date = this.invoices_service.end_date;
+  referenceNo = this.invoices_service.referenceNo;
+  creditAmount = this.invoices_service.creditAmount;
   first = signal<number>(0);
 
   // ledger data signals
