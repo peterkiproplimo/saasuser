@@ -212,11 +212,14 @@
   <p>Solution not found.</p>
 </div>
 
+<!-- Request Demo Modal -->
 <div
   *ngIf="showRequestDialog"
-  class="fixed inset-0 z-50 w-screen h-screen bg-[#e8fafd] flex flex-col justify-between overflow-y-auto"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
 >
-  <div class="p-8 sm:p-20 h-full flex flex-col justify-between">
+  <div
+    class="bg-[#e8fafd] rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 sm:p-10"
+  >
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <h2 class="text-3xl font-bold text-blue-800">
@@ -231,6 +234,7 @@
       </button>
     </div>
 
+    <!-- Form -->
     <form (ngSubmit)="submitDemoRequest()" class="space-y-6" novalidate>
       <div class="grid md:grid-cols-2 gap-4">
         <!-- Name -->
@@ -248,7 +252,7 @@
             [(ngModel)]="demoForm.customer_name"
             placeholder="Enter your full name"
             required
-            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
           />
         </div>
 
@@ -267,7 +271,7 @@
             [(ngModel)]="demoForm.email"
             placeholder="Enter your email address"
             required
-            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
           />
         </div>
 
@@ -286,7 +290,7 @@
             [(ngModel)]="demoForm.phone"
             placeholder="Enter phone number"
             required
-            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
           />
         </div>
 
@@ -303,7 +307,7 @@
             name="demo_type"
             [(ngModel)]="demoForm.demo_type"
             required
-            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
           >
             <option disabled selected value="">Select demo type</option>
             <option>Online</option>
@@ -325,7 +329,7 @@
             name="demo_date"
             [(ngModel)]="demoForm.demo_date"
             required
-            class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
           />
         </div>
       </div>
@@ -344,7 +348,7 @@
           rows="4"
           [(ngModel)]="demoForm.notes"
           placeholder="Any specific requirements or questions?"
-          class="w-full p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+          class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
         ></textarea>
       </div>
 
@@ -364,7 +368,7 @@
             [(ngModel)]="demoForm.captcha_answer"
             placeholder="Enter CAPTCHA answer"
             required
-            class="flex-1 p-3 border border-sky-400 focus:border-sky-500 focus:ring-sky-500 rounded-md dark:bg-gray-800 dark:text-white"
+            class="flex-1 p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
           />
           <i
             class="pi pi-refresh text-blue-600 hover:text-blue-800 text-xl cursor-pointer"
