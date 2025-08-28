@@ -9,6 +9,7 @@ export class SubscriptionService {
 
   page = signal(1);
   pageSize = signal(20);
+  searchTerm = signal('');
 
   http = inject(HttpClient);
 

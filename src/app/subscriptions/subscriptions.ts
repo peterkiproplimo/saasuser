@@ -23,6 +23,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
+import { CommonModule } from '@angular/common';
 
 import { SubscriptionService } from './subscription.service';
 
@@ -37,6 +38,7 @@ import { SubscriptionService } from './subscription.service';
     NgClass,
     FormsModule,
     DecimalPipe,
+    CommonModule,
     CurrencyPipe,
     DialogModule,
     PaginatorModule,
@@ -55,6 +57,8 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
   is_error = this.subscription_service.subscription_resource.statusCode;
 
   showDialog = false;
+  search_text = '';
+
   loading = false;
   error: string | null = null;
 
@@ -88,7 +92,15 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
   fetchSubscriptions(): void {
     this.subscription_service.page.set(this.page + 1); // API expects 1-based index
     this.subscription_service.pageSize.set(this.pageSize);
+
+    // Pass search term
+    this.subscription_service.searchTerm?.set(this.search_text); // <-- depends on your service setup
+
     this.subscription_service.refetch();
+  }
+  onSearch(): void {
+    this.page = 0; // Reset to first page whenever searching
+    this.fetchSubscriptions();
   }
 
   onPageChange(event: any): void {
