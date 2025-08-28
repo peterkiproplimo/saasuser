@@ -78,6 +78,47 @@ export class OursolutionsComponent implements OnInit {
       });
   }
 
+  // ▶ state
+  showTrialDialog = false; // 👈 add this
+
+  // ▶ trial form payload
+  trialForm = {
+    customer_name: '',
+    email: '',
+    phone: '',
+    company: '',
+    application_name: '',
+    status: 'Pending',
+    notes: '',
+  };
+
+  openRequestTrial(): void {
+    this.trialForm = {
+      ...this.trialForm,
+      application_name: this.solutionData?.name || '',
+    };
+    this.showTrialDialog = true;
+  }
+
+  closeRequestTrial(): void {
+    this.showTrialDialog = false;
+  }
+
+  submitTrialRequest(): void {
+    this.http
+      .post(`${this.base_url}.trial.create_trial_request`, this.trialForm)
+      .pipe(takeUntilDestroyed(this.destroy))
+      .subscribe({
+        next: () => {
+          alert('✅ Free Trial request sent!');
+          this.closeRequestTrial();
+        },
+        error: () => {
+          alert('❌ Failed to submit free trial request.');
+        },
+      });
+  }
+
   /* --------------------------- API calls -------------------------- */
   fetchSolutionData(id: string) {
     this.isLoading = true;

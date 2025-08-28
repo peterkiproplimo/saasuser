@@ -36,25 +36,22 @@
       </div>
 
       <!-- Text Side -->
-      <div class="w-full md:w-1/2 text-gray-800 dark:text-white text-left">
-        <h1
-          class="text-4xl md:text-5xl font-extrabold leading-tight mb-6 text-yellow-400"
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a
+          href="javascript:void(0)"
+          (click)="openRequestDemo()"
+          class="bg-blue-800 hover:bg-sky-400 text-white px-6 py-3 rounded-md font-semibold shadow-md text-center transition-colors duration-300"
         >
-          {{ solutionData.name }}
-        </h1>
-        <div
-          [innerHTML]="solutionData.description"
-          class="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-6"
-        ></div>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a
-            href="javascript:void(0)"
-            (click)="openRequestDemo()"
-            class="bg-blue-800 hover:bg-sky-400 text-white px-6 py-3 rounded-md font-semibold shadow-md text-center transition-colors duration-300"
-          >
-            Request Demo
-          </a>
-        </div>
+          Request Demo
+        </a>
+
+        <a
+          href="javascript:void(0)"
+          (click)="openRequestTrial()"
+          class="bg-green-700 hover:bg-green-500 text-white px-6 py-3 rounded-md font-semibold shadow-md text-center transition-colors duration-300"
+        >
+          Request Free Trial
+        </a>
       </div>
     </div>
   </section>
@@ -394,6 +391,127 @@
           class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-sky-600 hover:to-cyan-500"
         >
           Submit Demo Request
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Request Free Trial Modal -->
+<div
+  *ngIf="showTrialDialog"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+>
+  <div
+    class="bg-[#f0fdf4] rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 sm:p-10"
+  >
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-green-700">
+        Request Free Trial of {{ solutionData?.name }}
+      </h2>
+      <button
+        class="text-gray-700 text-3xl"
+        (click)="closeRequestTrial()"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="submitTrialRequest()" class="space-y-6" novalidate>
+      <div class="grid md:grid-cols-2 gap-4">
+        <!-- Name -->
+        <div class="flex flex-col">
+          <label for="trial_customer_name" class="mb-1 text-sm font-medium">
+            Full Name *
+          </label>
+          <input
+            type="text"
+            id="trial_customer_name"
+            name="trial_customer_name"
+            [(ngModel)]="trialForm.customer_name"
+            required
+            class="w-full p-3 border border-green-400 rounded-md"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="flex flex-col">
+          <label for="trial_email" class="mb-1 text-sm font-medium"
+            >Email *</label
+          >
+          <input
+            type="email"
+            id="trial_email"
+            name="trial_email"
+            [(ngModel)]="trialForm.email"
+            required
+            class="w-full p-3 border border-green-400 rounded-md"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="flex flex-col md:col-span-2">
+          <label for="trial_phone" class="mb-1 text-sm font-medium"
+            >Phone *</label
+          >
+          <input
+            type="text"
+            id="trial_phone"
+            name="trial_phone"
+            [(ngModel)]="trialForm.phone"
+            required
+            class="w-full p-3 border border-green-400 rounded-md"
+          />
+        </div>
+
+        <!-- Company -->
+        <div class="flex flex-col md:col-span-2">
+          <label for="trial_company" class="mb-1 text-sm font-medium"
+            >Company *</label
+          >
+          <input
+            type="text"
+            id="trial_company"
+            name="trial_company"
+            [(ngModel)]="trialForm.company"
+            required
+            class="w-full p-3 border border-green-400 rounded-md"
+          />
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div>
+        <label for="trial_notes" class="mb-1 block text-sm font-medium">
+          Additional Notes
+        </label>
+        <textarea
+          id="trial_notes"
+          name="trial_notes"
+          rows="4"
+          [(ngModel)]="trialForm.notes"
+          class="w-full p-3 border border-green-400 rounded-md"
+        ></textarea>
+      </div>
+
+      <!-- Hidden -->
+      <input
+        type="hidden"
+        [(ngModel)]="trialForm.application_name"
+        name="trial_application_name"
+      />
+      <input type="hidden" [(ngModel)]="trialForm.status" name="trial_status" />
+
+      <!-- Submit -->
+      <div class="text-center mt-6">
+        <button
+          type="submit"
+          class="bg-gradient-to-r from-green-500 to-emerald-400 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-green-600 hover:to-emerald-500"
+        >
+          Submit Free Trial Request
         </button>
       </div>
     </form>
