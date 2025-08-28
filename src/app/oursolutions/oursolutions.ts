@@ -13,12 +13,7 @@ import { environment } from '../../environments/environment';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-oursolutions',
@@ -52,45 +47,24 @@ export class OursolutionsComponent implements OnInit {
   // ▶ CAPTCHA
   captchaQuestion = '';
 
-  submitForm() {
-    this.submitted = true;
-
-    // check required fields
-    const requiredFields = [
-      'customer_name',
-      'email',
-      'phone',
-      'application_name',
-      'demo_type',
-      'demo_date',
-      'captcha_answer',
-    ];
-
-    const missing = requiredFields.filter(
-      (key) => !this.demoForm[key as keyof typeof this.demoForm]?.trim()
-    );
-
-    if (missing.length) {
-      alert('Please fill all required fields.');
-      return;
-    }
-
-    // Proceed with submission
-  }
-
   // ▶ demo form payload
-  demoForm = {
-    customer_name: '',
-    email: '',
-    phone: '',
-    application_name: '',
-    demo_type: '',
-    demo_date: '',
-    status: 'Open',
-    notes: '',
-    captcha_answer: '',
-    token: '', // set when we fetch CAPTCHA
-  };
+  demoForm = this.getEmptyForm();
+
+  /** Utility: create a fresh demo form */
+  private getEmptyForm() {
+    return {
+      customer_name: '',
+      email: '',
+      phone: '',
+      application_name: '',
+      demo_type: '',
+      demo_date: '',
+      status: 'Open',
+      notes: '',
+      captcha_answer: '',
+      token: '',
+    };
+  }
 
   /* --------------------------- lifecycle --------------------------- */
   ngOnInit(): void {
@@ -105,7 +79,7 @@ export class OursolutionsComponent implements OnInit {
   }
 
   /* --------------------------- API calls -------------------------- */
-  private fetchSolutionData(id: string) {
+  fetchSolutionData(id: string) {
     this.isLoading = true;
     this.http
       .get<{ data: any }>(
@@ -128,17 +102,15 @@ export class OursolutionsComponent implements OnInit {
   }
 
   /** GET /demo.generate_captcha */
-  public fetchCaptcha() {
+  fetchCaptcha() {
     this.captchaQuestion = '';
     this.demoForm.captcha_answer = '';
     this.demoForm.token = '';
 
     this.http
-      .get<{
-        status: number;
-        question: string;
-        token: string;
-      }>(`${this.base_url}.demo.generate_captcha`)
+      .get<{ status: number; question: string; token: string }>(
+        `${this.base_url}.demo.generate_captcha`
+      )
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: (res) => {
@@ -153,33 +125,55 @@ export class OursolutionsComponent implements OnInit {
       });
   }
 
+  /* ------------------------- dialog handlers -------------------------- */
   openRequestDemo(): void {
-    this.demoForm = {
-      ...this.demoForm,
-      application_name: this.solutionData?.name || '',
-    };
+    this.demoForm = this.getEmptyForm();
+    this.demoForm.application_name = this.solutionData?.name || '';
     this.showRequestDialog = true;
     this.fetchCaptcha();
   }
 
   closeRequestDemo(): void {
     this.showRequestDialog = false;
+    this.submitted = false;
+    this.demoForm = this.getEmptyForm();
   }
 
   /* ------------------------- form submit -------------------------- */
   submitDemoRequest(): void {
+    this.submitted = true;
+
+    // validate required fields
+    const requiredFields = [
+      'customer_name',
+      'email',
+      'phone',
+      'application_name',
+      'demo_type',
+      'demo_date',
+      'captcha_answer',
+    ];
+    const missing = requiredFields.filter(
+      (key) => !(this.demoForm[key as keyof typeof this.demoForm] || '').trim()
+    );
+    if (missing.length) {
+      alert('Please fill all required fields.');
+      return;
+    }
+
     if (!this.demoForm.captcha_answer) {
       alert('Please answer the CAPTCHA.');
       return;
     }
 
+    // send API request
     this.http
       .post(`${this.base_url}.demo.create_demo_booking`, this.demoForm)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: () => {
           alert('✅ Demo request sent!');
-          this.closeRequestDemo();
+          this.closeRequestDemo(); // reset + close
         },
         error: () => {
           alert('❌ Failed to submit demo request.');
