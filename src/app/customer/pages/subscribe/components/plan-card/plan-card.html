@@ -1,58 +1,170 @@
-<div class="mx-auto h-max">
-  <div
-    class="relative rounded-3xl bg-gray-200 dark:bg-gray-900 px-8 shadow-2xl ring-1 ring-gray-900/10 sm:px-10 py-6"
-  >
-    <h3
-      id="tier-enterprise"
-      class="text-xl font-bold text-indigo-600 line-clamp-2"
-    >
-      {{ plan()?.name }}
+<!-- Plan Card -->
+<div
+  *ngIf="!paymentVisible"
+  class="rounded-lg bg-gray-200 dark:bg-gray-900 p-6 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+>
+  <div>
+    <h3 class="text-xl font-bold text-indigo-600 text-center">
+      {{ plan.name }}
     </h3>
 
-    <p class="mt-8 flex items-baseline gap-x-2">
-      <span
-        class="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-200"
-      >
-        {{ plan()?.cost | number:'1.2-2' }} {{ plan()?.currency }}
+    <div class="mt-4 flex flex-col items-center gap-1">
+      <span class="text-lg font-semibold">
+        {{ plan.cost | number:'1.2-2' }} {{ plan.currency }}
       </span>
-      <span class="text-base capitalize text-gray-700 dark:text-gray-300"
-        >/{{ plan()?.billing_interval }}</span
-      >
-    </p>
+      <span class="text-sm text-gray-500">/{{ plan.billing_interval }}</span>
+      <p class="text-xs text-gray-400">VAT inclusive</p>
+    </div>
 
-    <!-- VAT info -->
-    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">VAT inclusive</p>
-
-    <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-300 sm:mt-10">
-      @for (planFeature of plan()?.features; track planFeature) {
-      <li class="flex gap-x-3">
+    <ul class="mt-6 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+      @for (planFeature of plan.features; track planFeature) {
+      <li class="flex items-center gap-2">
         <svg
-          viewBox="0 0 20 20"
+          class="h-4 w-4 text-indigo-500"
           fill="currentColor"
-          data-slot="icon"
-          aria-hidden="true"
-          class="h-6 w-5 flex-none text-indigo-400"
+          viewBox="0 0 20 20"
         >
           <path
-            d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-            clip-rule="evenodd"
-            fill-rule="evenodd"
+            d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 
+              10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 
+              0 0 1 1.06-1.06l3.894 3.893 
+              7.48-9.817a.75.75 0 0 1 
+              1.05-.143Z"
           />
         </svg>
-        <span class="text-base capitalize text-gray-700 dark:text-gray-300"
-          >{{ planFeature.description }}</span
-        >
+        {{ planFeature.description }}
       </li>
       }
     </ul>
 
     <button
-      class="mt-8 w-full rounded-md bg-indigo-500 dark:bg-indigo-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10"
-      (click)="add_to_cart(plan()!)"
+      (click)="subscribe()"
+      [disabled]="loading()"
+      class="mt-6 w-full rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
     >
-      Add to Cart
+      {{ loading() ? 'Processing...' : 'Subscribe' }}
     </button>
   </div>
 </div>
 
-<p-toast position="top-right" />
+<!-- Domain Dialog -->
+<p-dialog
+  [visible]="domainDialogOpen()"
+  (onHide)="domainDialogOpen.set(false)"
+  [modal]="true"
+  header="Enter Your Domain"
+  [baseZIndex]="10000"
+>
+  <div class="p-6">
+    <label class="block mb-2 font-semibold text-gray-800">Domain Name</label>
+    <div class="flex items-center gap-2">
+      <input
+        type="text"
+        [(ngModel)]="domainName"
+        class="flex-1 p-3 border rounded-lg"
+      />
+      <span class="text-gray-700 font-medium">.techsavanna.technology</span>
+    </div>
+
+    <div class="flex justify-end mt-6 gap-3">
+      <button
+        type="button"
+        (click)="domainDialogOpen.set(false)"
+        class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="submitDomain()"
+        [disabled]="loading() || !domainName"
+        class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Payment Form (Middle Center) -->
+<div
+  *ngIf="paymentVisible"
+  class="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50"
+>
+  <div
+    class="w-full max-w-md p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
+  >
+    <h1 class="text-2xl font-bold mb-4 text-indigo-600 text-center">
+      Make Payment
+    </h1>
+
+    <p class="font-semibold text-gray-800 text-center">
+      Invoice: {{ invoiceNumber }}
+    </p>
+    <p class="text-gray-600 text-center mb-4">Domain: {{ selectedDomain }}</p>
+
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block mb-1 font-semibold">Email Address</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full p-2 border rounded"
+        />
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold">Amount</label>
+        <input
+          type="number"
+          min="1"
+          formControlName="amount"
+          class="w-full p-2 border rounded"
+        />
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold">Phone Number</label>
+        <input
+          type="text"
+          formControlName="phone"
+          class="w-full p-2 border rounded"
+        />
+      </div>
+
+      <div class="flex justify-center gap-4 mt-4">
+        <button
+          type="button"
+          (click)="hidePaymentForm()"
+          class="px-4 py-2 bg-red-600 text-white rounded"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="paymentLoading()"
+          class="px-4 py-2 bg-green-600 text-white rounded"
+        >
+          {{ paymentLoading() ? 'Processing...' : 'Make Payment' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="iframe_dialog"
+  [style]="{ width: '800px', height: '700px' }"
+  header="Complete Payment"
+  [modal]="true"
+>
+  @if (payment_iframe_url()) {
+  <iframe
+    [src]="payment_iframe_url()"
+    width="100%"
+    height="650px"
+    frameborder="0"
+    sandbox="allow-scripts allow-same-origin allow-forms"
+  ></iframe>
+  }
+</p-dialog>

@@ -1,29 +1,29 @@
-<p-card
->
+<p-card>
+  <div class="focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <div>
+      <div
+        class="relative aspect-square w-full overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700 h-40"
+      >
+        <img
+          class="h-full w-full object-cover group-hover:scale-105 group-hover:opacity-90 transition-transform duration-300"
+          alt="test"
+          [ngSrc]="imageUrl"
+          fill
+        />
+      </div>
 
-  <div
-    class="focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-
-  <div>
-
-    <div class="relative aspect-square w-full overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700 h-40">
-      <img
-        class="h-full w-full object-cover group-hover:scale-105 group-hover:opacity-90 transition-transform duration-300"
-        alt="test" [ngSrc]="imageUrl" fill/>
-
+      <div class="my-4 flex flex-col gap-1 h-20">
+        <h3
+          class="text-lg font-bold text-gray-900 dark:text-gray-200 line-clamp-2"
+        >
+          {{solution()?.name}}
+        </h3>
+        <p
+          class="text-md font-semibold text-gray-500 dark:text-gray-400 line-clamp-2"
+        >
+          {{solution()?.short_description}}
+        </p>
+      </div>
     </div>
-
-    <div class="my-4 flex flex-col gap-1 h-20">
-      <h3 class="text-lg font-bold text-gray-900 dark:text-gray-200 line-clamp-2">
-        {{solution()?.name}}
-      </h3>
-      <p class="text-md font-semibold text-gray-500 dark:text-gray-400 line-clamp-2">
-        {{solution()?.short_description}}
-      </p>
-    </div>
-
-  </div>
-
   </div>
 </p-card>

@@ -1,0 +1,6 @@
+/* In your global styles.css */
+::ng-deep .black-dialog-mask {
+  background-color: rgba(26, 141, 185, 255) !important; /* Custom blue */
+  opacity: 1 !important; /* Fully opaque */
+  backdrop-filter: none !important; /* Remove blur */
+}

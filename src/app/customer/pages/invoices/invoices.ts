@@ -118,8 +118,9 @@ export class Invoices {
     this.payment_loading.set(true);
 
     const payment_request: PaymentRequest = {
-      invoice_name: this.selected_invoice()?.name,
-      payment_amount: this.payment_form.value.amount!,
+      invoice_name: this.selected_invoice()?.name ?? '',
+      payment_amount: Number(this.payment_form.value.amount!),
+
       payment_mode: 'PesaPal',
       customer_email: this.payment_form.value.email!,
       customer_phone: this.payment_form.value.phone!,
