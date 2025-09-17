@@ -1,14 +1,14 @@
-<div class="min-h-screen flex flex-col w-full overflow-hidden">
+<div class="min-h-screen flex flex-col w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
 
   <!-- Navbar (Sticky Top) -->
-  <app-navbar class="sticky top-0 z-50 bg-white dark:bg-gray-800 h-max" />
+  <app-navbar class="sticky top-0 z-50" />
 
   <!-- Scrollable Content Area -->
   <main class="flex-1 overflow-auto">
     <router-outlet></router-outlet>
   </main>
 
-<!-- Footer (Sticky Bottom) -->
-<app-footer class="z-50 bg-white dark:bg-gray-800 h-max" />
+  <!-- Footer (Sticky Bottom) -->
+  <app-footer class="z-50" />
 
 </div>

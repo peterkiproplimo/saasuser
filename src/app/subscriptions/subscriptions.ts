@@ -15,7 +15,6 @@ import {
   NgFor,
   NgClass,
   DecimalPipe,
-  CurrencyPipe,
 } from '@angular/common';
 
 import { PaginatorModule } from 'primeng/paginator';
@@ -39,7 +38,6 @@ import { SubscriptionService } from './subscription.service';
     FormsModule,
     DecimalPipe,
     CommonModule,
-    CurrencyPipe,
     DialogModule,
     PaginatorModule,
     InputTextModule,

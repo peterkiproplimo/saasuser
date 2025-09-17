@@ -1,9 +1,9 @@
-import {Component, inject} from '@angular/core';
-import {InvoicesService} from '../invoices/services/invoices';
-import {ProgressSpinner} from 'primeng/progressspinner';
-import {CurrencyPipe, DatePipe, DecimalPipe} from '@angular/common';
-import {SubscriptionService} from '../../../subscriptions/subscription.service';
-import {EmptyStateComponent} from '../../../shared/components/empty-state/empty-state.component';
+import { Component, inject, computed } from '@angular/core';
+import { InvoicesService } from '../invoices/services/invoices';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { SubscriptionService } from '../../../subscriptions/subscription.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,8 +11,7 @@ import {EmptyStateComponent} from '../../../shared/components/empty-state/empty-
     ProgressSpinner,
     CurrencyPipe,
     DatePipe,
-    DecimalPipe,
-    EmptyStateComponent
+    RouterLink
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
@@ -34,4 +33,16 @@ export class Dashboard {
   ledger = this.invoices_service.ledger_resource.value;
   ledger_loading = this.invoices_service.ledger_resource.isLoading;
 
+  // Computed properties for safe data access
+  subscriptionsData = computed(() => this.subscriptions()?.data || []);
+  invoicesData = computed(() => this.invoices()?.data || []);
+  ledgerData = computed(() => this.ledger()?.data || []);
+
+  getTotalOutstanding(): number {
+    const invoicesData = this.invoices()?.data;
+    if (!invoicesData || !Array.isArray(invoicesData)) return 0;
+    return invoicesData.reduce((total, invoice) => {
+      return total + (invoice.outstanding_amount || 0);
+    }, 0);
+  }
 }

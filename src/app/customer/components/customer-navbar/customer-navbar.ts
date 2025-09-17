@@ -1,16 +1,14 @@
-import {Component, inject} from '@angular/core';
-import {Button} from "primeng/button";
-import {Menu} from "primeng/menu";
-import {Ripple} from "primeng/ripple";
-import {Router, RouterLink} from "@angular/router";
-import {AuthService} from '../../../auth/services/auth.service';
-import {User} from '../../../auth/models/responses/login-response';
-import {CartService} from '../../pages/cart/services/cart-service';
+import { Component, inject } from '@angular/core';
+import { Menu } from "primeng/menu";
+import { Ripple } from "primeng/ripple";
+import { Router, RouterLink } from "@angular/router";
+import { AuthService } from '../../../auth/services/auth.service';
+import { User } from '../../../auth/models/responses/login-response';
+import { CartService } from '../../pages/cart/services/cart-service';
 
 @Component({
   selector: 'app-customer-navbar',
   imports: [
-    Button,
     Menu,
     Ripple,
     RouterLink
@@ -22,7 +20,7 @@ export class CustomerNavbar {
   isDarkMode = false;
   private auth_service = inject(AuthService);
   private cart_service = inject(CartService);
-  storedUser :User = JSON.parse(localStorage.getItem('user')!);
+  storedUser: User = JSON.parse(localStorage.getItem('user')!);
   loggedIn = this.auth_service.loggedIn();
   private router = inject(Router)
 

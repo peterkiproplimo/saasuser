@@ -1,30 +1,42 @@
-<nav class="text-white shadow sticky top-0 z-50">
+<nav class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white shadow-lg sticky top-0 z-50 border-b border-blue-600">
   <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
-    <div class="flex h-16 items-center justify-end">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Left: Logo -->
+      <div class="flex items-center space-x-3">
+        <img
+          src="/images/tech-savanna-logo.svg"
+          alt="TechSavanna Logo"
+          class="h-10 w-10 rounded-lg"
+        />
+        <div>
+          <h1 class="text-lg font-bold text-white">TechSavanna</h1>
+          <p class="text-xs text-blue-200">Customer Portal</p>
+        </div>
+      </div>
 
       <!-- Right: Dark mode + profile -->
       <div class="flex items-center space-x-4">
 
-        <a routerLink="/customer/cart" class="relative">
-        <i class="pi pi-shopping-cart text-gray-700 hover:text-blue-600 text-2xl size-5"></i>
-          <span class="absolute -top-2 -right-2 inline-flex items-center justify-center size-4
-                               py-1 text-[0.7rem] font-bold leading-none text-white bg-red-600 rounded-full">
-        {{total_items()}}
-        </span>
-
+        <a routerLink="/customer/cart" class="relative p-2 hover:bg-white/10 rounded-lg transition-all duration-200">
+          <i class="pi pi-shopping-cart text-white hover:text-blue-200 text-xl"></i>
+          <span class="absolute -top-1 -right-1 inline-flex items-center justify-center size-5
+                               py-1 text-[0.7rem] font-bold leading-none text-white bg-red-500 rounded-full">
+            {{total_items()}}
+          </span>
         </a>
 
         <!-- Dark Mode Toggle -->
-        <p-button
-          [icon]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
-          (onClick)="toggleDarkMode()"
-          styleClass="p-button-rounded p-button-text p-button-md"
-        ></p-button>
+        <button
+          (click)="toggleDarkMode()"
+          class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200"
+        >
+          <i [class]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'" class="text-lg"></i>
+        </button>
 
         <!-- Profile -->
         @if (loggedIn) {
           <button (click)="menu.toggle($event)"
-                  class="h-8 w-8 cursor-pointer text-[#084c9c] dark:text-white rounded-full ring-2 ring-indigo-500 flex items-center justify-center font-bold">
+                  class="h-10 w-10 cursor-pointer text-white rounded-full ring-2 ring-white/30 hover:ring-white/50 flex items-center justify-center font-bold bg-blue-600 hover:bg-blue-700 transition-all duration-200">
             {{ storedUser.first_name!.charAt(0).toUpperCase() }}{{ storedUser.last_name!.charAt(0).toUpperCase() }}
           </button>
         }

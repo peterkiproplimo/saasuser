@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { InvoicesService } from '../invoices/services/invoices';
 import { Paginator, PaginatorState } from 'primeng/paginator';
-import { Button } from 'primeng/button';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ProgressSpinner } from 'primeng/progressspinner';
@@ -18,7 +17,6 @@ import autoTable from 'jspdf-autotable';
   selector: 'app-billing-history',
   standalone: true,
   imports: [
-    Button,
     DatePipe,
     DecimalPipe,
     CommonModule,
@@ -154,5 +152,5 @@ export class BillingHistory {
   }
 
   // stub
-  pay_invoice() {}
+  pay_invoice() { }
 }

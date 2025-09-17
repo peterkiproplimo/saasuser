@@ -9,7 +9,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { CommonModule } from '@angular/common';
 import { ContactUsService } from './contactus.service';
 import { ContactUsPayload } from './contactus.model';
-import { ContactFeedbackDialogComponent } from './contact-feedback-dialog.component';
 
 @Component({
   selector: 'app-contactus',
@@ -18,7 +17,6 @@ import { ContactFeedbackDialogComponent } from './contact-feedback-dialog.compon
     CommonModule,
     GoogleMapsModule,
     ReactiveFormsModule,
-    ContactFeedbackDialogComponent,
   ],
   templateUrl: './contactus.html',
   styleUrls: ['./contactus.scss'],
@@ -41,7 +39,7 @@ export class ContactUsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private contactUsService: ContactUsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
