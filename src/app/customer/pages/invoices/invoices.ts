@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal, OnInit } from '@angular/core';
 import { InvoicesService } from './services/invoices';
 import { Paginator, PaginatorState } from 'primeng/paginator';
 import { ProgressSpinner } from 'primeng/progressspinner';
@@ -46,7 +46,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   templateUrl: './invoices.html',
   styleUrl: './invoices.scss',
 })
-export class Invoices {
+export class Invoices implements OnInit {
   invoices_service = inject(InvoicesService);
   pdf_service = inject(PdfService);
   private destroyRef = inject(DestroyRef);
@@ -93,6 +93,11 @@ export class Invoices {
     phone: new FormControl('', [Validators.required]),
     amount: new FormControl('', [Validators.required, Validators.min(1)]),
   });
+
+  ngOnInit() {
+    // Trigger API calls on component mount (like useEffect)
+    this.invoices_service.refreshInvoices();
+  }
 
   onPageChange(event: PaginatorState) {
     this.first.set(event.first ?? 0);

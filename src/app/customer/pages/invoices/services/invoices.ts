@@ -15,7 +15,7 @@ import { PaymentRequest } from '../models/requests/payment_request';
 export class InvoicesService {
   base_url = environment.BASE_URL;
 
-  constructor(private datePipe: DatePipe, private http: HttpClient) {}
+  constructor(private datePipe: DatePipe, private http: HttpClient) { }
 
   page = signal(1);
   page_size = signal(5);
@@ -31,6 +31,9 @@ export class InvoicesService {
   search = signal('');
   debounced_search = debounceSignal<string>(this.search, 500);
 
+  // Cache busting parameter to force fresh requests
+  refresh_timestamp = signal(Date.now());
+
   invoices_resource = httpResource<invoiceListResponse>(
     () => {
       const params = new URLSearchParams();
@@ -38,6 +41,7 @@ export class InvoicesService {
       params.set('page_size', this.page_size().toString());
       params.set('status', this.status());
       params.set('search', this.debounced_search()!);
+      params.set('_t', this.refresh_timestamp().toString()); // Cache busting
 
       const start = this.start_date();
       if (start) {
@@ -66,6 +70,7 @@ export class InvoicesService {
 
       params.set('page', this.page().toString());
       params.set('page_size', this.page_size().toString());
+      params.set('_t', this.refresh_timestamp().toString()); // Cache busting
 
       const start = this.start_date();
       if (start) {
@@ -83,9 +88,8 @@ export class InvoicesService {
         );
       }
 
-      return `${
-        this.base_url
-      }.invoices.get_customer_ledger?${params.toString()}`;
+      return `${this.base_url
+        }.invoices.get_customer_ledger?${params.toString()}`;
     },
     { defaultValue: {} }
   );
@@ -95,9 +99,8 @@ export class InvoicesService {
       if (!this.id()) {
         return '';
       }
-      return `${
-        this.base_url
-      }.invoices.get_invoice_by_id?invoice_id=${this.id()}`;
+      return `${this.base_url
+        }.invoices.get_invoice_by_id?invoice_id=${this.id()}`;
     },
     { defaultValue: {} }
   );
@@ -107,5 +110,15 @@ export class InvoicesService {
       `${this.base_url}.invoices.pay_invoice`,
       invoice
     );
+  }
+
+  // Method to refresh invoices data
+  refreshInvoices() {
+    this.refresh_timestamp.set(Date.now()); // Update timestamp to force fresh request
+  }
+
+  // Method to refresh ledger data
+  refreshLedger() {
+    this.refresh_timestamp.set(Date.now()); // Update timestamp to force fresh request
   }
 }

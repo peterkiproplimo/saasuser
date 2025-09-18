@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, OnInit } from '@angular/core';
 import { InvoicesService } from '../invoices/services/invoices';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { CurrencyPipe, DatePipe } from '@angular/common';
@@ -16,12 +16,19 @@ import { RouterLink } from '@angular/router';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   invoices_service = inject(InvoicesService);
   subscription_service = inject(SubscriptionService);
 
   constructor() {
     this.invoices_service.status.set("Unpaid");
+  }
+
+  ngOnInit() {
+    // Trigger API calls on component mount (like useEffect)
+    this.invoices_service.refreshInvoices();
+    this.invoices_service.refreshLedger();
+    this.subscription_service.refreshSubscriptions();
   }
 
   invoices = this.invoices_service.invoices_resource.value;

@@ -3,7 +3,7 @@ export function getHtmlContent(report: any) {
   const customerProfile = JSON.parse(localStorage.getItem('user') || '{}');
 
   const statusColors: Record<string, string> = {
-    paid: 'bg-green-600',
+    paid: 'bg-blue-600',
     unpaid: 'bg-red-600',
     'partially paid': 'bg-yellow-500',
     overdue: 'bg-orange-600',
@@ -26,12 +26,11 @@ export function getHtmlContent(report: any) {
       (item: any) => `
     <tr>
       <td class="border px-3 py-2">${item.item_name}</td>
-      <td class="border px-3 py-2 text-right">${item.rate.toLocaleString()} ${
-        report.currency
-      }</td>
+      <td class="border px-3 py-2 text-right">${item.rate.toLocaleString()} ${report.currency
+        }</td>
       <td class="border px-3 py-2 text-right">${(
-        item.rate * item.qty
-      ).toLocaleString()} ${report.currency}</td>
+          item.rate * item.qty
+        ).toLocaleString()} ${report.currency}</td>
     </tr>
   `
     )
@@ -114,9 +113,8 @@ export function getHtmlContent(report: any) {
       </div>
       <div class="flex justify-between font-bold text-lg mt-2">
         <span>TOTAL</span>
-        <span class="text-blue-600">${report.grand_total.toLocaleString()} ${
-    report.currency
-  }</span>
+        <span class="text-blue-600">${report.grand_total.toLocaleString()} ${report.currency
+    }</span>
       </div>
     </div>
 
@@ -127,9 +125,8 @@ export function getHtmlContent(report: any) {
     <!-- VAT Note -->
     <div class="text-sm mb-4">
       <p class="font-bold">VAT Provision Notice</p>
-      <p>Please note: All services are subject to applicable VAT regulations under VAT No. ${
-        report.vat_no
-      }.</p>
+      <p>Please note: All services are subject to applicable VAT regulations under VAT No. ${report.vat_no
+    }.</p>
     </div>
 
     <!-- Footer -->

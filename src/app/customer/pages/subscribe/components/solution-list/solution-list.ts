@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, computed, inject, signal, OnInit} from '@angular/core';
 import {SolutionsService} from '../../services/solutions-service';
 import {SolutionCard} from '../solution-card/solution-card';
 import {Dialog} from 'primeng/dialog';
@@ -14,7 +14,7 @@ import {Router, RouterLink} from '@angular/router';
   templateUrl: './solution-list.html',
   styleUrl: './solution-list.scss'
 })
-export class SolutionList {
+export class SolutionList implements OnInit {
 
   solutions_service = inject(SolutionsService);
   router = inject(Router);
@@ -30,5 +30,9 @@ export class SolutionList {
 
   selected_solution = this.solutions_service.selected_solution;
 
+  ngOnInit() {
+    // Trigger API calls on component mount (like useEffect)
+    this.solutions_service.refreshSolutions();
+  }
 
 }

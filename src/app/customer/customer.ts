@@ -2,11 +2,13 @@ import { Component, inject } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
 import { SideBarItem } from './components/side-bar-item/side-bar-item';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { CustomerNavbar } from './components/customer-navbar/customer-navbar';
 import { User } from '../auth/models/responses/login-response';
 import { AuthService } from '../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { InvoicesService } from './pages/invoices/services/invoices';
+import { SubscriptionService } from '../subscriptions/subscription.service';
 
 @Component({
   selector: 'app-customer',
@@ -14,10 +16,8 @@ import { Router } from '@angular/router';
     Button,
     Drawer,
     SideBarItem,
-    RouterLink,
     RouterOutlet,
     CustomerNavbar,
-    RouterLinkActive,
   ],
   templateUrl: './customer.html',
   styleUrl: './customer.scss',
@@ -25,12 +25,15 @@ import { Router } from '@angular/router';
 export class Customer {
   isMenuOpen = false;
   drawerVisible = false;
+  sidebarCollapsed = false;
   private auth_service = inject(AuthService);
+  private invoices_service = inject(InvoicesService);
+  private subscription_service = inject(SubscriptionService);
 
   storedUser: User = JSON.parse(localStorage.getItem('user')!);
   loggedIn = this.auth_service.loggedIn();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   toggleDrawer() {
     this.drawerVisible = !this.drawerVisible;
@@ -60,5 +63,45 @@ export class Customer {
     } else {
       this.router.navigate(['/customer/subscriptions']);
     }
+  }
+
+  // Navigation methods - components will handle their own data refresh on mount
+  navigateToDashboard() {
+    this.router.navigate(['/customer']);
+    this.close_drawer();
+  }
+
+  navigateToSubscriptions() {
+    this.router.navigate(['/customer/subscriptions']);
+    this.close_drawer();
+  }
+
+  navigateToInvoices() {
+    this.router.navigate(['/customer/invoices']);
+    this.close_drawer();
+  }
+
+  navigateToBilling() {
+    this.router.navigate(['/customer/billing']);
+    this.close_drawer();
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/customer/profile']);
+    this.close_drawer();
+  }
+
+  navigateToTickets() {
+    this.router.navigate(['/customer/tickets']);
+    this.close_drawer();
+  }
+
+  navigateToSubscribe() {
+    this.router.navigate(['/customer/subscribe']);
+    this.close_drawer();
+  }
+
+  toggleSidebar() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

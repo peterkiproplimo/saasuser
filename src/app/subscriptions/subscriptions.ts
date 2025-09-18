@@ -94,7 +94,7 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
     // Pass search term
     this.subscription_service.searchTerm?.set(this.search_text); // <-- depends on your service setup
 
-    this.subscription_service.refetch();
+    this.subscription_service.refreshSubscriptions(); // Use the new refresh method
   }
   onSearch(): void {
     this.page = 0; // Reset to first page whenever searching
@@ -114,7 +114,7 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
   createSubscription(): void {
     this.showDialog = false;
-    this.subscription_service.refetch();
+    this.subscription_service.refreshSubscriptions();
   }
 
   statusSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' {

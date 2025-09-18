@@ -1,38 +1,344 @@
-<div class="max-w-md w-full mx-auto my-8">
-  <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden">
-    <div class="bg-gradient-to-b from-[#1476B7] to-[#093553] p-4 flex justify-between items-center">
-      <h3 class="text-xl font-semibold text-white">{{ user.name || 'User Profile' }}</h3>
-    </div>
-    <div class="p-4">
+<!-- Toast Messages -->
+<p-toast></p-toast>
 
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Full Name:
-              {{ user.name || 'Not provided' }}
-            </p>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">First Name:
-            {{ user.first_name || 'Not provided' }}
-            </p>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Last Name:
-            {{ user.last_name || 'Not provided' }}
-            </p>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Email:
-           {{ user.email || 'Not provided' }}
-            </p>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Last Login:
-            {{ user.last_login | date:'dd-MMM-yyyy HH:mm z' }}
-            </p>
-          </div>
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header Section -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Profile</h1>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Manage your account settings and preferences</p>
         </div>
+        <button 
+          (click)="editProfile()"
+          class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl">
+          <i class="pi pi-pencil text-sm"></i>
+          <span>Edit Profile</span>
+        </button>
+      </div>
+    </div>
 
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left Column - Profile Info -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Profile Card -->
+        <p-card class="profile-card">
+          <ng-template pTemplate="header">
+            <div class="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 p-8 text-center">
+              <div class="relative inline-block">
+                <div class="w-32 h-32 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-6xl font-bold text-white mb-4 mx-auto">
+                  {{ getInitials() }}
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-500 rounded-full border-4 border-white flex items-center justify-center">
+                  <i class="pi pi-check text-white text-xs"></i>
+                </div>
+              </div>
+              <h2 class="text-2xl font-bold text-white">{{ user.name || 'User Profile' }}</h2>
+              <p class="text-blue-100 mt-2">{{ user.email }}</p>
+              <div class="mt-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  <i class="pi pi-circle-fill text-blue-500 mr-2 text-xs"></i>
+                  Active Account
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          
+          <div class="p-6">
+            <!-- Account Completion Progress -->
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Profile Completion</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">{{ getAccountCompletion() }}%</span>
+              </div>
+              <p-progressBar [value]="getAccountCompletion()" [showValue]="false" 
+                            styleClass="custom-progress-bar"></p-progressBar>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                    <i class="pi pi-user text-blue-600 dark:text-blue-400"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Full Name</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ user.name || 'Not provided' }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                    <i class="pi pi-envelope text-blue-600 dark:text-blue-400"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Email Address</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ user.email || 'Not provided' }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                    <i class="pi pi-calendar text-purple-600 dark:text-purple-400"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Last Login</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                      {{ user.last_login | date:'MMM dd, yyyy' }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
+                    <i class="pi pi-clock text-orange-600 dark:text-orange-400"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Member Since</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">January 2024</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Account Statistics -->
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                <i class="pi pi-chart-bar text-blue-600 mr-3"></i>
+                Account Statistics
+              </h3>
+            </div>
+          </ng-template>
+          
+          <div class="p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div class="text-center">
+                <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="pi pi-credit-card text-blue-600 dark:text-blue-400 text-xl"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ accountStats.totalSubscriptions }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Total Subscriptions</p>
+              </div>
+
+              <div class="text-center">
+                <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="pi pi-check-circle text-blue-600 dark:text-blue-400 text-xl"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ accountStats.activeSubscriptions }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Active Plans</p>
+              </div>
+
+              <div class="text-center">
+                <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="pi pi-file-invoice text-purple-600 dark:text-purple-400 text-xl"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ accountStats.totalInvoices }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Total Invoices</p>
+              </div>
+
+              <div class="text-center">
+                <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i class="pi pi-money-bill text-orange-600 dark:text-orange-400 text-xl"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ accountStats.paidInvoices }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Paid Invoices</p>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Right Column - Quick Actions & Settings -->
+      <div class="space-y-6">
+        
+        <!-- Quick Actions -->
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                <i class="pi pi-bolt text-yellow-600 mr-3"></i>
+                Quick Actions
+              </h3>
+            </div>
+          </ng-template>
+          
+          <div class="p-6 space-y-4">
+            <button 
+              (click)="changePassword()"
+              class="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
+              <div class="flex items-center space-x-3">
+                <i class="pi pi-key text-blue-600"></i>
+                <span class="font-medium text-gray-900 dark:text-white">Change Password</span>
+              </div>
+              <i class="pi pi-chevron-right text-gray-400"></i>
+            </button>
+
+            <button 
+              (click)="updateNotificationSettings()"
+              class="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
+              <div class="flex items-center space-x-3">
+                <i class="pi pi-bell text-blue-600"></i>
+                <span class="font-medium text-gray-900 dark:text-white">Notifications</span>
+              </div>
+              <i class="pi pi-chevron-right text-gray-400"></i>
+            </button>
+
+            <button 
+              (click)="exportData()"
+              class="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
+              <div class="flex items-center space-x-3">
+                <i class="pi pi-download text-purple-600"></i>
+                <span class="font-medium text-gray-900 dark:text-white">Export Data</span>
+              </div>
+              <i class="pi pi-chevron-right text-gray-400"></i>
+            </button>
+          </div>
+        </p-card>
+
+        <!-- Account Status -->
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                <i class="pi pi-shield text-blue-600 mr-3"></i>
+                Account Status
+              </h3>
+            </div>
+          </ng-template>
+          
+          <div class="p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Account Status</span>
+              <p-badge value="Active" severity="success"></p-badge>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Email Verified</span>
+              <p-badge value="Verified" severity="success"></p-badge>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Two-Factor Auth</span>
+              <p-badge value="Disabled" severity="warn"></p-badge>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Last Activity</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400">{{ accountStats.lastActivity }}</span>
+            </div>
+          </div>
+        </p-card>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Edit Profile Dialog -->
+<p-dialog 
+  [(visible)]="showEditDialog" 
+  [modal]="true" 
+  [closable]="true" 
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="edit-profile-dialog"
+  [style]="{ width: '600px' }">
+  
+  <ng-template pTemplate="header">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+        <i class="pi pi-user-edit text-blue-600 dark:text-blue-400"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Edit Profile</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Update your personal information</p>
+      </div>
+    </div>
+  </ng-template>
+
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First Name</label>
+        <input 
+          type="text" 
+          formControlName="firstName"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-colors duration-200"
+          placeholder="Enter first name">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last Name</label>
+        <input 
+          type="text" 
+          formControlName="lastName"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-colors duration-200"
+          placeholder="Enter last name">
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+      <input 
+        type="email" 
+        formControlName="email"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-colors duration-200"
+        placeholder="Enter email address">
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+        <input 
+          type="tel" 
+          formControlName="phone"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-colors duration-200"
+          placeholder="Enter phone number">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
+        <input 
+          type="text" 
+          formControlName="company"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-colors duration-200"
+          placeholder="Enter company name">
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bio</label>
+      <textarea 
+        formControlName="bio"
+        rows="4"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-colors duration-200"
+        placeholder="Tell us about yourself..."></textarea>
+    </div>
+
+    <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <button 
+        type="button"
+        (click)="cancelEdit()"
+        class="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200">
+        Cancel
+      </button>
+      <button 
+        type="submit"
+        [disabled]="profileForm.invalid || isLoading()"
+        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-medium rounded-lg transition-all duration-200 flex items-center space-x-2">
+        <i class="pi pi-spin pi-spinner" *ngIf="isLoading()"></i>
+        <span>{{ isLoading() ? 'Saving...' : 'Save Changes' }}</span>
+      </button>
+    </div>
+  </form>
+</p-dialog>

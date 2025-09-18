@@ -35,35 +35,26 @@
           <nav class="space-y-1">
             <!-- Main Navigation -->
             <div class="space-y-1">
-              <a
-                routerLink="/customer"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
-                (click)="close_drawer()"
+              <button
+                (click)="navigateToDashboard()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Dashboard" icon="pi pi-chart-line" />
-              </a>
+              </button>
               
-              <a
-                routerLink="/customer/subscriptions"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
-                (click)="close_drawer()"
+              <button
+                (click)="navigateToSubscriptions()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Subscriptions" icon="pi pi-credit-card" />
-              </a>
+              </button>
 
-              <a
-                routerLink="/customer/subscribe"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
-                (click)="close_drawer()"
+              <button
+                (click)="navigateToSubscribe()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Purchase Plans" icon="pi pi-shopping-cart" />
-              </a>
+              </button>
             </div>
 
             <!-- Divider -->
@@ -75,25 +66,19 @@
                 <h3 class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Billing</h3>
               </div>
               
-              <a
-                routerLink="/customer/invoices"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
-                (click)="close_drawer()"
+              <button
+                (click)="navigateToInvoices()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Invoices" icon="pi pi-file-text" />
-              </a>
+              </button>
               
-              <a
-                routerLink="/customer/billing"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
-                (click)="close_drawer()"
+              <button
+                (click)="navigateToBilling()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Billing History" icon="pi pi-history" />
-              </a>
+              </button>
             </div>
 
             <!-- Divider -->
@@ -105,25 +90,19 @@
                 <h3 class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Support</h3>
               </div>
               
-              <a
-                routerLink="/customer/tickets"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
-                (click)="close_drawer()"
+              <button
+                (click)="navigateToTickets()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Support Tickets" icon="pi pi-life-ring" />
-              </a>
+              </button>
               
-              <a
-                routerLink="/customer/profile"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
-                (click)="close_drawer()"
+              <button
+                (click)="navigateToProfile()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="My Profile" icon="pi pi-user" />
-              </a>
+              </button>
             </div>
           </nav>
         </div>
@@ -154,32 +133,26 @@
           <nav class="space-y-1">
             <!-- Main Navigation -->
             <div class="space-y-1">
-              <a
-                routerLink="/customer"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
+              <button
+                (click)="navigateToDashboard()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Dashboard" icon="pi pi-chart-line" />
-              </a>
+              </button>
               
-              <a
-                routerLink="/customer/subscriptions"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
+              <button
+                (click)="navigateToSubscriptions()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Subscriptions" icon="pi pi-credit-card" />
-              </a>
+              </button>
 
-              <a
-                routerLink="/customer/subscribe"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
+              <button
+                (click)="navigateToSubscribe()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Purchase Plans" icon="pi pi-shopping-cart" />
-              </a>
+              </button>
             </div>
 
             <!-- Divider -->
@@ -191,23 +164,19 @@
                 <h3 class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Billing</h3>
               </div>
               
-              <a
-                routerLink="/customer/invoices"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
+              <button
+                (click)="navigateToInvoices()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Invoices" icon="pi pi-file-text" />
-              </a>
+              </button>
               
-              <a
-                routerLink="/customer/billing"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
+              <button
+                (click)="navigateToBilling()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Billing History" icon="pi pi-history" />
-              </a>
+              </button>
             </div>
 
             <!-- Divider -->
@@ -219,23 +188,19 @@
                 <h3 class="text-xs font-semibold text-blue-200 uppercase tracking-wider">Support</h3>
               </div>
               
-              <a
-                routerLink="/customer/tickets"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: false}"
-                class="block"
+              <button
+                (click)="navigateToTickets()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="Support Tickets" icon="pi pi-life-ring" />
-              </a>
+              </button>
               
-              <a
-                routerLink="/customer/profile"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}"
-                class="block"
+              <button
+                (click)="navigateToProfile()"
+                class="block w-full text-left"
               >
                 <app-side-bar-item item="My Profile" icon="pi pi-user" />
-              </a>
+              </button>
             </div>
           </nav>
         </aside>

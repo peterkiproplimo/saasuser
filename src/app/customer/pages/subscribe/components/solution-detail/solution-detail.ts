@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {SolutionsService} from '../../services/solutions-service';
 import {PlanCard} from '../plan-card/plan-card';
 import {ProgressSpinner} from 'primeng/progressspinner';
@@ -13,7 +13,7 @@ import {ActivatedRoute} from '@angular/router';
   templateUrl: './solution-detail.html',
   styleUrl: './solution-detail.scss'
 })
-export class SolutionDetail {
+export class SolutionDetail implements OnInit {
 
   private route = inject(ActivatedRoute);
   solutions_service = inject(SolutionsService);
@@ -29,5 +29,9 @@ export class SolutionDetail {
   plans = this.solutions_service.plans_resource.value;
   is_loading = this.solutions_service.plans_resource.isLoading;
 
+  ngOnInit() {
+    // Trigger API calls on component mount (like useEffect)
+    this.solutions_service.refreshPlans();
+  }
 
 }

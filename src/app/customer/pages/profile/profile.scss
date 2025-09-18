@@ -1,0 +1,194 @@
+// Profile Page Custom Styles
+.profile-card {
+  .p-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  .p-card-header {
+    padding: 0;
+  }
+
+  .p-card-body {
+    padding: 0;
+  }
+}
+
+// Custom Progress Bar
+:host ::ng-deep .custom-progress-bar {
+  .p-progressbar {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e5e7eb;
+
+    .p-progressbar-value {
+      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      border-radius: 4px;
+    }
+  }
+}
+
+// Edit Profile Dialog
+:host ::ng-deep .edit-profile-dialog {
+  .p-dialog {
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  .p-dialog-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  }
+
+  .p-dialog-content {
+    padding: 1.5rem;
+  }
+
+  .p-dialog-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    background: #f8fafc;
+  }
+}
+
+// Dark mode adjustments
+:host-context(.dark) {
+  .profile-card .p-card {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  :host ::ng-deep .edit-profile-dialog {
+    .p-dialog-header {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border-bottom-color: #374151;
+    }
+
+    .p-dialog-footer {
+      background: #1f2937;
+      border-top-color: #374151;
+    }
+  }
+}
+
+// Animation for cards
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-card,
+.p-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// Hover effects for action buttons
+button {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Custom badge styles
+:host ::ng-deep .p-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+
+  &.p-badge-success {
+    background-color: #10b981;
+    color: white;
+  }
+
+  &.p-badge-warning {
+    background-color: #f59e0b;
+    color: white;
+  }
+
+  &.p-badge-info {
+    background-color: #3b82f6;
+    color: white;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .profile-card .p-card-header {
+    padding: 1rem;
+  }
+
+  .profile-card .p-card-body {
+    padding: 1rem;
+  }
+
+  :host ::ng-deep .edit-profile-dialog .p-dialog {
+    width: 95vw !important;
+    max-width: 500px;
+  }
+}
+
+// Loading state
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  z-index: 10;
+}
+
+// Gradient text
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Custom scrollbar
+:host ::ng-deep .p-dialog-content {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
+}

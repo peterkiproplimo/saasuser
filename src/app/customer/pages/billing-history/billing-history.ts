@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { InvoicesService } from '../invoices/services/invoices';
 import { Paginator, PaginatorState } from 'primeng/paginator';
 import { DatePipe, DecimalPipe } from '@angular/common';
@@ -30,7 +30,7 @@ import autoTable from 'jspdf-autotable';
   templateUrl: './billing-history.html',
   styleUrl: './billing-history.scss',
 })
-export class BillingHistory {
+export class BillingHistory implements OnInit {
   invoices_service = inject(InvoicesService);
 
   // pagination + filters
@@ -48,6 +48,12 @@ export class BillingHistory {
   is_loading = this.invoices_service.ledger_resource.isLoading;
   is_error = this.invoices_service.ledger_resource.error;
   totalRecords = computed(() => this.ledger().pagination?.total_records ?? 0);
+
+  ngOnInit() {
+    // Trigger API calls on component mount (like useEffect)
+    this.invoices_service.refreshInvoices();
+    this.invoices_service.refreshLedger();
+  }
 
   // paginator handler
   onPageChange(event: PaginatorState) {
