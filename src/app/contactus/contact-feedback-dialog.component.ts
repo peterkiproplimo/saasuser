@@ -17,7 +17,7 @@ import { ButtonModule } from 'primeng/button';
       <div class="flex flex-col items-center space-y-4 text-center">
         <div
           [ngClass]="{
-            'bg-green-100 text-green-600': success,
+            'bg-blue-100 text-blue-600': success,
             'bg-red-100 text-red-600': !success
           }"
           class="rounded-full p-3"
@@ -28,7 +28,7 @@ import { ButtonModule } from 'primeng/button';
 
         <h2
           class="text-xl font-bold"
-          [ngClass]="success ? 'text-green-700' : 'text-red-700'"
+          [ngClass]="success ? 'text-blue-700' : 'text-red-700'"
         >
           {{ success ? 'Success' : 'Error' }}
         </h2>
