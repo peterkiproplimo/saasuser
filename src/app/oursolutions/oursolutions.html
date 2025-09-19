@@ -819,7 +819,15 @@
           for="captcha_answer"
             class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
         >
-            Security Verification: {{ captchaQuestion }}
+            Security Verification: 
+            @if (captchaLoading) {
+              <span class="flex items-center gap-2">
+                <i class="pi pi-spin pi-spinner text-blue-600"></i>
+                Loading CAPTCHA...
+              </span>
+            } @else {
+              {{ captchaQuestion || 'Click refresh to load CAPTCHA' }}
+            }
         </label>
           <div class="flex gap-3 items-center">
           <input
@@ -829,12 +837,14 @@
             [(ngModel)]="demoForm.captcha_answer"
               placeholder="Enter your answer"
             required
+            [disabled]="captchaLoading"
               class="flex-1 p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
           />
             <button
               type="button"
             (click)="fetchCaptcha()"
-              class="p-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors duration-200"
+            [disabled]="captchaLoading"
+              class="p-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             title="Refresh CAPTCHA"
             >
               <i class="pi pi-refresh text-blue-600 dark:text-blue-400 text-lg"></i>

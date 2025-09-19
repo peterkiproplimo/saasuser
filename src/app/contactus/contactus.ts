@@ -25,6 +25,7 @@ export class ContactUsComponent implements OnInit {
   form!: FormGroup;
   captchaQuestion = '';
   captchaToken = '';
+  captchaLoading = false;
 
   showDialog = false;
   dialogMessage = '';
@@ -55,15 +56,25 @@ export class ContactUsComponent implements OnInit {
   }
 
   getCaptcha(): void {
+    this.captchaLoading = true;
+    this.captchaQuestion = '';
+    this.captchaToken = '';
+    
     this.contactUsService.generateCaptcha().subscribe({
       next: (res) => {
         this.captchaQuestion = res.question;
         this.captchaToken = res.token;
+        this.captchaLoading = false;
       },
       error: () => {
+        this.captchaLoading = false;
         this.dialogSuccess = false;
         this.dialogMessage = 'Failed to load CAPTCHA. Please try again.';
         this.showDialog = true;
+        // Retry loading CAPTCHA after 2 seconds
+        setTimeout(() => {
+          this.getCaptcha();
+        }, 2000);
       },
     });
   }

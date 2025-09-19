@@ -32,9 +32,13 @@ export interface Pagination {
 }
 
 export interface SubscriptionResponse {
-  status?: number;
-  message?: string;
-  total: number;
-  data?: Subscription[];
-  pagination?: Pagination;
+  status: number;
+  message: string;
+  data: Subscription[];
+  pagination: Pagination;
+  filters: {
+    search: string | null;
+    start_date: string | null;
+    end_date: string | null;
+  };
 }

@@ -17,15 +17,30 @@ export class SubscriptionService {
   http = inject(HttpClient);
 
   subscription_resource = httpResource<SubscriptionResponse>(
-    () => ({
-      method: 'GET',
-      url: `${this.url
-        }.subscription.list_subscriptions?page=${this.page()}&page_size=${this.pageSize()}&_t=${this.refresh_timestamp()}`,
-    }),
+    () => {
+      const searchParam = this.searchTerm() ? `&search=${encodeURIComponent(this.searchTerm())}` : '';
+      return {
+        method: 'GET',
+        url: `${this.url
+          }.subscription.list_subscriptions?page=${this.page()}&page_size=${this.pageSize()}&_t=${this.refresh_timestamp()}${searchParam}`,
+      };
+    },
     {
       defaultValue: {
-        total: 0,
+        status: 200,
+        message: 'No data',
         data: [],
+        pagination: {
+          page: 1,
+          page_size: 10,
+          total_pages: 0,
+          total_records: 0
+        },
+        filters: {
+          search: null,
+          start_date: null,
+          end_date: null
+        }
       },
     }
   );

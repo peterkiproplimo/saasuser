@@ -40,7 +40,7 @@
             Total Subscriptions
           </p>
           <p class="text-3xl font-bold text-gray-900 dark:text-white">
-            {{ subscriptions().total || 0 }}
+            {{ subscriptions().pagination?.total_records || 0 }}
           </p>
         </div>
         <div

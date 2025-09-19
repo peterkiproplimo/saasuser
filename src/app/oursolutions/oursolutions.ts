@@ -46,6 +46,7 @@ export class OursolutionsComponent implements OnInit {
 
   // ▶ CAPTCHA
   captchaQuestion = '';
+  captchaLoading = false;
 
   // ▶ demo form payload
   demoForm = this.getEmptyForm();
@@ -145,6 +146,7 @@ export class OursolutionsComponent implements OnInit {
 
   /** GET /demo.generate_captcha */
   fetchCaptcha() {
+    this.captchaLoading = true;
     this.captchaQuestion = '';
     this.demoForm.captcha_answer = '';
     this.demoForm.token = '';
@@ -158,11 +160,16 @@ export class OursolutionsComponent implements OnInit {
         next: (res) => {
           this.captchaQuestion = res.question;
           this.demoForm.token = res.token;
+          this.captchaLoading = false;
           this.cd.detectChanges();
         },
         error: () => {
+          this.captchaLoading = false;
           alert('Could not load CAPTCHA. Please try again.');
-          this.closeRequestDemo();
+          // Retry loading CAPTCHA after 2 seconds
+          setTimeout(() => {
+            this.fetchCaptcha();
+          }, 2000);
         },
       });
   }

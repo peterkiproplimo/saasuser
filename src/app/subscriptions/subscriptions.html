@@ -1,215 +1,288 @@
 <!-- Full-screen wrapper -->
 <div
-  class="w-full h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-white flex flex-col"
+  class="w-full min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-white flex flex-col"
 >
-  <div class="flex-1 overflow-y-auto px-4 py-4 sm:px-6 lg:px-8">
-    <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      <div class="w-full">
-        <input
-          id="search"
-          [(ngModel)]="search_text"
-          (input)="onSearch()"
-          placeholder="Type to search..."
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 transition duration-150"
-        />
+  <div class="flex-1 overflow-y-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6 lg:px-8">
+    <!-- Search Bar -->
+    <div class="mb-4 w-full max-w-md mx-auto sm:mx-0">
+      <input
+        id="search"
+        [(ngModel)]="search_text"
+        (input)="onSearch()"
+        placeholder="Type to search subscriptions..."
+        class="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 transition duration-150"
+      />
+    </div>
+
+    <!-- Modern Table Container -->
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <!-- Table Header with Stats -->
+      <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 border-b border-gray-200 dark:border-gray-600">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Subscriptions</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              {{ totalRecords() }} total subscriptions
+            </p>
+          </div>
+          <div class="mt-2 sm:mt-0 flex items-center space-x-4 text-sm">
+            <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span class="text-gray-600 dark:text-gray-400">Active</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              <span class="text-gray-600 dark:text-gray-400">Past Due</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+              <span class="text-gray-600 dark:text-gray-400">Cancelled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Subscription
+              </th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Plan Details
+              </th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider hidden lg:table-cell">
+                Invoice
+              </th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider hidden xl:table-cell">
+                Dates
+              </th>
+              <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Status
+              </th>
+              <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr *ngFor="let sub of list()?.data" class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
+              <!-- Subscription Column -->
+              <td class="px-6 py-4">
+                <div class="text-sm font-semibold text-gray-900 dark:text-white">
+                  {{ sub.name }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ sub.party }}
+                </div>
+              </td>
+
+              <!-- Plan Details Column -->
+              <td class="px-6 py-4">
+                <div class="text-sm font-medium text-gray-900 dark:text-white">
+                  {{ sub.plans[0].plan }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                  Qty: {{ sub.plans[0].qty }} • {{ sub.plans[0].cost | number:'1.2-2' }} {{ sub.plans[0].currency }}
+                </div>
+              </td>
+
+              <!-- Invoice Column (Desktop only) -->
+              <td class="px-6 py-4 hidden lg:table-cell">
+                <div class="text-sm text-gray-900 dark:text-white">
+                  {{ sub.latest_invoice.name }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ sub.latest_invoice.grand_total | number:'1.2-2' }} {{ sub.latest_invoice.currency }}
+                </div>
+              </td>
+
+              <!-- Dates Column (Desktop only) -->
+              <td class="px-6 py-4 hidden xl:table-cell">
+                <div class="text-sm text-gray-900 dark:text-white">
+                  {{ sub.current_invoice_start | date:'MMM dd, yyyy' }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                  Due: {{ sub.current_invoice_end | date:'MMM dd, yyyy' }}
+                </div>
+              </td>
+
+              <!-- Status Column -->
+              <td class="px-6 py-4 text-center">
+                <span
+                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                  [ngClass]="{
+                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': sub.status === 'active',
+                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': sub.status === 'pending' || sub.status === 'Past Due Date',
+                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': sub.status === 'cancelled'
+                  }"
+                >
+                  <div class="w-2 h-2 rounded-full mr-2"
+                       [ngClass]="{
+                         'bg-green-500': sub.status === 'active',
+                         'bg-yellow-500': sub.status === 'pending' || sub.status === 'Past Due Date',
+                         'bg-red-500': sub.status === 'cancelled'
+                       }"></div>
+                  {{ sub.status }}
+                </span>
+              </td>
+
+              <!-- Actions Column -->
+              <td class="px-6 py-4 text-center">
+                <button
+                  (click)="openDetailsDialog(sub)"
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                >
+                  <i class="pi pi-eye mr-1"></i>
+                  View Details
+                </button>
+              </td>
+            </tr>
+          </tbody>
+
+          <ng-template #noData>
+            <tbody>
+              <tr>
+                <td colspan="6" class="px-6 py-12 text-center">
+                  <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                      <i class="pi pi-inbox text-2xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      No Subscriptions Found
+                    </h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-center max-w-sm">
+                      Try adjusting your search terms or check back later.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
       </div>
     </div>
-    <div class="p-4 overflow-auto">
-      <div class="flow-root">
-        <div class="m-0">
-          <div class="inline-block min-w-full py-2 align-middle">
-            <div
-              class="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg"
+
+    <!-- Modern Pagination -->
+    <div class="mt-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+        <!-- Pagination Info -->
+        <div class="flex items-center space-x-4">
+          <div class="text-sm text-gray-700 dark:text-gray-300">
+            <span class="font-medium">{{ (page * pageSize) + 1 }}</span> - 
+            <span class="font-medium">{{ Math.min((page + 1) * pageSize, totalRecords()) }}</span> of 
+            <span class="font-medium">{{ totalRecords() }}</span> subscriptions
+          </div>
+          <div class="hidden sm:block w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">
+            Page {{ page + 1 }} of {{ Math.ceil(totalRecords() / pageSize) }}
+          </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="flex items-center space-x-4">
+          <!-- Rows per page selector -->
+          <div class="flex items-center space-x-2">
+            <label class="text-sm text-gray-700 dark:text-gray-300">Show:</label>
+            <select 
+              [(ngModel)]="pageSize" 
+              (change)="onPageSizeChange()"
+              class="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <table
-                class="min-w-full divide-y divide-gray-300 dark:divide-gray-700"
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span class="text-sm text-gray-700 dark:text-gray-300">per page</span>
+          </div>
+
+          <!-- Page navigation -->
+          <div class="flex items-center space-x-2">
+            <button
+              (click)="goToFirstPage()"
+              [disabled]="page === 0"
+              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              <i class="pi pi-angle-double-left text-xs"></i>
+            </button>
+            <button
+              (click)="goToPreviousPage()"
+              [disabled]="page === 0"
+              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              <i class="pi pi-angle-left text-xs"></i>
+            </button>
+            
+            <!-- Page numbers -->
+            <div class="flex items-center space-x-1">
+              <button
+                *ngFor="let pageNum of getVisiblePages()"
+                (click)="goToPage(pageNum - 1)"
+                [class]="pageNum - 1 === page 
+                  ? 'px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md' 
+                  : 'px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors duration-200'"
               >
-                <thead class="bg-gray-50 dark:bg-gray-800">
-                  <tr>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Subscription #                                                                                                                                                                        
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Party
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Plan
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Quantity
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Cost
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Currency
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Invoice Date
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Invoice Due Date
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Latest Invoice
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Status
-                    </th>
-                    <th
-                      class="py-3 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100"
-                    >
-                      Due
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody
-                  class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900"
-                >
-                  <tr *ngFor="let sub of list()?.data">
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.name }}
-                    </td>
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.party }}
-                    </td>
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.plans[0].plan }}
-                    </td>
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.plans[0].qty }}
-                    </td>
-
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.plans[0].cost | number:'1.2-2' }}
-                    </td>
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.plans[0].currency }}
-                    </td>
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.current_invoice_start | date:'yyyy-MM-dd HH:mm' }}
-                    </td>
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      {{ sub.current_invoice_end | date:'yyyy-MM-dd HH:mm' }}
-                    </td>
-
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      <div>{{ sub.latest_invoice.name }}</div>
-                    </td>
-                    <td
-                      class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100"
-                    >
-                      <div class="text-xs text-gray-500 dark:text-gray-400">
-                        {{ sub.latest_invoice.status }},
-                      </div>
-                    </td>
-                    <td class="px-4 py-3">
-                      <span
-                        class="inline-block px-2 py-1 text-xs font-semibold rounded-full capitalize"
-                        [ngClass]="{
-                          'bg-blue-100 text-blue-800': sub.status === 'active',
-                          'bg-yellow-100 text-yellow-800': sub.status === 'pending',
-                          'bg-red-100 text-red-800': sub.status === 'cancelled'
-                        }"
-                      >
-                        {{ sub.status }}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-
-                <ng-template #noData>
-                  <tbody>
-                    <tr>
-                      <td colspan="8" class="py-4">
-                        <div class="w-full flex flex-col items-center">
-                          <h3
-                            class="text-lg font-medium text-gray-700 dark:text-gray-300"
-                          >
-                            No Subscriptions Found
-                          </h3>
-                          <p class="text-gray-500 dark:text-gray-400 mt-2">
-                            Try adjusting your filters or check back later.
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </ng-template>
-              </table>
+                {{ pageNum }}
+              </button>
             </div>
+
+            <button
+              (click)="goToNextPage()"
+              [disabled]="page >= Math.ceil(totalRecords() / pageSize) - 1"
+              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              <i class="pi pi-angle-right text-xs"></i>
+            </button>
+            <button
+              (click)="goToLastPage()"
+              [disabled]="page >= Math.ceil(totalRecords() / pageSize) - 1"
+              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              <i class="pi pi-angle-double-right text-xs"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Pagination -->
-    <p-paginator
-      (onPageChange)="onPageChange($event)"
-      [first]="page * pageSize"
-      [rows]="pageSize"
-      [totalRecords]="totalRecords()"
-      [showCurrentPageReport]="true"
-      [showPageLinks]="true"
-      [rowsPerPageOptions]="[5, 10, 20]"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} subscriptions"
-    ></p-paginator>
-
-    <!-- Loading & Error States -->
-    <div *ngIf="loading" class="px-4 py-2 text-center text-sm">
-      Loading subscriptions…
+    <!-- Loading State -->
+    <div *ngIf="is_loading()" class="mt-6 flex items-center justify-center py-8">
+      <div class="flex items-center space-x-3">
+        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+        <span class="text-sm text-gray-600 dark:text-gray-400">Loading subscriptions...</span>
+      </div>
     </div>
-    <div *ngIf="error" class="px-4 py-2 text-center text-sm text-red-600">
-      {{ error }}
+    
+    <!-- Error State -->
+    <div *ngIf="is_error()" class="mt-6 flex items-center justify-center py-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-exclamation-triangle text-2xl text-red-600 dark:text-red-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-red-700 dark:text-red-400 mb-2">Error Loading Subscriptions</h3>
+        <p class="text-sm text-red-600 dark:text-red-300">Status: {{ is_error() }}</p>
+        <button 
+          (click)="fetchSubscriptions()" 
+          class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
+        >
+          Try Again
+        </button>
+      </div>
     </div>
-  </div>
 
   <!-- Dialog -->
   <p-dialog
     header="New Subscription"
     [(visible)]="showDialog"
     [modal]="true"
-    [style]="{ width: '30rem' }"
-    [contentStyle]="{ padding: '1.5rem 2rem' }"
+    [style]="{ width: '90vw', maxWidth: '30rem' }"
+    [contentStyle]="{ padding: '1rem 1.5rem' }"
+    [styleClass]="'responsive-dialog'"
   >
     <!-- Form Body -->
     <div class="p-fluid space-y-4">
@@ -245,4 +318,341 @@
       </div>
     </ng-template>
   </p-dialog>
-</div>
+
+  <!-- Subscription Details Dialog -->
+  <p-dialog
+    header=""
+    [(visible)]="showDetailsDialog"
+    [modal]="true"
+    [style]="{ width: '95vw', maxWidth: '90rem', height: '90vh' }"
+    [contentStyle]="{ padding: '0' }"
+    [styleClass]="'details-dialog'"
+    (onHide)="closeDetailsDialog()"
+  >
+    @if (selectedSubscription) {
+    <div class="flex h-full">
+      <!-- Left Section - Details -->
+      <div class="w-1/2 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-purple-700 to-purple-500 text-white p-4 flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold">{{ selectedSubscription.name }}</h2>
+            <p class="text-sm opacity-80 mt-1">Detailed Information</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span
+              class="inline-block px-3 py-1 text-sm font-semibold rounded-full capitalize"
+              [ngClass]="{
+                'bg-green-100 text-green-800': selectedSubscription.status === 'active',
+                'bg-yellow-100 text-yellow-800': selectedSubscription.status === 'pending' || selectedSubscription.status === 'Past Due Date',
+                'bg-red-100 text-red-800': selectedSubscription.status === 'cancelled'
+              }"
+            >
+              {{ selectedSubscription.status }}
+            </span>
+            <button
+              (click)="downloadPDF()"
+              class="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors duration-200"
+              title="Download PDF"
+            >
+              <i class="pi pi-download text-white"></i>
+            </button>
+            <button
+              (click)="closeDetailsDialog()"
+              class="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors duration-200"
+              title="Close"
+            >
+              <i class="pi pi-times text-white"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Content Area - Scrollable -->
+        <div class="p-4 flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- General Information -->
+            <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4">
+              <h3 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-3 flex items-center">
+                <i class="pi pi-info-circle mr-2"></i>
+                General Information
+              </h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Party:</span>
+                  <span class="text-gray-900 dark:text-white">{{ selectedSubscription.party }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Custom Subdomain:</span>
+                  <span class="text-gray-900 dark:text-white">{{ selectedSubscription.custom_subdomain || 'N/A' }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Creation Date:</span>
+                  <span class="text-gray-900 dark:text-white">{{ formatDateTime(selectedSubscription.creation) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Last Modified:</span>
+                  <span class="text-gray-900 dark:text-white">{{ formatDateTime(selectedSubscription.modified) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Latest Invoice -->
+            <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4">
+              <h3 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-3 flex items-center">
+                <i class="pi pi-file-text mr-2"></i>
+                Latest Invoice
+              </h3>
+              @if (selectedSubscription.latest_invoice) {
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="font-medium text-gray-600 dark:text-gray-400">Invoice #:</span>
+                    <span class="text-gray-900 dark:text-white font-mono">{{ selectedSubscription.latest_invoice.name }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-medium text-gray-600 dark:text-gray-400">Total Amount:</span>
+                    <span class="text-gray-900 dark:text-white font-semibold">{{ selectedSubscription.latest_invoice.grand_total | number:'1.2-2' }} {{ selectedSubscription.latest_invoice.currency }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-medium text-gray-600 dark:text-gray-400">Status:</span>
+                    <span
+                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full"
+                      [ngClass]="{
+                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': selectedSubscription.latest_invoice.status === 'Paid',
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': selectedSubscription.latest_invoice.status === 'Unpaid' || selectedSubscription.latest_invoice.status === 'Partly Paid',
+                        'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': selectedSubscription.latest_invoice.status === 'Cancelled'
+                      }"
+                    >
+                      {{ selectedSubscription.latest_invoice.status }}
+                    </span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-medium text-gray-600 dark:text-gray-400">Posting Date:</span>
+                    <span class="text-gray-900 dark:text-white">{{ formatDate(selectedSubscription.latest_invoice.posting_date) }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-medium text-gray-600 dark:text-gray-400">Prorate Factor:</span>
+                    <span class="text-gray-900 dark:text-white">{{ selectedSubscription.latest_invoice.prorate_factor }}</span>
+                  </div>
+                </div>
+              } @else {
+                <p class="text-sm text-gray-600 dark:text-gray-400">No latest invoice details available.</p>
+              }
+            </div>
+
+            <!-- Plan Details -->
+            <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4">
+              <h3 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-3 flex items-center">
+                <i class="pi pi-cog mr-2"></i>
+                Plan Details
+              </h3>
+              @if (selectedSubscription.plans && selectedSubscription.plans.length > 0) {
+                @for (plan of selectedSubscription.plans; track plan.name) {
+                  <div class="border-l-4 border-purple-400 pl-3 mb-3 last:mb-0">
+                    <div class="space-y-1 text-sm">
+                      <div class="flex justify-between">
+                        <span class="font-medium text-gray-600 dark:text-gray-400">Plan Name:</span>
+                        <span class="text-gray-900 dark:text-white">{{ plan.plan }}</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="font-medium text-gray-600 dark:text-gray-400">Quantity:</span>
+                        <span class="text-gray-900 dark:text-white">{{ plan.qty }}</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="font-medium text-gray-600 dark:text-gray-400">Cost:</span>
+                        <span class="text-gray-900 dark:text-white">{{ plan.cost | number:'1.2-2' }} {{ plan.currency }}</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="font-medium text-gray-600 dark:text-gray-400">Plan ID:</span>
+                        <span class="text-gray-900 dark:text-white font-mono text-xs">{{ plan.name }}</span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              } @else {
+                <p class="text-sm text-gray-600 dark:text-gray-400">No plan details available.</p>
+              }
+            </div>
+
+            <!-- Invoice Period -->
+            <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4">
+              <h3 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-3 flex items-center">
+                <i class="pi pi-calendar mr-2"></i>
+                Invoice Period
+              </h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Start Date:</span>
+                  <span class="text-gray-900 dark:text-white">{{ formatDate(selectedSubscription.current_invoice_start) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-600 dark:text-gray-400">End Date:</span>
+                  <span class="text-gray-900 dark:text-white">{{ formatDate(selectedSubscription.current_invoice_end) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Duration:</span>
+                  <span class="text-gray-900 dark:text-white">{{ calculateDuration(selectedSubscription.current_invoice_start, selectedSubscription.current_invoice_end) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section - PDF Preview -->
+      <div class="w-1/2 flex flex-col bg-gray-100 dark:bg-gray-800">
+        <!-- PDF Header -->
+        <div class="bg-gray-800 text-white p-4 flex items-center justify-between">
+          <h3 class="text-lg font-semibold">Preview Subscription Report</h3>
+          <div class="flex items-center space-x-2">
+            <button
+              (click)="downloadPDF()"
+              class="p-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-200"
+              title="Download PDF"
+            >
+              <i class="pi pi-download text-white"></i>
+            </button>
+            <button
+              (click)="printPDF()"
+              class="p-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors duration-200"
+              title="Print PDF"
+            >
+              <i class="pi pi-print text-white"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- PDF Content Area -->
+        <div class="flex-1 overflow-y-auto p-4">
+          <div id="pdf-content" class="bg-white rounded-xl shadow-2xl min-h-full">
+            <!-- Report Header -->
+            <div class="p-8">
+              <div class="flex justify-between items-start mb-10 pb-5 border-b-2 border-blue-500">
+                <div>
+                  <div class="text-4xl font-bold text-gray-900 mb-2">Subscription Report</div>
+                  <div class="text-lg text-gray-600">TechSavanna ERPs Billing Platform</div>
+                </div>
+                <div class="text-right">
+                  <img src="/images/tech-savanna-logo.svg" alt="TechSavanna Logo" class="w-16 h-16 mb-3" />
+                  <div class="text-lg font-bold text-gray-900">TechSavanna</div>
+                  <div class="text-sm text-blue-600 font-semibold mb-2">ERPs Billing Platform</div>
+                  <div class="text-xs text-gray-600">
+                    Reliance Centre - 2nd Floor, Left Wing<br>
+                    Westlands Woodvale Grove, Nairobi, Kenya<br>
+                    Phone: 0700106077
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subscription Information -->
+              <div class="space-y-2 mb-8">
+                <div class="flex justify-between py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Subscriber</span>
+                  <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.party || 'N/A' }}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Subscription ID</span>
+                  <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.name }}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Status</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase
+                    {{ selectedSubscription.status === 'Past Due Date' ? 'bg-red-100 text-red-700' : 
+                       selectedSubscription.status === 'Active' ? 'bg-green-100 text-green-700' : 
+                       'bg-yellow-100 text-yellow-700' }}">
+                    {{ selectedSubscription.status || 'N/A' }}
+                  </span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Invoice Period</span>
+                  <span class="text-sm font-medium text-gray-900">{{ formatDate(selectedSubscription.current_invoice_start) }} - {{ formatDate(selectedSubscription.current_invoice_end) }}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Created</span>
+                  <span class="text-sm font-medium text-gray-900">{{ formatDate(selectedSubscription.creation) }}</span>
+                </div>
+                <div class="flex justify-between py-2">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Report Generated</span>
+                  <span class="text-sm font-medium text-gray-900">{{ getCurrentDate() }}</span>
+                </div>
+              </div>
+
+              <!-- Blue separator -->
+              <div class="h-0.5 bg-blue-500 my-8"></div>
+
+              <!-- Plans Table -->
+              <table class="w-full border-collapse mb-8 bg-white border border-gray-300">
+                <thead class="bg-blue-600 text-white">
+                  <tr>
+                    <th class="px-4 py-3 text-left font-semibold text-sm uppercase tracking-wide">Plan Name</th>
+                    <th class="px-4 py-3 text-right font-semibold text-sm uppercase tracking-wide">Rate</th>
+                    <th class="px-4 py-3 text-right font-semibold text-sm uppercase tracking-wide">Quantity</th>
+                    <th class="px-4 py-3 text-right font-semibold text-sm uppercase tracking-wide">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @if (selectedSubscription.plans && selectedSubscription.plans.length > 0) {
+                    @for (plan of selectedSubscription.plans; track plan.name) {
+                      <tr class="border-b border-gray-200 even:bg-gray-50">
+                        <td class="px-4 py-3 text-gray-900">{{ plan.plan }}</td>
+                        <td class="px-4 py-3 text-right text-gray-900">{{ plan.cost | number:'1.2-2' }} {{ plan.currency }}</td>
+                        <td class="px-4 py-3 text-right text-gray-900">{{ plan.qty }}</td>
+                        <td class="px-4 py-3 text-right font-semibold text-gray-900">{{ (plan.qty * plan.cost) | number:'1.2-2' }} {{ plan.currency }}</td>
+                      </tr>
+                    }
+                  } @else {
+                    <tr>
+                      <td colspan="4" class="px-4 py-8 text-center text-gray-500 italic">No plan details available</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+
+              <!-- Invoice Information -->
+              @if (selectedSubscription.latest_invoice) {
+                <div class="space-y-2 mb-8">
+                  <div class="flex justify-between py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Invoice Number</span>
+                    <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.latest_invoice.name }}</span>
+                  </div>
+                  <div class="flex justify-between py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Amount</span>
+                    <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.latest_invoice.grand_total | number:'1.2-2' }} {{ selectedSubscription.latest_invoice.currency }}</span>
+                  </div>
+                  <div class="flex justify-between py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Invoice Status</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase
+                      {{ selectedSubscription.latest_invoice.status === 'Paid' ? 'bg-green-100 text-green-700' : 
+                         selectedSubscription.latest_invoice.status === 'Unpaid' ? 'bg-yellow-100 text-yellow-700' : 
+                         'bg-red-100 text-red-700' }}">
+                      {{ selectedSubscription.latest_invoice.status }}
+                    </span>
+                  </div>
+                  <div class="flex justify-between py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Posting Date</span>
+                    <span class="text-sm font-medium text-gray-900">{{ formatDate(selectedSubscription.latest_invoice.posting_date) }}</span>
+                  </div>
+                  <div class="flex justify-between py-2">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Prorate Factor</span>
+                    <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.latest_invoice.prorate_factor }}</span>
+                  </div>
+                </div>
+              }
+
+              <!-- Footer -->
+              <div class="bg-gray-800 text-white p-6 text-center mt-8">
+                <div class="text-lg font-bold text-blue-400 mb-2">TechSavanna ERPs Billing Platform</div>
+                <div class="my-2">
+                  <img src="/images/tech-savanna-logo.svg" alt="TechSavanna Logo" class="w-10 h-10 mx-auto mb-1" />
+                </div>
+                <div class="text-sm text-gray-300 mb-2">Your trusted partner in enterprise resource planning and billing solutions</div>
+                <div class="text-xs text-gray-400">Support: support&#64;techsavanna.com | Website: www.techsavanna.com</div>
+                <div class="text-xs text-gray-500 mt-2">Report generated on {{ getCurrentDate() }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </p-dialog>
+
