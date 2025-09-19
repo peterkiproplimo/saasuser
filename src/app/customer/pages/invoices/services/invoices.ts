@@ -121,4 +121,9 @@ export class InvoicesService {
   refreshLedger() {
     this.refresh_timestamp.set(Date.now()); // Update timestamp to force fresh request
   }
+
+  // Method to refresh invoice by ID data
+  refreshInvoiceById() {
+    this.refresh_timestamp.set(Date.now()); // Update timestamp to force fresh request
+  }
 }

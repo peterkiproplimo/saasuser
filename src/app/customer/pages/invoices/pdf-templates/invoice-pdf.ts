@@ -55,7 +55,7 @@ export function getHtmlContent(report: any) {
   <div class="max-w-3xl mx-auto px-8 py-6 rounded shadow">
     <!-- Header -->
     <div class="flex justify-between items-center">
-      <img src="https://techsavanna.co.ke/wp-content/themes/techsavanna/assets/images/logo-dark.svg" alt="Techsavanna Logo" class="h-12 mb-2"/>
+      <img src="https://Techsavanna.co.ke/wp-content/themes/Techsavanna/assets/images/logo-dark.svg" alt="Techsavanna Logo" class="h-12 mb-2"/>
       <div class="relative w-40 h-32">
         <div class="absolute -right-12 w-48 h-10 text-white text-md font-bold text-center transform rotate-45 flex items-center justify-center ${ribbonColorClass}">
           ${report.status?.toUpperCase() ?? ''}
@@ -65,7 +65,7 @@ export function getHtmlContent(report: any) {
 
     <!-- Payment Info -->
     <div class="mb-6 text-sm">
-      <p class="mb-1">Transfer the amount to the business account below. Please include Invoice number on your payment.</p>
+      <p class="mb-1">Transfer the amount to the business account below. </p>
      <p class="font-semibold">
   MPESA 
 </p>
@@ -133,7 +133,7 @@ export function getHtmlContent(report: any) {
     <div class="text-sm">
       <p class="font-bold mb-1">HOW TO CONFIRM PAYMENT FOR BANK TRANSFERS</p>
       <ul class="list-disc pl-6 space-y-1">
-        <li>TECHSAVANNA will automatically allocate payments to your account once it reflects on TECHSAVANNA's bank account.</li>
+        <li>Techsavanna will automatically allocate payments to your account once it reflects on Techsavanna's bank account.</li>
         <li>Use your account holder's email address as reference.</li>
         <li>You can use the Invoice Number to allocate the payment to a certain invoice.</li>
         <li>Please do not send Proof of Payments unless requested.</li>
@@ -146,7 +146,7 @@ export function getHtmlContent(report: any) {
         <p>Woodvale Grove, Westlands</p>
       </div>
       <div class="text-right">
-        <p>sales@techsavanna.technology</p>
+        <p>admin@techsavanna.technology</p>
         <p>+254 700 000000</p>
         <p>Registered in KE: K15002000</p>
       </div>

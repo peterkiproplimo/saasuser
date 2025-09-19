@@ -239,7 +239,7 @@ export class OursolutionsComponent implements OnInit {
   /* ------------------------- utils -------------------------- */
   get imageUrl(): string | null {
     return this.solutionData?.app_logo
-      ? `https://saas.techsavanna.technology${this.solutionData.app_logo}`
+      ? `https://saas.Techsavanna.technology${this.solutionData.app_logo}`
       : null;
   }
 }

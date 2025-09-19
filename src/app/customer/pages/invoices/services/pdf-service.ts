@@ -1,14 +1,14 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PdfService {
 
-  private gotenbergUrl = 'https://dyerandblair-gotenberg.techsavanna.co.ke/forms/chromium/convert/html';
-  private http =  inject(HttpClient);
+  private gotenbergUrl = 'https://dyerandblair-gotenberg.Techsavanna.co.ke/forms/chromium/convert/html';
+  private http = inject(HttpClient);
 
   generatePdf(htmlContent: string): Observable<Blob> {
     const formData: FormData = new FormData();

@@ -16,4 +16,9 @@ export type Invoice = {
   currency?:           string;
   status?:             string;
   type?:               string;
+  // Customer fields for preview
+  customer_name?:      string;
+  customer_organization?: string;
+  customer_email?:     string;
+  customer_phone?:     string;
 }

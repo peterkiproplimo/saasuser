@@ -1,0 +1,55 @@
+// Invoice Preview Dialog Styling
+::ng-deep .invoice-preview-dialog {
+  .p-dialog-content {
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .p-dialog-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .p-dialog-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+  }
+}
+
+// Custom scrollbar for preview sections
+.invoice-preview-dialog {
+  .overflow-y-auto {
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+      
+      &:hover {
+        background: #94a3b8;
+      }
+    }
+  }
+}
+
+// PDF Preview styling
+#pdf-content {
+  transform-origin: top left;
+  transform: scale(0.8);
+  width: 125%;
+  margin-bottom: -20%;
+  
+  @media (max-width: 768px) {
+    transform: scale(0.6);
+    width: 167%;
+    margin-bottom: -40%;
+  }
+}

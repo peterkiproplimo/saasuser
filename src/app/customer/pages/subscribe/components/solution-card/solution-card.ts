@@ -1,7 +1,7 @@
-import {Component, input} from '@angular/core';
-import {NgOptimizedImage} from '@angular/common';
-import {Solution} from '../../models/responses/list-solutions-response';
-import {Card} from 'primeng/card';
+import { Component, input } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { Solution } from '../../models/responses/list-solutions-response';
+import { Card } from 'primeng/card';
 
 @Component({
   selector: 'app-solution-card',
@@ -15,10 +15,10 @@ import {Card} from 'primeng/card';
 export class SolutionCard {
 
   solution = input<Solution>();
-  root_url = "https://saas.techsavanna.technology";
+  root_url = "https://saas.Techsavanna.technology";
 
   get imageUrl(): string {
-    return this.root_url+this.solution()?.app_logo!;
+    return this.root_url + this.solution()?.app_logo!;
   }
 
 }

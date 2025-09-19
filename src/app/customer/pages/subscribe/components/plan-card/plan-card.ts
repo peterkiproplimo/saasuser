@@ -105,7 +105,7 @@ export class PlanCard {
     let cleanDomain = this.domainName.trim().toLowerCase();
 
     // Remove common domain suffixes if user accidentally included them
-    cleanDomain = cleanDomain.replace(/\.(com|org|net|techsavanna\.technology)$/i, '');
+    cleanDomain = cleanDomain.replace(/\.(com|org|net|Techsavanna\.technology)$/i, '');
 
     // Remove any special characters except hyphens and ensure it's valid
     cleanDomain = cleanDomain.replace(/[^a-z0-9-]/g, '');
