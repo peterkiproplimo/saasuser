@@ -2,8 +2,6 @@ import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { InvoicesService } from '../invoices/services/invoices';
 import { Paginator, PaginatorState } from 'primeng/paginator';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { ProgressSpinner } from 'primeng/progressspinner';
 import { FormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { Calendar } from 'primeng/calendar';
@@ -20,9 +18,7 @@ import autoTable from 'jspdf-autotable';
     DatePipe,
     DecimalPipe,
     CommonModule,
-    EmptyStateComponent,
     Paginator,
-    ProgressSpinner,
     Dialog,
     FormsModule,
     Calendar,
@@ -155,6 +151,31 @@ export class BillingHistory implements OnInit {
 
     // Save PDF
     doc.save('billing-history.pdf');
+  }
+
+  // Filter methods
+  onSearchChange() {
+    this.first.set(0);
+    this.pageNum.set(1);
+    this.invoices_service.refreshLedger();
+  }
+
+  onDateChange() {
+    this.first.set(0);
+    this.pageNum.set(1);
+    this.invoices_service.refreshLedger();
+  }
+
+  onReferenceChange() {
+    this.first.set(0);
+    this.pageNum.set(1);
+    this.invoices_service.refreshLedger();
+  }
+
+  onCreditAmountChange() {
+    this.first.set(0);
+    this.pageNum.set(1);
+    this.invoices_service.refreshLedger();
   }
 
   // stub

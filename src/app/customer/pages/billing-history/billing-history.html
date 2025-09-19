@@ -1,33 +1,51 @@
-<div class="p-4 overflow-auto">
-  <div class="flow-root">
-    <div class="m-0">
-      <div>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-            Billing History
-          </h2>
-
+<div class="p-0 overflow-auto bg-gray-50 dark:bg-gray-900 min-h-screen">
+  <div class="w-full">
+    <!-- Header Section -->
+    <div class="mb-8 px-6 pt-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Billing History</h1>
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Track your account transactions and billing history
+          </p>
+        </div>
+        
+        <div class="flex items-center gap-3">
           <button
             (click)="exportToPdf()"
-            class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900"
+            class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
-            <i class="pi pi-download"></i>
-            Download PDF
+            <i class="pi pi-download text-sm"></i>
+            Export PDF
           </button>
         </div>
+      </div>
+    </div>
 
-        <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div class="w-full">
-            <label for="">Search Term</label>
-            <input
-              [(ngModel)]="search_text"
-              placeholder="Search"
-              class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-            />
+    <!-- Filters Section -->
+    <div class="mb-6 px-6">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <i class="pi pi-filter text-blue-600"></i>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Filters</h3>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Search Term</label>
+            <div class="relative">
+              <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input
+                [(ngModel)]="search_text"
+                placeholder="Search transactions..."
+                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                (input)="onSearchChange()"
+              />
+            </div>
           </div>
 
-          <div class="w-full">
-            <label for="">Start Date</label>
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
             <p-calendar
               appendTo="body"
               [(ngModel)]="start_date"
@@ -37,11 +55,12 @@
               [dateFormat]="'mm/dd/yy'"
               [maxDate]="end_date()"
               styleClass="w-full"
+              (onSelect)="onDateChange()"
             />
           </div>
 
-          <div class="w-full">
-            <label for="">End Date</label>
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
             <p-calendar
               appendTo="body"
               [(ngModel)]="end_date"
@@ -51,206 +70,304 @@
               [dateFormat]="'mm/dd/yy'"
               [minDate]="start_date()"
               styleClass="w-full"
+              (onSelect)="onDateChange()"
             />
           </div>
-          <div class="w-full">
-            <label for="">Reference No</label>
-            <input
-              [(ngModel)]="referenceNo"
-              placeholder="Enter Reference No"
-              class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-            />
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Reference No</label>
+            <div class="relative">
+              <i class="pi pi-hashtag absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input
+                [(ngModel)]="referenceNo"
+                placeholder="Enter reference number"
+                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                (input)="onReferenceChange()"
+              />
+            </div>
           </div>
-          <!-- Credit Amount -->
-          <div class="w-full">
-            <label for="">Credit Amount</label>
-            <input
-              type="number"
-              [(ngModel)]="creditAmount"
-              placeholder="Min Credit Amount"
-              class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-            />
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Min Credit Amount</label>
+            <div class="relative">
+              <i class="pi pi-dollar absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input
+                type="number"
+                [(ngModel)]="creditAmount"
+                placeholder="0.00"
+                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                (input)="onCreditAmountChange()"
+              />
+            </div>
           </div>
         </div>
       </div>
+    </div>
+    <!-- Table Section -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Posting Date
+              </th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Reference
+              </th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Reference No
+              </th>
+              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Debit
+              </th>
+              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Credit
+              </th>
+              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Balance
+              </th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Remarks
+              </th>
+              <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr *ngFor="let ledger_entry of ledger()?.data" class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
+              <!-- Posting Date Column -->
+              <td class="px-6 py-4">
+                <div class="text-sm font-semibold text-gray-900 dark:text-white">
+                  {{ ledger_entry.posting_date | date: 'MMM dd, yyyy' }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ ledger_entry.posting_date | date: 'HH:mm' }}
+                </div>
+              </td>
 
-      <div class="inline-block min-w-full py-2 align-middle">
-        <div class="overflow-auto shadow-sm ring-1 ring-black/5 sm:rounded-lg">
-          <table
-            class="min-w-full divide-y divide-gray-300 dark:divide-gray-700 overflow-x-auto"
-          >
-            <thead class="bg-gray-50 dark:bg-gray-800 w-full">
-              <tr class="w-full">
-                <th
-                  scope="col"
-                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  Posting Date
-                </th>
-                <th
-                  scope="col"
-                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  Reference
-                </th>
-                <th
-                  scope="col"
-                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  Reference No
-                </th>
-                <th
-                  scope="col"
-                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  Debit
-                </th>
-                <th
-                  scope="col"
-                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  Credit
-                </th>
-                <th
-                  scope="col"
-                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  Balance
-                </th>
-
-                <th
-                  scope="col"
-                  class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  Remarks
-                </th>
-              </tr>
-            </thead>
-            <tbody
-              class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900"
-            >
-              <!-- Loading State -->
-              @if (is_loading()) {
-              <tr class="w-full">
-                <td colspan="9" class="text-center py-4">
-                  <div class="w-full flex justify-center">
-                    <p-progressSpinner
-                      class="text-gray-500 dark:text-gray-400"
-                      [style]="{ width: '40px', height: '40px' }"
-                    >
-                    </p-progressSpinner>
-                  </div>
-                </td>
-              </tr>
-              } @else { @if (ledger().data?.length! > 0) { @for (ledger_entry of
-              ledger().data; track ledger_entry.name) {
-
-              <tr class="w-full">
-                <td
-                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  {{ ledger_entry.posting_date | date: 'yyyy-MM-dd' }}
-                </td>
-                <td
-                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
+              <!-- Reference Column -->
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                   {{ ledger_entry.voucher_type }}
-                </td>
-                <td
-                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-blue-600 dark:text-blue-400 cursor-pointer underline sm:pl-6"
-                  (click)="openVoucherDialog(ledger_entry)"
-                >
+                </span>
+              </td>
+
+              <!-- Reference No Column -->
+              <td class="px-6 py-4">
+                <div class="text-sm font-medium text-blue-600 dark:text-blue-400">
                   {{ ledger_entry.voucher_no }}
-                </td>
+                </div>
+              </td>
 
-                <td
-                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  {{ ledger_entry.debit | number: '1.2-2' }}
-                </td>
-                <td
-                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
-                  {{ ledger_entry.credit | number: '1.2-2' }}
-                </td>
-                <td
-                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100 sm:pl-6"
-                >
+              <!-- Debit Column -->
+              <td class="px-6 py-4 text-right">
+                <div class="text-sm font-medium" [ngClass]="ledger_entry.debit && ledger_entry.debit > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-400'">
+                  @if (ledger_entry.debit && ledger_entry.debit > 0) {
+                    -{{ ledger_entry.debit | number: '1.2-2' }}
+                  } @else {
+                    -
+                  }
+                </div>
+              </td>
+
+              <!-- Credit Column -->
+              <td class="px-6 py-4 text-right">
+                <div class="text-sm font-medium" [ngClass]="ledger_entry.credit && ledger_entry.credit > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-400'">
+                  @if (ledger_entry.credit && ledger_entry.credit > 0) {
+                    +{{ ledger_entry.credit | number: '1.2-2' }}
+                  } @else {
+                    -
+                  }
+                </div>
+              </td>
+
+              <!-- Balance Column -->
+              <td class="px-6 py-4 text-right">
+                <div class="text-sm font-semibold text-gray-900 dark:text-white">
                   {{ ledger_entry.balance | number: '1.2-2' }}
-                </td>
+                </div>
+              </td>
 
-                <td
-                  class="py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap max-w-[10rem] truncate text-gray-900 dark:text-gray-100 sm:pl-6"
+              <!-- Remarks Column -->
+              <td class="px-6 py-4">
+                <div class="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate" [title]="ledger_entry.remarks">
+                  {{ ledger_entry.remarks || 'No remarks' }}
+                </div>
+              </td>
+
+              <!-- Actions Column -->
+              <td class="px-6 py-4 text-center">
+                <button
+                  (click)="openVoucherDialog(ledger_entry)"
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
                 >
-                  {{ ledger_entry.remarks }}
-                </td>
-              </tr>
+                  <i class="pi pi-eye mr-1"></i>
+                  View Details
+                </button>
+              </td>
+            </tr>
 
-              } } @else {
-              <tr class="w-full">
-                <td colspan="9" class="py-4">
-                  <div class="w-full flex justify-center">
-                    <app-empty-state class="text-center">
-                      <h3
-                        class="text-lg font-medium text-gray-700 dark:text-gray-300"
-                        slot="title"
-                      >
-                        No Billing History Found
-                      </h3>
-                      <p
-                        class="text-gray-500 dark:text-gray-400 mt-2"
-                        slot="message"
-                      >
-                        Try adjusting your search term or check back later for
-                        more.
-                      </p>
-                    </app-empty-state>
+            <ng-template #noData>
+              <tr>
+                <td colspan="8" class="px-6 py-12 text-center">
+                  <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                      <i class="pi pi-inbox text-2xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      No Transactions Found
+                    </h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-center max-w-sm">
+                      Try adjusting your search terms or check back later.
+                    </p>
                   </div>
                 </td>
               </tr>
-              } }
-            </tbody>
-          </table>
-        </div>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-center px-6 pb-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+        <p-paginator
+          (onPageChange)="onPageChange($event)"
+          [first]="first()"
+          [rows]="pageSize()"
+          [totalRecords]="totalRecords()"
+          [showCurrentPageReport]="true"
+          [showPageLinks]="true"
+          [showJumpToPageDropdown]="false"
+          [rowsPerPageOptions]="[5, 10, 20, 30]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+          [styleClass]="'custom-paginator'"
+        />
       </div>
     </div>
   </div>
 </div>
 
-<div class="flex justify-center w-full">
-  <p-paginator
-    (onPageChange)="onPageChange($event)"
-    [first]="first()"
-    [rows]="pageSize()"
-    [totalRecords]="totalRecords()"
-    [showCurrentPageReport]="true"
-    [showPageLinks]="false"
-    [showJumpToPageDropdown]="false"
-    [rowsPerPageOptions]="[5, 10, 20, 30]"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-  />
-</div>
+<!-- Modern Voucher Details Dialog -->
 <p-dialog
-  header="Voucher Details"
   [(visible)]="voucherDialogVisible"
+  [style]="{ width: '90vw', maxWidth: '800px' }"
   [modal]="true"
-  [style]="{ width: '600px' }"
+  [closable]="true"
   (onHide)="closeVoucherDialog()"
+  [styleClass]="'voucher-details-dialog'"
 >
-  <div *ngIf="selectedVoucher">
-    <p><strong>Reference:</strong> {{ selectedVoucher?.voucher_type }}</p>
-    <p><strong>Reference No:</strong> {{ selectedVoucher?.voucher_no }}</p>
-    <p>
-      <strong>Posting Date:</strong> {{ selectedVoucher?.posting_date |
-      date:'yyyy-MM-dd' }}
-    </p>
-    <p><strong>Debit:</strong> {{ selectedVoucher?.debit | number:'1.2-2' }}</p>
-    <p>
-      <strong>Credit:</strong> {{ selectedVoucher?.credit | number:'1.2-2' }}
-    </p>
-    <p>
-      <strong>Balance:</strong> {{ selectedVoucher?.balance | number:'1.2-2' }}
-    </p>
-    <p><strong>Remarks:</strong> {{ selectedVoucher?.remarks }}</p>
-  </div>
+  @if (selectedVoucher) {
+    <div class="space-y-6">
+      <!-- Header -->
+      <div class="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-receipt text-blue-600 dark:text-blue-400 text-lg"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Transaction Details</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Reference: {{ selectedVoucher.voucher_no }}</p>
+        </div>
+      </div>
+
+      <!-- Transaction Information -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Basic Information -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+            Transaction Information
+          </h3>
+          
+          <div class="space-y-3">
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Reference Type</span>
+              <span class="text-sm text-gray-900 dark:text-white font-medium">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  {{ selectedVoucher.voucher_type }}
+                </span>
+              </span>
+            </div>
+            
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Reference Number</span>
+              <span class="text-sm font-mono text-gray-900 dark:text-white font-medium">{{ selectedVoucher.voucher_no }}</span>
+            </div>
+            
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Posting Date</span>
+              <span class="text-sm text-gray-900 dark:text-white font-medium">
+                {{ selectedVoucher.posting_date | date: 'MMM dd, yyyy' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Information -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+            Financial Details
+          </h3>
+          
+          <div class="space-y-3">
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Debit Amount</span>
+              <span class="text-sm font-medium" [ngClass]="selectedVoucher.debit > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-400'">
+                @if (selectedVoucher.debit > 0) {
+                  -{{ selectedVoucher.debit | number: '1.2-2' }}
+                } @else {
+                  -
+                }
+              </span>
+            </div>
+            
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
+              <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Credit Amount</span>
+              <span class="text-sm font-medium" [ngClass]="selectedVoucher.credit > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-400'">
+                @if (selectedVoucher.credit > 0) {
+                  +{{ selectedVoucher.credit | number: '1.2-2' }}
+                } @else {
+                  -
+                }
+              </span>
+            </div>
+            
+            <div class="flex justify-between items-center py-3 bg-gray-50 dark:bg-gray-800 rounded-lg px-4">
+              <span class="text-base font-semibold text-gray-900 dark:text-white">Running Balance</span>
+              <span class="text-lg font-bold text-gray-900 dark:text-white">
+                {{ selectedVoucher.balance | number: '1.2-2' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Remarks Section -->
+      @if (selectedVoucher.remarks) {
+        <div class="space-y-3">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+            Remarks
+          </h3>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              {{ selectedVoucher.remarks }}
+            </p>
+          </div>
+        </div>
+      }
+
+      <!-- Action Buttons -->
+      <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <button
+          type="button"
+          (click)="closeVoucherDialog()"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  }
 </p-dialog>
