@@ -167,7 +167,7 @@
       <div class="p-6">
         @if (subscriptions_loading()) {
         <div class="flex justify-center py-8">
-          <p-progressSpinner
+                <p-progressSpinner
             [style]="{ width: '40px', height: '40px' }"
           ></p-progressSpinner>
         </div>
@@ -211,7 +211,7 @@
         </div>
         } }
       </div>
-    </div>
+  </div>
 
     <!-- Unpaid Invoices -->
     <div
@@ -231,9 +231,9 @@
         </div>
       </div>
       <div class="p-6">
-        @if (invoices_loading()) {
+      @if (invoices_loading()) {
         <div class="flex justify-center py-8">
-          <p-progressSpinner
+              <p-progressSpinner
             [style]="{ width: '40px', height: '40px' }"
           ></p-progressSpinner>
         </div>
@@ -316,31 +316,31 @@
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
             >
               Voucher
-            </th>
+        </th>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
             >
               Description
-            </th>
+        </th>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
             >
-              Debit
-            </th>
+          Debit
+        </th>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
             >
-              Credit
-            </th>
-          </tr>
-        </thead>
+          Credit
+        </th>
+      </tr>
+      </thead>
         <tbody
           class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
         >
-          @if (ledger_loading()) {
+        @if (ledger_loading()) {
           <tr>
             <td colspan="5" class="px-6 py-8 text-center">
-              <p-progressSpinner
+                <p-progressSpinner
                 [style]="{ width: '40px', height: '40px' }"
               ></p-progressSpinner>
             </td>
@@ -374,7 +374,7 @@
               {{ ledger_entry.credit && ledger_entry.credit > 0 ?
               (ledger_entry.credit | currency) : '-' }}
             </td>
-          </tr>
+              </tr>
           } } @else {
           <tr>
             <td colspan="5" class="px-6 py-8 text-center">
@@ -383,12 +383,12 @@
                 <p class="text-gray-500 dark:text-gray-400">
                   No transactions found
                 </p>
-              </div>
-            </td>
-          </tr>
+                </div>
+              </td>
+            </tr>
           } }
-        </tbody>
-      </table>
+      </tbody>
+    </table>
     </div>
   </div>
 </div>

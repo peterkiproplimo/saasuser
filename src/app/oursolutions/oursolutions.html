@@ -12,191 +12,565 @@
 </div>
 
 <!-- Main Content -->
-<div class="overflow-y-auto h-screen" *ngIf="solutionData && !isLoading">
+<div *ngIf="solutionData && !isLoading">
   <!-- Hero Section -->
-  <section class="relative bg-white dark:bg-gray-900 py-10">
-    <div
-      class="container mx-auto flex flex-col md:flex-row items-center px-6 gap-10"
-    >
+  <section class="relative bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-cyan-900/20 py-20 lg:py-32 overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-400/10 to-transparent rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-cyan-400/10 to-transparent rounded-full blur-3xl"></div>
+    
+    <div class="relative container mx-auto px-6 lg:px-12">
+      <div class="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+        
+        <!-- Content Side -->
+        <div class="space-y-8">
+          <!-- Badge -->
+          <div class="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-800 dark:text-blue-200 font-medium text-sm border border-blue-200 dark:border-blue-700">
+            <i class="pi pi-star-fill mr-2 text-blue-600"></i>
+            Enterprise-Grade Solution
+          </div>
+          
+          <!-- Main Heading -->
+          <div class="space-y-4">
+            <h1 class="text-4xl lg:text-6xl font-bold leading-tight tracking-tight">
+              <span class="bg-gradient-to-r from-gray-900 via-blue-900 to-cyan-900 dark:from-white dark:via-blue-200 dark:to-cyan-200 bg-clip-text text-transparent">
+                {{ solutionData?.name }}
+              </span>
+            </h1>
+            <p class="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl">
+              Transform your business operations with our cutting-edge technology platform designed for modern enterprises.
+            </p>
+          </div>
+
+          <!-- Key Benefits -->
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="pi pi-check text-white text-sm"></i>
+              </div>
+              <span class="text-gray-700 dark:text-gray-300 font-medium">Scalable Architecture</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="pi pi-shield text-white text-sm"></i>
+              </div>
+              <span class="text-gray-700 dark:text-gray-300 font-medium">Enterprise Security</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="pi pi-cog text-white text-sm"></i>
+              </div>
+              <span class="text-gray-700 dark:text-gray-300 font-medium">Easy Integration</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="pi pi-headphones text-white text-sm"></i>
+              </div>
+              <span class="text-gray-700 dark:text-gray-300 font-medium">24/7 Support</span>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <button
+              (click)="openRequestDemo()"
+              class="group inline-flex items-center justify-center gap-3 px-8 py-4 text-white bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-semibold"
+            >
+              <i class="pi pi-play-circle text-lg"></i>
+              <span>Schedule Demo</span>
+              <i class="pi pi-arrow-right group-hover:translate-x-1 transition-transform duration-300"></i>
+            </button>
+            
+            <button
+              (click)="openRequestTrial()"
+              class="group inline-flex items-center justify-center gap-3 px-8 py-4 text-blue-700 dark:text-blue-300 bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-2 border-blue-600 dark:border-blue-400 rounded-xl transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg hover:shadow-xl"
+            >
+              <i class="pi pi-calendar text-lg"></i>
+              <span>Start Free Trial</span>
+              <i class="pi pi-external-link group-hover:translate-x-1 transition-transform duration-300"></i>
+            </button>
+          </div>
+        </div>
+
       <!-- Image Side -->
-      <div class="w-full md:w-1/2 flex justify-center">
-        <div
-          class="relative rounded-2xl border-[8px] border-gray-300 overflow-hidden"
-        >
-          <div
-            class="absolute inset-0 bg-black/40 dark:block hidden z-10 rounded-2xl"
-          ></div>
+        <div class="relative">
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-800 p-4">
+            <div class="relative rounded-2xl overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10"></div>
           <img
             *ngIf="imageUrl"
             [src]="imageUrl"
             alt="{{ solutionData?.name }}"
-            class="w-full object-cover rounded"
-          />
+                class="w-full h-[400px] lg:h-[500px] object-cover"
+              />
+              
+              <!-- Floating Stats -->
+              <div class="absolute top-6 left-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 shadow-lg z-20">
+                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">99.9%</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Uptime SLA</div>
+              </div>
+              
+              <div class="absolute bottom-6 right-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 shadow-lg z-20">
+                <div class="text-2xl font-bold text-green-600 dark:text-green-400">500+</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Happy Clients</div>
+              </div>
         </div>
       </div>
 
-      <!-- Text Side -->
-      <div class="flex flex-col sm:flex-row gap-4">
-        <a
-          href="javascript:void(0)"
-          (click)="openRequestDemo()"
-          class="bg-blue-800 hover:bg-sky-400 text-white px-6 py-3 rounded-md font-semibold shadow-md text-center transition-colors duration-300"
-        >
-          Request Demo
-        </a>
-
-        <a
-          href="javascript:void(0)"
-          (click)="openRequestTrial()"
-          class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-md font-semibold shadow-md text-center transition-all duration-300"
-        >
-          Request Free Trial
-        </a>
+          <!-- Decorative Elements -->
+          <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-400/20 rounded-full blur-xl"></div>
+          <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-cyan-400/20 rounded-full blur-xl"></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Feature Heading Section -->
-  <section
-    class="py-24 px-6 md:px-12 lg:px-32 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
-  >
-    <div class="max-w-7xl mx-auto text-center space-y-10">
-      <h2
-        class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-900 via-blue-600 to-blue-300 bg-clip-text text-transparent"
-      >
-        {{ solutionData.name }} Features
+  <!-- Features Overview Section -->
+  <section class="py-20 lg:py-32 bg-white dark:bg-gray-900 text-gray-800 dark:text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-800 dark:text-blue-200 font-medium text-sm border border-blue-200 dark:border-blue-700 mb-6">
+          <i class="pi pi-star-fill mr-2 text-blue-600"></i>
+          Powerful Features
+        </div>
+        
+        <h2 class="text-4xl lg:text-5xl font-bold leading-tight mb-6">
+          <span class="bg-gradient-to-r from-gray-900 via-blue-900 to-cyan-900 dark:from-white dark:via-blue-200 dark:to-cyan-200 bg-clip-text text-transparent">
+            {{ solutionData?.name }} Features
+          </span>
       </h2>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        Discover how <span class="font-bold">{{ solutionData.name }}</span> can
-        transform your business performance.
-      </p>
+        
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+          Discover the comprehensive suite of features that make 
+          <span class="font-semibold text-blue-600 dark:text-blue-400">{{ solutionData?.name }}</span> 
+          the preferred choice for modern enterprises seeking operational excellence.
+        </p>
+      </div>
 
-      <!-- Key Features -->
+      <!-- Features Grid -->
       <div
         *ngIf="solutionData?.features?.length"
-        class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-left"
+        class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
       >
         <div
-          *ngFor="let feature of solutionData.features"
-          class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow hover:shadow-md transition"
+          *ngFor="let feature of solutionData.features; let i = index"
+          class="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
         >
-          <div class="text-blue-600 dark:text-blue-400 text-3xl mb-2">
-            <i class="pi pi-check-circle"></i>
+          <!-- Icon -->
+          <div class="relative mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <i class="pi pi-check-circle text-white text-2xl"></i>
+            </div>
+            <!-- Decorative gradient -->
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-sm"></div>
           </div>
+          
+          <!-- Content -->
+          <div class="space-y-3">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
           {{ feature }}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+              Experience seamless integration and enhanced productivity with this core feature designed for enterprise efficiency.
+            </p>
+          </div>
+          
+          <!-- Hover Effect -->
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="text-center mt-16">
+        <div class="inline-flex items-center space-x-4">
+          <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+            <i class="pi pi-check-circle text-green-500"></i>
+            <span class="text-sm font-medium">All features included</span>
+          </div>
+          <div class="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+          <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+            <i class="pi pi-shield text-blue-500"></i>
+            <span class="text-sm font-medium">Enterprise security</span>
+          </div>
+          <div class="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+          <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+            <i class="pi pi-headphones text-purple-500"></i>
+            <span class="text-sm font-medium">24/7 support</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Grid -->
-  <section
-    class="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white py-16 px-6 md:px-12 lg:px-24"
-  >
-    <div class="grid md:grid-cols-2 gap-10 max-w-7xl mx-auto items-start">
-      <!-- Dynamic Features List -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div
-          *ngFor="let feature of solutionData.features"
-          class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3"
-        >
-          <div class="text-blue-600 dark:text-blue-400 text-3xl">
-            <i class="pi pi-check-circle"></i>
-          </div>
-          <h3 class="text-lg font-bold">{{ feature }}</h3>
-        </div>
-      </div>
-
-      <!-- Embedded Video Placeholder -->
-      <div class="w-full aspect-video rounded-xl overflow-hidden shadow-lg">
+  <!-- Video & Additional Features Section -->
+  <section class="py-20 lg:py-32 bg-gradient-to-br from-gray-50 via-blue-50/30 to-cyan-50/30 dark:from-gray-800 dark:via-blue-900/10 dark:to-cyan-900/10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Video Section -->
+        <div class="order-2 lg:order-1">
+          <div class="relative">
+            <!-- Video Container -->
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-800 p-4">
+              <div class="relative rounded-2xl overflow-hidden">
         <iframe
-          class="w-full h-full"
+                  class="w-full h-[300px] lg:h-[400px]"
           src="https://www.youtube.com/embed/crynl8l-Zac"
           title="YouTube video"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
         ></iframe>
+                
+                <!-- Play Button Overlay (for visual appeal) -->
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <div class="w-16 h-16 bg-white/90 dark:bg-gray-800/90 rounded-full flex items-center justify-center shadow-lg">
+                    <i class="pi pi-play text-blue-600 text-xl ml-1"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Decorative Elements -->
+            <div class="absolute -top-4 -left-4 w-24 h-24 bg-blue-400/20 rounded-full blur-xl"></div>
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-cyan-400/20 rounded-full blur-xl"></div>
+          </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="order-1 lg:order-2 space-y-8">
+          <!-- Header -->
+          <div class="space-y-4">
+            <div class="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-800 dark:text-blue-200 font-medium text-sm border border-blue-200 dark:border-blue-700">
+              <i class="pi pi-video mr-2 text-blue-600"></i>
+              See It In Action
+            </div>
+            
+            <h2 class="text-3xl lg:text-4xl font-bold leading-tight">
+              <span class="bg-gradient-to-r from-gray-900 via-blue-900 to-cyan-900 dark:from-white dark:via-blue-200 dark:to-cyan-200 bg-clip-text text-transparent">
+                Watch {{ solutionData?.name }} Transform Your Business
+              </span>
+            </h2>
+            
+            <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+              Experience firsthand how our solution streamlines operations, enhances productivity, 
+              and delivers measurable results for enterprises like yours.
+            </p>
+          </div>
+
+          <!-- Key Benefits -->
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                <i class="pi pi-chart-line text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Real-time Analytics</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Monitor performance metrics and make data-driven decisions with comprehensive dashboards.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                <i class="pi pi-bolt text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Lightning Fast Performance</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Experience blazing-fast load times and seamless user interactions across all devices.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                <i class="pi pi-shield text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Enterprise Security</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Bank-grade security with end-to-end encryption and compliance with industry standards.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="pt-4">
+            <button
+              (click)="openRequestDemo()"
+              class="group inline-flex items-center gap-3 px-8 py-4 text-white bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-semibold"
+            >
+              <i class="pi pi-calendar text-lg"></i>
+              <span>Book Full Demo</span>
+              <i class="pi pi-arrow-right group-hover:translate-x-1 transition-transform duration-300"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- What Makes Us Different -->
-  <section
-    class="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24"
-  >
-    <div class="max-w-6xl mx-auto space-y-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-center">
+  <section class="py-20 lg:py-32 bg-white dark:bg-gray-900 text-gray-800 dark:text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-800 dark:text-blue-200 font-medium text-sm border border-blue-200 dark:border-blue-700 mb-6">
+          <i class="pi pi-star-fill mr-2 text-blue-600"></i>
+          Why Choose Us
+        </div>
+        
+        <h2 class="text-4xl lg:text-5xl font-bold leading-tight mb-6">
+          <span class="bg-gradient-to-r from-gray-900 via-blue-900 to-cyan-900 dark:from-white dark:via-blue-200 dark:to-cyan-200 bg-clip-text text-transparent">
         What Makes Us Different
+          </span>
       </h2>
-      <p class="text-center text-lg max-w-3xl mx-auto">
-        We offer a complete suite of tools for managing employee information,
-        payroll, and benefits, while keeping businesses organized. It also
-        simplifies onboarding, time tracking, and performance management,
-        ensuring streamlined operations and regulatory compliance.
-      </p>
+        
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+          We don't just deliver software—we forge lasting partnerships that drive your business forward. 
+          Our unique approach combines cutting-edge technology with personalized service to deliver 
+          exceptional results.
+        </p>
+      </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <!-- Differentiators Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- True Partnership -->
-        <div
-          class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3"
-        >
-          <div class="text-blue-600 dark:text-blue-400 text-3xl">
-            <i class="pi pi-users"></i>
+        <div class="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+          <!-- Icon -->
+          <div class="relative mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <i class="pi pi-users text-white text-2xl"></i>
+            </div>
+            <!-- Decorative gradient -->
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-sm"></div>
           </div>
-          <h3 class="text-lg font-bold">True Partnership with our Clients</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
-            We stand by your side to help you hit your goals. We consider
-            clients our “Co-creators” and prioritize their feedback to deliver
-            ongoing enhancement.
-          </p>
+          
+          <!-- Content -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+              True Partnership Approach
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+              We don't just provide solutions—we become an extension of your team. Our collaborative 
+              approach ensures we understand your unique challenges and deliver tailored solutions 
+              that grow with your business.
+            </p>
+            
+            <!-- Feature List -->
+            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>Dedicated success manager</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>Regular strategy sessions</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>Continuous optimization</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Hover Effect -->
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
 
-        <!-- Innovative Product Development -->
-        <div
-          class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3"
-        >
-          <div class="text-purple-600 dark:text-purple-400 text-3xl">
-            <i class="pi pi-cog"></i>
+        <!-- Innovative Development -->
+        <div class="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+          <!-- Icon -->
+          <div class="relative mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <i class="pi pi-cog text-white text-2xl"></i>
+            </div>
+            <!-- Decorative gradient -->
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-sm"></div>
           </div>
-          <h3 class="text-lg font-bold">Innovative Product Development</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
-            We invest in key features that keep you on the cutting edge and
-            create experiences that engage your employees every day.
-          </p>
+          
+          <!-- Content -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+              Innovation-Driven Development
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+              Our R&D team continuously pushes the boundaries of technology, ensuring you always have 
+              access to the latest innovations and features that keep you ahead of the competition.
+            </p>
+            
+            <!-- Feature List -->
+            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>AI-powered automation</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>Regular feature updates</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>Future-proof architecture</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Hover Effect -->
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
 
         <!-- Award-Winning Support -->
-        <div
-          class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow flex flex-col gap-3"
-        >
-          <div class="text-blue-600 dark:text-blue-400 text-3xl">
-            <i class="pi pi-star"></i>
+        <div class="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+          <!-- Icon -->
+          <div class="relative mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <i class="pi pi-star text-white text-2xl"></i>
+            </div>
+            <!-- Decorative gradient -->
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-full blur-sm"></div>
           </div>
-          <h3 class="text-lg font-bold">Award-Winning Customer Service</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
-            Clients say we deliver the best service of any provider they’ve
-            worked with—and we’re committed to giving you the same.
-          </p>
+          
+          <!-- Content -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">
+              Award-Winning Support
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+              Our support team has been recognized industry-wide for exceptional service. We provide 
+              round-the-clock assistance with response times that exceed industry standards.
+            </p>
+            
+            <!-- Feature List -->
+            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>24/7 expert support</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>Sub-2-minute response time</span>
+              </li>
+              <li class="flex items-center space-x-2">
+                <i class="pi pi-check text-green-500"></i>
+                <span>Proactive monitoring</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Hover Effect -->
+          <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Stats -->
+      <div class="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div class="space-y-2">
+          <div class="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-400">99.9%</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Uptime SLA</div>
+        </div>
+        <div class="space-y-2">
+          <div class="text-3xl lg:text-4xl font-bold text-green-600 dark:text-green-400">500+</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Happy Clients</div>
+        </div>
+        <div class="space-y-2">
+          <div class="text-3xl lg:text-4xl font-bold text-purple-600 dark:text-purple-400">10+</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Years Experience</div>
+        </div>
+        <div class="space-y-2">
+          <div class="text-3xl lg:text-4xl font-bold text-cyan-600 dark:text-cyan-400">24/7</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Expert Support</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Trusted Clients -->
-  <section
-    class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 md:px-12 lg:px-24 text-center"
-  >
-    <h2 class="text-3xl md:text-4xl font-bold mb-8">
-      We are glad to be Trusted by:
+  <section class="py-20 lg:py-32 bg-gradient-to-br from-gray-50 via-blue-50/30 to-cyan-50/30 dark:from-gray-800 dark:via-blue-900/10 dark:to-cyan-900/10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-800 dark:text-blue-200 font-medium text-sm border border-blue-200 dark:border-blue-700 mb-6">
+          <i class="pi pi-building mr-2 text-blue-600"></i>
+          Trusted Partners
+        </div>
+        
+        <h2 class="text-4xl lg:text-5xl font-bold leading-tight mb-6">
+          <span class="bg-gradient-to-r from-gray-900 via-blue-900 to-cyan-900 dark:from-white dark:via-blue-200 dark:to-cyan-200 bg-clip-text text-transparent">
+            Trusted by Industry Leaders
+          </span>
     </h2>
-    <div class="flex flex-wrap justify-center gap-6">
-      <img src="/images/safaricom.png" alt="Safaricom" class="h-12" />
-      <img src="/images/equity.png" alt="Equity" class="h-12" />
-      <img src="/images/icealion.jpg" alt="ICEA Lion" class="h-12" />
-      <img src="/images/kcb.png" alt="KCB" class="h-12" />
-      <img src="/images/NCBA.jpg" alt="NCBA" class="h-12" />
-      <img src="/images/cellulant.jpeg" alt="Cellulant" class="h-12" />
+        
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+          Join hundreds of forward-thinking enterprises who have chosen our solutions to drive their 
+          digital transformation and achieve operational excellence.
+        </p>
+      </div>
+
+      <!-- Client Logos Grid -->
+      <div class="relative">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        <!-- Logos Container -->
+        <div class="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+          <!-- Safaricom -->
+          <div class="group flex items-center justify-center w-32 h-20 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 dark:border-gray-700">
+            <img src="/images/safaricom.png" alt="Safaricom" class="h-10 object-contain transition-all duration-300" />
+          </div>
+          
+          <!-- Equity -->
+          <div class="group flex items-center justify-center w-32 h-20 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 dark:border-gray-700">
+            <img src="/images/equity.png" alt="Equity" class="h-10 object-contain transition-all duration-300" />
+          </div>
+          
+          <!-- ICEA Lion -->
+          <div class="group flex items-center justify-center w-32 h-20 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 dark:border-gray-700">
+            <img src="/images/icealion.jpg" alt="ICEA Lion" class="h-10 object-contain transition-all duration-300" />
+          </div>
+          
+          <!-- KCB -->
+          <div class="group flex items-center justify-center w-32 h-20 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 dark:border-gray-700">
+            <img src="/images/kcb.png" alt="KCB" class="h-10 object-contain transition-all duration-300" />
+          </div>
+          
+          <!-- NCBA -->
+          <div class="group flex items-center justify-center w-32 h-20 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 dark:border-gray-700">
+            <img src="/images/NCBA.jpg" alt="NCBA" class="h-10 object-contain transition-all duration-300" />
+          </div>
+          
+          <!-- Cellulant -->
+          <div class="group flex items-center justify-center w-32 h-20 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 dark:border-gray-700">
+            <img src="/images/cellulant.jpeg" alt="Cellulant" class="h-10 object-contain transition-all duration-300" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="text-center mt-16">
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+              <i class="pi pi-check-circle text-green-500"></i>
+              <span class="text-sm font-medium">Enterprise-grade security</span>
+            </div>
+            <div class="w-px h-4 bg-gray-300 dark:bg-gray-600 hidden sm:block"></div>
+            <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+              <i class="pi pi-shield text-blue-500"></i>
+              <span class="text-sm font-medium">SOC 2 compliant</span>
+            </div>
+            <div class="w-px h-4 bg-gray-300 dark:bg-gray-600 hidden sm:block"></div>
+            <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+              <i class="pi pi-lock text-purple-500"></i>
+              <span class="text-sm font-medium">GDPR ready</span>
+            </div>
+          </div>
+          
+          <p class="text-gray-600 dark:text-gray-400 text-sm max-w-2xl mx-auto">
+            Ready to join these industry leaders? Experience the same level of excellence and 
+            reliability that has made us the trusted choice for enterprise solutions.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -212,33 +586,46 @@
 <!-- Request Demo Modal -->
 <div
   *ngIf="showRequestDialog"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
 >
   <div
-    class="bg-[#e8fafd] rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 sm:p-10"
+    class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700"
   >
     <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
-      <h2 class="text-3xl font-bold text-blue-800">
-        Request a Demo of {{ solutionData?.name }}
-      </h2>
+    <div class="relative bg-gradient-to-r from-blue-600 to-cyan-600 rounded-t-3xl p-8 text-white">
       <button
-        class="text-gray-700 text-3xl"
+        class="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-200"
         (click)="closeRequestDemo()"
         aria-label="Close"
       >
-        &times;
+        <i class="pi pi-times text-white text-lg"></i>
       </button>
+      
+      <div class="space-y-2">
+        <div class="flex items-center space-x-2">
+          <i class="pi pi-play-circle text-2xl"></i>
+          <span class="text-sm font-medium opacity-90">Schedule Demo</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-bold">
+          Request a Demo of {{ solutionData?.name }}
+        </h2>
+        <p class="text-blue-100 text-sm">
+          See how our solution can transform your business operations
+        </p>
+      </div>
     </div>
+    
+    <!-- Form Content -->
+    <div class="p-8">
 
     <!-- Form -->
     <form (ngSubmit)="submitDemoRequest()" class="space-y-6" novalidate>
-      <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-6">
         <!-- Name -->
-        <div class="flex flex-col">
+          <div class="space-y-2">
           <label
             for="customer_name"
-            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+              class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
           >
             Full Name *
           </label>
@@ -249,17 +636,17 @@
             [(ngModel)]="demoForm.customer_name"
             placeholder="Enter your full name"
             required
-            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
           />
         </div>
 
         <!-- Email -->
-        <div class="flex flex-col">
+          <div class="space-y-2">
           <label
             for="email"
-            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+              class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
           >
-            Email *
+              Email Address *
           </label>
           <input
             type="email"
@@ -268,17 +655,17 @@
             [(ngModel)]="demoForm.email"
             placeholder="Enter your email address"
             required
-            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
           />
         </div>
 
         <!-- Phone -->
-        <div class="flex flex-col">
+          <div class="space-y-2">
           <label
             for="phone"
-            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+              class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
           >
-            Phone *
+              Phone Number *
           </label>
           <input
             type="text"
@@ -287,15 +674,15 @@
             [(ngModel)]="demoForm.phone"
             placeholder="Enter phone number"
             required
-            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
           />
         </div>
 
         <!-- Demo Type -->
-        <div class="flex flex-col">
+          <div class="space-y-2">
           <label
             for="demo_type"
-            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+              class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
           >
             Demo Type *
           </label>
@@ -304,38 +691,115 @@
             name="demo_type"
             [(ngModel)]="demoForm.demo_type"
             required
-            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
           >
             <option disabled selected value="">Select demo type</option>
-            <option>Online</option>
-            <option>Onsite</option>
+              <option>Online Demo</option>
+              <option>Onsite Demo</option>
           </select>
         </div>
 
-        <!-- Demo Date -->
-        <div class="flex flex-col md:col-span-2">
-          <label
-            for="demo_date"
-            class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
+          <!-- Demo Date & Time -->
+          <div class="space-y-2 md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
             Preferred Demo Date & Time *
           </label>
+            
+            <!-- Custom Date Time Picker -->
+            <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-700">
+              <!-- Date Selection -->
+              <div class="mb-6">
+                <h4 class="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3 flex items-center">
+                  <i class="pi pi-calendar mr-2"></i>
+                  Select Date
+                </h4>
+                <!-- Beautiful Date Input -->
+                <div class="relative">
           <input
-            type="datetime-local"
-            id="demo_date"
+                    type="date"
+                    id="demo_date_picker"
+                    [(ngModel)]="demoForm.demo_date"
             name="demo_date"
-            [(ngModel)]="demoForm.demo_date"
-            required
-            class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
-          />
+                    class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
+                    style="color-scheme: light dark;"
+                  />
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                    <i class="pi pi-calendar text-gray-400"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Time Selection -->
+              <div>
+                <h4 class="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3 flex items-center">
+                  <i class="pi pi-clock mr-2"></i>
+                  Select Time
+                </h4>
+                <!-- Beautiful Time Selection -->
+                <div class="relative">
+                  <select
+                    [(ngModel)]="demoForm.demo_time"
+                    name="demo_time"
+                    class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200 appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled selected>Select your preferred time</option>
+                    <option value="09:00">9:00 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="12:00">12:00 PM</option>
+                    <option value="14:00">2:00 PM</option>
+                    <option value="15:00">3:00 PM</option>
+                    <option value="16:00">4:00 PM</option>
+                    <option value="17:00">5:00 PM</option>
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                    <i class="pi pi-clock text-gray-400"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Selected Date Time Display -->
+              <div class="mt-4 p-4 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-xl border border-blue-200 dark:border-blue-700">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                      <i class="pi pi-calendar text-white text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-blue-800 dark:text-blue-200">Your Demo Appointment</div>
+                      <div class="text-xs text-blue-600 dark:text-blue-300 flex items-center space-x-2">
+                        <span class="flex items-center space-x-1">
+                          <i class="pi pi-calendar text-xs"></i>
+                          <span>{{ demoForm.demo_date || 'mm/dd/yyyy' }}</span>
+                        </span>
+                        <span class="text-gray-400">•</span>
+                        <span class="flex items-center space-x-1">
+                          <i class="pi pi-clock text-xs"></i>
+                          <span>{{ demoForm.demo_time || '--:--' }}</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    (click)="clearDateTimeSelection()"
+                    class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                  >
+                    <i class="pi pi-refresh text-xs"></i>
+                    <span>Change</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
         </div>
       </div>
 
       <!-- Notes -->
-      <div>
+        <div class="space-y-2">
         <label
           for="notes"
-          class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
         >
           Additional Notes
         </label>
@@ -344,35 +808,38 @@
           name="notes"
           rows="4"
           [(ngModel)]="demoForm.notes"
-          placeholder="Any specific requirements or questions?"
-          class="w-full p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
+            placeholder="Any specific requirements or questions you'd like us to address during the demo?"
+            class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200 resize-none"
         ></textarea>
       </div>
 
       <!-- CAPTCHA -->
-      <div>
+        <div class="space-y-2">
         <label
           for="captcha_answer"
-          class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
         >
-          CAPTCHA: {{ captchaQuestion }}
+            Security Verification: {{ captchaQuestion }}
         </label>
-        <div class="flex gap-2 items-center mb-2">
+          <div class="flex gap-3 items-center">
           <input
             type="text"
             id="captcha_answer"
             name="captcha_answer"
             [(ngModel)]="demoForm.captcha_answer"
-            placeholder="Enter CAPTCHA answer"
+              placeholder="Enter your answer"
             required
-            class="flex-1 p-3 border border-sky-400 rounded-md dark:bg-gray-800 dark:text-white"
+              class="flex-1 p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200"
           />
-          <i
-            class="pi pi-refresh text-blue-600 hover:text-blue-800 text-xl cursor-pointer"
+            <button
+              type="button"
             (click)="fetchCaptcha()"
+              class="p-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors duration-200"
             title="Refresh CAPTCHA"
-          ></i>
-        </div>
+            >
+              <i class="pi pi-refresh text-blue-600 dark:text-blue-400 text-lg"></i>
+            </button>
+          </div>
       </div>
 
       <!-- Hidden Fields -->
@@ -385,46 +852,61 @@
       <input type="hidden" [(ngModel)]="demoForm.token" name="token" />
 
       <!-- Submit -->
-      <div class="text-center mt-6">
+        <div class="pt-6">
         <button
           type="submit"
-          class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-sky-600 hover:to-cyan-500"
+            class="w-full bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
         >
-          Submit Demo Request
+            <i class="pi pi-calendar mr-2"></i>
+            Schedule Demo Request
         </button>
       </div>
     </form>
+    </div>
   </div>
 </div>
 
 <!-- Request Free Trial Modal -->
 <div
   *ngIf="showTrialDialog"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
 >
   <div
-    class="bg-[#f0fdf4] rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 sm:p-10"
+    class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700"
   >
     <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
-      <h2 class="text-3xl font-bold text-blue-700">
-        Request Free Trial of {{ solutionData?.name }}
-      </h2>
+    <div class="relative bg-gradient-to-r from-green-600 to-emerald-600 rounded-t-3xl p-8 text-white">
       <button
-        class="text-gray-700 text-3xl"
+        class="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-200"
         (click)="closeRequestTrial()"
         aria-label="Close"
       >
-        &times;
+        <i class="pi pi-times text-white text-lg"></i>
       </button>
+      
+      <div class="space-y-2">
+        <div class="flex items-center space-x-2">
+          <i class="pi pi-calendar text-2xl"></i>
+          <span class="text-sm font-medium opacity-90">Start Free Trial</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-bold">
+          Request Free Trial of {{ solutionData?.name }}
+        </h2>
+        <p class="text-green-100 text-sm">
+          Experience our solution risk-free for 30 days
+        </p>
+      </div>
     </div>
+    
+    <!-- Form Content -->
+    <div class="p-8">
 
     <!-- Form -->
     <form (ngSubmit)="submitTrialRequest()" class="space-y-6" novalidate>
-      <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-6">
         <!-- Name -->
-        <div class="flex flex-col">
-          <label for="trial_customer_name" class="mb-1 text-sm font-medium">
+          <div class="space-y-2">
+            <label for="trial_customer_name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
             Full Name *
           </label>
           <input
@@ -432,60 +914,64 @@
             id="trial_customer_name"
             name="trial_customer_name"
             [(ngModel)]="trialForm.customer_name"
+              placeholder="Enter your full name"
             required
-            class="w-full p-3 border border-blue-400 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200"
           />
         </div>
 
         <!-- Email -->
-        <div class="flex flex-col">
-          <label for="trial_email" class="mb-1 text-sm font-medium"
-            >Email *</label
-          >
+          <div class="space-y-2">
+            <label for="trial_email" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Email Address *
+            </label>
           <input
             type="email"
             id="trial_email"
             name="trial_email"
             [(ngModel)]="trialForm.email"
+              placeholder="Enter your email address"
             required
-            class="w-full p-3 border border-blue-400 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200"
           />
         </div>
 
         <!-- Phone -->
-        <div class="flex flex-col md:col-span-2">
-          <label for="trial_phone" class="mb-1 text-sm font-medium"
-            >Phone *</label
-          >
+          <div class="space-y-2 md:col-span-2">
+            <label for="trial_phone" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Phone Number *
+            </label>
           <input
             type="text"
             id="trial_phone"
             name="trial_phone"
             [(ngModel)]="trialForm.phone"
+              placeholder="Enter your phone number"
             required
-            class="w-full p-3 border border-blue-400 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200"
           />
         </div>
 
         <!-- Company -->
-        <div class="flex flex-col md:col-span-2">
-          <label for="trial_company" class="mb-1 text-sm font-medium"
-            >Company *</label
-          >
+          <div class="space-y-2 md:col-span-2">
+            <label for="trial_company" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Company Name *
+            </label>
           <input
             type="text"
             id="trial_company"
             name="trial_company"
             [(ngModel)]="trialForm.company"
+              placeholder="Enter your company name"
             required
-            class="w-full p-3 border border-blue-400 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200"
           />
         </div>
       </div>
 
       <!-- Notes -->
-      <div>
-        <label for="trial_notes" class="mb-1 block text-sm font-medium">
+        <div class="space-y-2">
+          <label for="trial_notes" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
           Additional Notes
         </label>
         <textarea
@@ -493,9 +979,33 @@
           name="trial_notes"
           rows="4"
           [(ngModel)]="trialForm.notes"
-          class="w-full p-3 border border-blue-400 rounded-md"
+            placeholder="Tell us about your business needs and how we can help you succeed"
+            class="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 resize-none"
         ></textarea>
       </div>
+
+        <!-- Trial Benefits -->
+        <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+          <h3 class="font-semibold text-green-800 dark:text-green-200 mb-3">What's Included in Your Free Trial:</h3>
+          <ul class="space-y-2 text-sm text-green-700 dark:text-green-300">
+            <li class="flex items-center space-x-2">
+              <i class="pi pi-check text-green-600"></i>
+              <span>Full access to all features for 30 days</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i class="pi pi-check text-green-600"></i>
+              <span>Dedicated onboarding support</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i class="pi pi-check text-green-600"></i>
+              <span>No credit card required</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i class="pi pi-check text-green-600"></i>
+              <span>Cancel anytime, no questions asked</span>
+            </li>
+          </ul>
+        </div>
 
       <!-- Hidden -->
       <input
@@ -506,14 +1016,16 @@
       <input type="hidden" [(ngModel)]="trialForm.status" name="trial_status" />
 
       <!-- Submit -->
-      <div class="text-center mt-6">
+        <div class="pt-6">
         <button
           type="submit"
-          class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:from-blue-700 hover:to-blue-800"
+            class="w-full bg-gradient-to-r from-green-600 via-green-700 to-emerald-600 hover:from-green-700 hover:via-green-800 hover:to-emerald-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
         >
-          Submit Free Trial Request
+            <i class="pi pi-rocket mr-2"></i>
+            Start My Free Trial
         </button>
       </div>
     </form>
+    </div>
   </div>
 </div>

@@ -4,7 +4,6 @@ import { Ripple } from "primeng/ripple";
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from '../../../auth/services/auth.service';
 import { User } from '../../../auth/models/responses/login-response';
-import { CartService } from '../../pages/cart/services/cart-service';
 
 @Component({
   selector: 'app-customer-navbar',
@@ -19,12 +18,9 @@ import { CartService } from '../../pages/cart/services/cart-service';
 export class CustomerNavbar {
   isDarkMode = false;
   private auth_service = inject(AuthService);
-  private cart_service = inject(CartService);
   storedUser: User = JSON.parse(localStorage.getItem('user')!);
   loggedIn = this.auth_service.loggedIn();
   private router = inject(Router)
-
-  total_items = this.cart_service.totalItems;
 
   toggleDarkMode() {
     const element = document.querySelector('html');

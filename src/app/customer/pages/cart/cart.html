@@ -5,7 +5,7 @@
 
       @if (cartService.getCartItems().length){
       <button
-        class="text-gray-200 bg-red-600 dark:bg-red-500 hover:bg-red-700 hover:text-red-50 dark:hover:text-white h-10 px-4 rounded-full transition-colors duration-300"
+        class="text-gray-200 bg-gray-800 dark:bg-gray-700 hover:bg-gray-700 hover:text-gray-100 dark:hover:text-white h-10 px-4 rounded-full transition-colors duration-300"
         (click)="cartService.clearCart()"
       >
         <i class="pi pi-trash mr-2"></i>
@@ -43,7 +43,7 @@
               severity="danger"
               [rounded]="true"
               [outlined]="true"
-              class="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+              class="text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/20"
               (click)="cartService.removeFromCart(item.plan!)"
             />
           </div>

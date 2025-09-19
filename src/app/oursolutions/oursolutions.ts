@@ -59,6 +59,7 @@ export class OursolutionsComponent implements OnInit {
       application_name: '',
       demo_type: '',
       demo_date: '',
+      demo_time: '',
       status: 'Open',
       notes: '',
       captcha_answer: '',
@@ -180,6 +181,11 @@ export class OursolutionsComponent implements OnInit {
     this.demoForm = this.getEmptyForm();
   }
 
+  clearDateTimeSelection(): void {
+    this.demoForm.demo_date = '';
+    this.demoForm.demo_time = '';
+  }
+
   /* ------------------------- form submit -------------------------- */
   submitDemoRequest(): void {
     this.submitted = true;
@@ -192,6 +198,7 @@ export class OursolutionsComponent implements OnInit {
       'application_name',
       'demo_type',
       'demo_date',
+      'demo_time',
       'captcha_answer',
     ];
     const missing = requiredFields.filter(

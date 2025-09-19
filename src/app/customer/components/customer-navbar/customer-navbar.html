@@ -1,29 +1,33 @@
 <nav class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white shadow-lg sticky top-0 z-50 border-b border-blue-600">
   <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
-      <!-- Left: Logo -->
-      <div class="flex items-center space-x-3">
-        <img
-          src="/images/tech-savanna-logo.svg"
-          alt="TechSavanna Logo"
-          class="h-10 w-10 rounded-lg"
-        />
-        <div>
-          <h1 class="text-lg font-bold text-white">TechSavanna</h1>
-          <p class="text-xs text-blue-200">Customer Portal</p>
-        </div>
+      <!-- Left: Home Button + Logo -->
+      <div class="flex items-center space-x-4">
+        <!-- Home Button -->
+        <button
+          routerLink="/"
+          class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200"
+          title="Go Home"
+        >
+          <i class="pi pi-home text-xl"></i>
+        </button>
+        
+        <!-- Logo (Clickable) -->
+        <a routerLink="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
+          <img
+            src="/images/tech-savanna-logo.svg"
+            alt="TechSavanna Logo"
+            class="h-10 w-10 rounded-lg"
+          />
+          <div>
+            <h1 class="text-lg font-bold text-white">TechSavanna</h1>
+            <p class="text-xs text-blue-200">Customer Portal</p>
+          </div>
+        </a>
       </div>
 
       <!-- Right: Dark mode + profile -->
       <div class="flex items-center space-x-4">
-
-        <a routerLink="/customer/cart" class="relative p-2 hover:bg-white/10 rounded-lg transition-all duration-200">
-          <i class="pi pi-shopping-cart text-white hover:text-blue-200 text-xl"></i>
-          <span class="absolute -top-1 -right-1 inline-flex items-center justify-center size-5
-                               py-1 text-[0.7rem] font-bold leading-none text-white bg-red-500 rounded-full">
-            {{total_items()}}
-          </span>
-        </a>
 
         <!-- Dark Mode Toggle -->
         <button

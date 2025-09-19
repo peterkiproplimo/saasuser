@@ -1,27 +1,27 @@
-<div class="max-w-xl w-full space-y-6 lg:space-y-8 pt-2 lg:pt-0">
+<div class="w-full max-w-md mx-auto space-y-3 sm:space-y-4">
   <!-- Centered Logo -->
   <div class="flex justify-center">
     <a routerLink="/">
       <img
         src="/images/images.jpeg"
         alt="Logo"
-        class="h-32 w-32 rounded-full object-cover"
+        class="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full object-cover"
       />
     </a>
   </div>
 
   <!-- Welcome Message -->
-  <div class="text-center -mt-4 lg:-mt-6">
-    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
-      Welcome Back to Savanna ERP Solutions
+  <div class="text-center">
+    <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
+      Welcome Back to TechSavanna
     </h2>
-    <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-      Your business command center.
+    <p class="mt-1 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+      Access your customer portal.
     </p>
   </div>
 
   <!-- Login Form -->
-  <form class="space-y-6" (ngSubmit)="login()" [formGroup]="login_form">
+  <form class="space-y-3 sm:space-y-4" (ngSubmit)="login()" [formGroup]="login_form">
     <app-reactive-input
       [form]="login_form"
       [id]="'email'"
@@ -29,7 +29,7 @@
       [label]="'Email Address'"
       [type]="'email'"
       [classes]="
-        'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'
+        'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'
       "
     ></app-reactive-input>
 
@@ -40,46 +40,52 @@
       [label]="'Password'"
       [type]="'password'"
       [classes]="
-        'border border-sky-400 focus:border-sky-500 focus:ring-sky-500'
+        'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'
       "
     ></app-reactive-input>
 
-    <!-- Spacer Below Password on Web -->
-    <div class="hidden lg:block h-2"></div>
-
     <!-- Buttons -->
-    <div class="flex flex-col sm:flex-row gap-4">
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
       <button
         type="submit"
-        class="flex-1 flex justify-center gap-2 rounded-md bg-sky-500 hover:bg-sky-600 focus:ring-2 focus:ring-sky-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-200"
+        class="flex-1 flex justify-center gap-2 rounded-md bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-700 hover:to-slate-700 focus:ring-2 focus:ring-blue-500 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-white transition-all duration-200 shadow-lg hover:shadow-xl"
       >
         Login @if (loading) {
         <p-progress-spinner
           strokeWidth="8"
           fill="transparent"
           animationDuration=".5s"
-          [style]="{ width: '20px', height: '20px' }"
+          [style]="{ width: '16px', height: '16px' }"
           class="text-white"
         />
         }
       </button>
       <a
         routerLink="/"
-        class="flex-1 flex justify-center items-center gap-2 rounded-md bg-sky-500 hover:bg-sky-600 focus:ring-2 focus:ring-sky-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-200"
+        class="flex-1 flex justify-center items-center gap-2 rounded-md bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-gray-700 transition-all duration-200 border border-gray-300"
       >
+        <i class="pi pi-home text-xs sm:text-sm"></i>
         Home
       </a>
     </div>
 
-    <!-- forgot password -->
-
-    <div class="text-center mt-4">
+    <!-- forgot password and signup -->
+    <div class="text-center mt-2 sm:mt-3 space-y-1">
       <a
         routerLink="/auth/forgot-password"
-        class="text-sm text-sky-500 hover:underline"
+        class="text-xs sm:text-sm text-blue-600 hover:text-blue-700 hover:underline transition-colors duration-200 block"
       >
         Forgot Password?
       </a>
+      <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+        Don't have an account? 
+        <a
+          routerLink="/auth/signup"
+          class="text-blue-600 hover:text-blue-700 hover:underline transition-colors duration-200 font-medium"
+        >
+          Sign up here
+        </a>
+      </div>
     </div>
   </form>
 </div>

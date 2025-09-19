@@ -18,14 +18,15 @@
 
         <!-- Desktop Navigation Links -->
         <div class="hidden lg:flex items-center gap-8">
-          <nav class="space-x-8 font-medium">
-            <a
-              routerLink="/"
-              class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group"
-            >
-              Home
-              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
-            </a>
+          <a
+            routerLink="/"
+            routerLinkActive="text-blue-200 bg-white/10"
+            [routerLinkActiveOptions]="{exact: true}"
+            class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group px-3 py-2 rounded-lg"
+          >
+            Home
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
+          </a>
 
             <!-- Solutions Dropdown -->
             <div class="relative group inline-block">
@@ -65,31 +66,33 @@
               </div>
             </div>
 
-            <!-- About Us Link -->
-            <a
-              routerLink="/about"
-              class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group"
-            >
-              About Us
-              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
-            </a>
+          <!-- About Us Link -->
+          <a
+            routerLink="/about"
+            routerLinkActive="text-blue-200 bg-white/10"
+            class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group px-3 py-2 rounded-lg"
+          >
+            About Us
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
+          </a>
 
-            <a
-              routerLink="/contactus"
-              class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group"
-            >
-              Contact Us
-              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
-            </a>
+          <a
+            routerLink="/contactus"
+            routerLinkActive="text-blue-200 bg-white/10"
+            class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group px-3 py-2 rounded-lg"
+          >
+            Contact Us
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
+          </a>
 
-            <a
-              routerLink="/faqs"
-              class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group"
-            >
-              FAQs
-              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
-            </a>
-          </nav>
+          <a
+            routerLink="/faqs"
+            routerLinkActive="text-blue-200 bg-white/10"
+            class="text-white hover:text-blue-200 transition-colors duration-200 cursor-pointer relative group px-3 py-2 rounded-lg"
+          >
+            FAQs
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-200 transition-all duration-200 group-hover:w-full"></span>
+          </a>
         </div>
       </div>
 
@@ -183,21 +186,26 @@
   >
     <a
       routerLink="/"
+      routerLinkActive="text-blue-200 bg-white/10"
+      [routerLinkActiveOptions]="{exact: true}"
       class="block px-4 py-3 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg cursor-pointer transition-all duration-200 font-medium"
       >Home</a
     >
     <a
       routerLink="/about"
+      routerLinkActive="text-blue-200 bg-white/10"
       class="block px-4 py-3 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg cursor-pointer transition-all duration-200 font-medium"
       >About Us</a
     >
     <a
       routerLink="/contactus"
+      routerLinkActive="text-blue-200 bg-white/10"
       class="block px-4 py-3 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg cursor-pointer transition-all duration-200 font-medium"
       >Contact Us</a
     >
     <a
       routerLink="/faqs"
+      routerLinkActive="text-blue-200 bg-white/10"
       class="block px-4 py-3 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg cursor-pointer transition-all duration-200 font-medium"
       >FAQs</a
     >

@@ -1,21 +1,23 @@
-import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
-import {inject} from '@angular/core';
-import {AuthService} from '../services/auth.service';
-import {BehaviorSubject, catchError, filter, switchMap, take, throwError} from 'rxjs';
-import {Router} from '@angular/router';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+import { BehaviorSubject, catchError, filter, switchMap, take, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { TokenService } from '../services/token.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const authService = inject(AuthService);
   const router = inject(Router);
+  const tokenService = inject(TokenService);
   const token = localStorage.getItem('access_token');
 
   // Subject to track ongoing refresh token requests
   let refreshTokenInProgress = false;
   const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-  // Add Authorization header if token exists
-  if (token) {
+  // Add Authorization header if token exists and is not expired
+  if (token && !tokenService.isTokenExpired()) {
     const tokenizedReq = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${token}`)
     });
@@ -42,6 +44,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               )
             );
           } else {
+            // Check if refresh token is also expired
+            if (tokenService.isRefreshTokenExpired()) {
+              authService.sign_out();
+              router.navigate(['/auth/login']);
+              return throwError(() => new Error('Refresh token expired'));
+            }
+
             // Start a new refresh token request
             refreshTokenInProgress = true;
             return authService.refreshToken().pipe(
@@ -55,7 +64,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               }),
               catchError(refreshError => {
 
-                if (refreshError.status !== 401){
+                if (refreshError.status !== 401) {
                   return throwError(() => refreshError);
                 }
 

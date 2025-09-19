@@ -1,5 +1,5 @@
 import { Component, inject, computed } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
@@ -23,6 +23,7 @@ import { SolutionService } from '../navbar/services/navbar.service';
     AvatarModule,
     Menu,
     RouterLink,
+    RouterLinkActive,
   ],
 })
 export class NavbarComponent {
