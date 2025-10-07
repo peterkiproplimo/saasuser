@@ -1,0 +1,36 @@
+// Customer FAQ List Styles
+.customer-faq-accordion {
+  .p-accordion-header {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    
+    &:hover {
+      background: #f1f5f9;
+    }
+  }
+  
+  .p-accordion-content {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .p-accordion-header-link {
+    color: #1e293b;
+    font-weight: 500;
+    
+    &:focus {
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+  }
+}
+
+.faq-container {
+  .p-accordion {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}

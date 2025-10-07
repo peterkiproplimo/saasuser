@@ -1,4 +1,4 @@
-<!-- Modern SaaS Billing Dashboard -->
+<!-- Modern SaaS Dashboard -->
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
   <!-- Header Section -->
   <div class="mb-8">
@@ -8,36 +8,23 @@
           Dashboard
         </h1>
         <p class="mt-2 text-gray-600 dark:text-gray-400">
-          Welcome to your Techsavanna billing portal
+          WManage and monitor your Savanna services
         </p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3">
-        <button
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center"
-        >
-          <i class="pi pi-plus mr-2"></i>
-          New Subscription
-        </button>
-        <button
-          class="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center"
-        >
-          <i class="pi pi-download mr-2"></i>
-          Export Data
-        </button>
       </div>
     </div>
   </div>
 
-  <!-- Key Metrics Cards -->
+  <!-- Summary Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <!-- Total Subscriptions -->
+    <!-- My Services -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
+      routerLink="/customer/subscriptions"
     >
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Total Subscriptions
+            My Services
           </p>
           <p class="text-3xl font-bold text-gray-900 dark:text-white">
             {{ subscriptions().pagination.total_records || 0 }}
@@ -46,49 +33,59 @@
         <div
           class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center"
         >
-          <i class="pi pi-sync text-blue-600 dark:text-blue-400 text-xl"></i>
+          <i class="pi pi-briefcase text-blue-600 dark:text-blue-400 text-xl"></i>
         </div>
-      </div>
-      <div
-        class="mt-4 flex items-center text-sm text-blue-600 dark:text-blue-400"
-      >
-        <i class="pi pi-arrow-up mr-1"></i>
-        <span>Active subscriptions</span>
       </div>
     </div>
 
-    <!-- Outstanding Amount -->
+    <!-- Active Services -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
+      routerLink="/customer/subscriptions"
     >
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Outstanding Amount
+            Active Services
           </p>
           <p class="text-3xl font-bold text-gray-900 dark:text-white">
-            {{ getTotalOutstanding() | currency }}
+            {{ activeSubscriptionsCount() }}
+          </p>
+        </div>
+        <div
+          class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center"
+        >
+          <i class="pi pi-check text-green-600 dark:text-green-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inactive Services -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
+      routerLink="/customer/subscriptions"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Inactive Services
+          </p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+            {{ inactiveSubscriptionsCount() }}
           </p>
         </div>
         <div
           class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center"
         >
-          <i
-            class="pi pi-exclamation-triangle text-red-600 dark:text-red-400 text-xl"
-          ></i>
+          <i class="pi pi-times text-red-600 dark:text-red-400 text-xl"></i>
         </div>
-      </div>
-      <div
-        class="mt-4 flex items-center text-sm text-red-600 dark:text-red-400"
-      >
-        <i class="pi pi-clock mr-1"></i>
-        <span>Requires attention</span>
       </div>
     </div>
 
     <!-- Total Invoices -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
+      routerLink="/customer/invoices"
     >
       <div class="flex items-center justify-between">
         <div>
@@ -100,61 +97,24 @@
           </p>
         </div>
         <div
-          class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center"
-        >
-          <i
-            class="pi pi-receipt text-blue-600 dark:text-blue-400 text-xl"
-          ></i>
-        </div>
-      </div>
-      <div
-        class="mt-4 flex items-center text-sm text-gray-600 dark:text-gray-400"
-      >
-        <i class="pi pi-calendar mr-1"></i>
-        <span>All time</span>
-      </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
-    >
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Recent Activity
-          </p>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white">
-            {{ ledger().data?.length || 0 }}
-          </p>
-        </div>
-        <div
           class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center"
         >
-          <i
-            class="pi pi-chart-line text-purple-600 dark:text-purple-400 text-xl"
-          ></i>
+          <i class="pi pi-file text-purple-600 dark:text-purple-400 text-xl"></i>
         </div>
-      </div>
-      <div
-        class="mt-4 flex items-center text-sm text-purple-600 dark:text-purple-400"
-      >
-        <i class="pi pi-clock mr-1"></i>
-        <span>Last 30 days</span>
       </div>
     </div>
   </div>
 
   <!-- Main Content Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <!-- Active Subscriptions -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <!-- Active Solutions -->
     <div
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
     >
       <div class="p-6 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            Active Subscriptions
+            Active Solutions
           </h3>
           <a
             routerLink="/customer/subscriptions"
@@ -173,16 +133,16 @@
         </div>
          } @else { @if (subscriptionsData().length > 0) {
         <div class="space-y-4">
-          @for (subscription of subscriptionsData().slice(0, 5); track
+          @for (subscription of activeSubscriptions().slice(0, 5); track
           subscription.name) {
           <div
-            class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+            class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
           >
             <div class="flex items-center space-x-3">
               <div
-                class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center"
+                class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center"
               >
-                <i class="pi pi-sync text-blue-600 dark:text-blue-400"></i>
+                <i class="pi pi-check text-green-600 dark:text-green-400"></i>
               </div>
               <div>
                 <p class="font-medium text-gray-900 dark:text-white">
@@ -194,12 +154,12 @@
               </div>
             </div>
             <div class="text-right">
-              <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                [class]="subscription.status === 'Active' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'"
+              <button
+                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
               >
-                {{ subscription.status }}
-              </span>
+                <i class="pi pi-external-link mr-1"></i>
+                Visit
+              </button>
             </div>
           </div>
           }
@@ -213,72 +173,61 @@
       </div>
   </div>
 
-    <!-- Unpaid Invoices -->
+    <!-- Pending Solutions -->
     <div
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
     >
       <div class="p-6 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            Unpaid Invoices
+            Pending Solutions
           </h3>
           <a
-            routerLink="/customer/invoices"
+            routerLink="/customer/subscribe"
             class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
           >
-            View All
+            Browse Solutions
           </a>
         </div>
       </div>
       <div class="p-6">
-      @if (invoices_loading()) {
+      @if (subscriptions_loading()) {
         <div class="flex justify-center py-8">
               <p-progressSpinner
             [style]="{ width: '40px', height: '40px' }"
           ></p-progressSpinner>
         </div>
-         } @else { @if (invoicesData().length > 0) {
-        <div class="space-y-4">
-          @for (invoice of invoicesData().slice(0, 5); track
-          invoice.name) {
+         } @else { @if (inactiveSubscriptions().length > 0) {
+        <div class="space-y-4 max-h-96 overflow-y-auto">
+          @for (subscription of inactiveSubscriptions().slice(0, 5); track
+          subscription.name) {
           <div
-            class="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800"
+            class="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors duration-200"
           >
             <div class="flex items-center space-x-3">
               <div
-                class="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center"
+                class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center"
               >
-                <i
-                  class="pi pi-exclamation-triangle text-red-600 dark:text-red-400"
-                ></i>
+                <i class="pi pi-clock text-orange-600 dark:text-orange-400"></i>
               </div>
               <div>
                 <p class="font-medium text-gray-900 dark:text-white">
-                  {{ invoice.name }}
+                  {{ subscription.name }}
                 </p>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                  {{ invoice.posting_date | date:'MMM dd, yyyy' }}
+                  Payment required to activate
                 </p>
               </div>
             </div>
-            <div class="text-right">
-              <p class="font-semibold text-red-600 dark:text-red-400">
-                {{ invoice.outstanding_amount | currency }}
-              </p>
-              <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-              >
-                {{ invoice.status }}
-              </span>
-            </div>
+       
           </div>
           }
         </div>
         } @else {
         <div class="text-center py-8">
-          <i class="pi pi-check-circle text-blue-400 text-4xl mb-4"></i>
+          <i class="pi pi-check-circle text-green-400 text-4xl mb-4"></i>
           <p class="text-gray-500 dark:text-gray-400">
-            All invoices are paid up!
+            No pending solutions!
           </p>
         </div>
         } }
@@ -286,109 +235,111 @@
     </div>
   </div>
 
-  <!-- Recent Transactions -->
+  <!-- Solution Features & Quick Actions -->
   <div
-    class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+    class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
   >
     <div class="p-6 border-b border-gray-200 dark:border-gray-700">
       <div class="flex items-center justify-between">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-          Recent Transactions
+          Solution Features & Quick Actions
         </h3>
         <a
-          routerLink="/customer/billing"
+          routerLink="/customer/subscribe"
           class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
         >
-          View All
+          Explore Solutions
         </a>
       </div>
     </div>
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead class="bg-gray-50 dark:bg-gray-700">
-          <tr>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-            >
-              Date
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-            >
-              Voucher
-        </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-            >
-              Description
-        </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-            >
-          Debit
-        </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-            >
-          Credit
-        </th>
-      </tr>
-      </thead>
-        <tbody
-          class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
-        >
-        @if (ledger_loading()) {
-          <tr>
-            <td colspan="5" class="px-6 py-8 text-center">
-                <p-progressSpinner
-                [style]="{ width: '40px', height: '40px' }"
-              ></p-progressSpinner>
-            </td>
-          </tr>
-           } @else { @if (ledgerData().length > 0) { @for
-          (ledger_entry of ledgerData().slice(0, 10); track
-          ledger_entry.name) {
-          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-            <td
-              class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white"
-            >
-              {{ ledger_entry.posting_date | date:'MMM dd, yyyy' }}
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
-            >
-              {{ ledger_entry.voucher_no }}
-            </td>
-            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-              N/A
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-sm font-medium text-red-600 dark:text-red-400"
-            >
-              {{ ledger_entry.debit && ledger_entry.debit > 0 ?
-              (ledger_entry.debit | currency) : '-' }}
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 dark:text-blue-400"
-            >
-              {{ ledger_entry.credit && ledger_entry.credit > 0 ?
-              (ledger_entry.credit | currency) : '-' }}
-            </td>
-              </tr>
-          } } @else {
-          <tr>
-            <td colspan="5" class="px-6 py-8 text-center">
-              <div class="text-center">
-                <i class="pi pi-chart-line text-gray-400 text-4xl mb-4"></i>
-                <p class="text-gray-500 dark:text-gray-400">
-                  No transactions found
-                </p>
-                </div>
-              </td>
-            </tr>
-          } }
-      </tbody>
-    </table>
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Custom Domains -->
+        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="pi pi-globe text-blue-600 dark:text-blue-400"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-1">Custom Domains</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Get your own branded domain for your solutions</p>
+              <a href="#" class="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline">Setup Domain</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- SSL Security -->
+        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="pi pi-shield text-green-600 dark:text-green-400"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-1">SSL Security</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Automatic SSL certificates for secure connections</p>
+              <span class="text-green-600 dark:text-green-400 text-sm font-medium">Included</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cloud Hosting -->
+        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="pi pi-cloud text-purple-600 dark:text-purple-400"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-1">Cloud Hosting</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Reliable cloud infrastructure with 99.9% uptime</p>
+              <span class="text-purple-600 dark:text-purple-400 text-sm font-medium">Managed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 24/7 Support -->
+        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="pi pi-headphones text-orange-600 dark:text-orange-400"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-1">24/7 Support</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Round-the-clock technical support for your solutions</p>
+              <a href="#" class="text-orange-600 dark:text-orange-400 text-sm font-medium hover:underline">Get Support</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Easy Setup -->
+        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="pi pi-cog text-indigo-600 dark:text-indigo-400"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-1">Easy Setup</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Quick deployment with automated configuration</p>
+              <span class="text-indigo-600 dark:text-indigo-400 text-sm font-medium">Automated</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics -->
+        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="pi pi-chart-bar text-pink-600 dark:text-pink-400"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-1">Analytics</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Comprehensive analytics and usage insights</p>
+              <span class="text-pink-600 dark:text-pink-400 text-sm font-medium">Available</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+
 </div>

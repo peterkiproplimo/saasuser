@@ -14,237 +14,257 @@
       />
     </div>
 
-    <!-- Modern Table Container -->
-    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <!-- Table Header with Stats -->
-      <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 border-b border-gray-200 dark:border-gray-600">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Subscriptions</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {{ totalRecords() }} total subscriptions
-            </p>
-          </div>
-          <div class="mt-2 sm:mt-0 flex items-center space-x-4 text-sm">
-            <div class="flex items-center space-x-2">
-              <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span class="text-gray-600 dark:text-gray-400">Active</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <span class="text-gray-600 dark:text-gray-400">Past Due</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-              <span class="text-gray-600 dark:text-gray-400">Cancelled</span>
-            </div>
-          </div>
+    <!-- Header Section -->
+    <div class="mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">My Services</h1>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            View and manage all your services and domains
+          </p>
         </div>
-      </div>
-
-      <!-- Table -->
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                Subscription
-              </th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                Plan Details
-              </th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider hidden lg:table-cell">
-                Invoice
-              </th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider hidden xl:table-cell">
-                Dates
-              </th>
-              <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-
-          <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-            <tr *ngFor="let sub of list()?.data" class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
-              <!-- Subscription Column -->
-              <td class="px-6 py-4">
-                <div class="text-sm font-semibold text-gray-900 dark:text-white">
-                  {{ sub.name }}
-                </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ sub.party }}
-                </div>
-              </td>
-
-              <!-- Plan Details Column -->
-              <td class="px-6 py-4">
-                <div class="text-sm font-medium text-gray-900 dark:text-white">
-                  {{ sub.plans[0].plan }}
-                </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">
-                  Qty: {{ sub.plans[0].qty }} • {{ sub.plans[0].cost | number:'1.2-2' }} {{ sub.plans[0].currency }}
-                </div>
-              </td>
-
-              <!-- Invoice Column (Desktop only) -->
-              <td class="px-6 py-4 hidden lg:table-cell">
-                <div class="text-sm text-gray-900 dark:text-white">
-                  {{ sub.latest_invoice.name }}
-                </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ sub.latest_invoice.grand_total | number:'1.2-2' }} {{ sub.latest_invoice.currency }}
-                </div>
-              </td>
-
-              <!-- Dates Column (Desktop only) -->
-              <td class="px-6 py-4 hidden xl:table-cell">
-                <div class="text-sm text-gray-900 dark:text-white">
-                  {{ sub.current_invoice_start | date:'MMM dd, yyyy' }}
-                </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">
-                  Due: {{ sub.current_invoice_end | date:'MMM dd, yyyy' }}
-                </div>
-              </td>
-
-              <!-- Status Column -->
-              <td class="px-6 py-4 text-center">
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
-                  [ngClass]="{
-                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': sub.status === 'active',
-                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': sub.status === 'pending' || sub.status === 'Past Due Date',
-                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': sub.status === 'cancelled'
-                  }"
-                >
-                  <div class="w-2 h-2 rounded-full mr-2"
-                       [ngClass]="{
-                         'bg-green-500': sub.status === 'active',
-                         'bg-yellow-500': sub.status === 'pending' || sub.status === 'Past Due Date',
-                         'bg-red-500': sub.status === 'cancelled'
-                       }"></div>
-                  {{ sub.status }}
-                </span>
-              </td>
-
-              <!-- Actions Column -->
-              <td class="px-6 py-4 text-center">
-                <button
-                  (click)="openDetailsDialog(sub)"
-                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
-                >
-                  <i class="pi pi-eye mr-1"></i>
-                  View Details
-                </button>
-              </td>
-            </tr>
-          </tbody>
-
-          <ng-template #noData>
-            <tbody>
-              <tr>
-                <td colspan="6" class="px-6 py-12 text-center">
-                  <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-                      <i class="pi pi-inbox text-2xl text-gray-400"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      No Subscriptions Found
-                    </h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-center max-w-sm">
-                      Try adjusting your search terms or check back later.
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </ng-template>
-        </table>
+        <button
+          (click)="fetchSubscriptions()"
+          class="mt-2 sm:mt-0 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+        >
+          <i class="pi pi-refresh mr-2"></i>
+          Refresh
+        </button>
       </div>
     </div>
 
-    <!-- Modern Pagination -->
-    <div class="mt-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-      <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
-        <!-- Pagination Info -->
-        <div class="flex items-center space-x-4">
-          <div class="text-sm text-gray-700 dark:text-gray-300">
-            <span class="font-medium">{{ (page * pageSize) + 1 }}</span> - 
-            <span class="font-medium">{{ Math.min((page + 1) * pageSize, totalRecords()) }}</span> of 
-            <span class="font-medium">{{ totalRecords() }}</span> subscriptions
-          </div>
-          <div class="hidden sm:block w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">
-            Page {{ page + 1 }} of {{ Math.ceil(totalRecords() / pageSize) }}
-          </div>
-        </div>
-
-        <!-- Pagination Controls -->
-        <div class="flex items-center space-x-4">
-          <!-- Rows per page selector -->
-          <div class="flex items-center space-x-2">
-            <label class="text-sm text-gray-700 dark:text-gray-300">Show:</label>
-            <select 
-              [(ngModel)]="pageSize" 
-              (change)="onPageSizeChange()"
-              class="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-            <span class="text-sm text-gray-700 dark:text-gray-300">per page</span>
+    <!-- Active Services Section (Paid Subscriptions) - SHOW FIRST -->
+    <div class="mb-8">
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Active Services</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Services with current payments</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div *ngFor="let sub of getPaidSubscriptions()" class="subscription-card bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 relative">
+          <!-- Status Badge -->
+          <div class="absolute -top-2 -right-2">
+            <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+              Active
+            </span>
           </div>
 
-          <!-- Page navigation -->
-          <div class="flex items-center space-x-2">
-            <button
-              (click)="goToFirstPage()"
-              [disabled]="page === 0"
-              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              <i class="pi pi-angle-double-left text-xs"></i>
-            </button>
-            <button
-              (click)="goToPreviousPage()"
-              [disabled]="page === 0"
-              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              <i class="pi pi-angle-left text-xs"></i>
-            </button>
-            
-            <!-- Page numbers -->
-            <div class="flex items-center space-x-1">
-              <button
-                *ngFor="let pageNum of getVisiblePages()"
-                (click)="goToPage(pageNum - 1)"
-                [class]="pageNum - 1 === page 
-                  ? 'px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md' 
-                  : 'px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors duration-200'"
-              >
-                {{ pageNum }}
+          <!-- Subscription Header -->
+          <div class="mb-4">
+            <div class="text-sm font-semibold text-gray-900 dark:text-white mb-1">{{ sub.name }}</div>
+            <div class="text-xs text-gray-600 dark:text-gray-300 mb-1">{{ sub.party }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">Created {{ sub.creation | date:'MMM d, yyyy' }}</div>
+          </div>
+
+          <!-- Domain Section -->
+          <div class="mb-3">
+            <div class="flex items-center mb-2">
+              <i class="pi pi-globe text-blue-400 mr-2 text-sm"></i>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Domain</span>
+            </div>
+            <div class="bg-blue-900 text-blue-100 px-2 py-1 rounded text-xs mb-2">
+              {{ sub.custom_subdomain || 'bunny-pms.techsavanna.technology' }}
+            </div>
+            <div class="flex space-x-2">
+              <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700 transition-colors">
+                <i class="pi pi-copy mr-1"></i>Copy
+              </button>
+              <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700 transition-colors">
+                <i class="pi pi-external-link mr-1"></i>Visit
               </button>
             </div>
+          </div>
 
-            <button
-              (click)="goToNextPage()"
-              [disabled]="page >= Math.ceil(totalRecords() / pageSize) - 1"
-              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              <i class="pi pi-angle-right text-xs"></i>
-            </button>
-            <button
-              (click)="goToLastPage()"
-              [disabled]="page >= Math.ceil(totalRecords() / pageSize) - 1"
-              class="p-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              <i class="pi pi-angle-double-right text-xs"></i>
-            </button>
+          <!-- Plan Section -->
+          <div class="mb-3">
+            <div class="flex items-center mb-2">
+              <i class="pi pi-file text-green-400 mr-2 text-sm"></i>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Plan</span>
+            </div>
+            <div class="bg-green-900 text-green-100 px-2 py-1 rounded text-xs flex justify-between items-center">
+              <span>{{ sub.plans[0]?.plan || 'PMS Basic Plan' }}</span>
+              <span class="text-green-200">{{ sub.plans[0]?.cost || 1 }} {{ sub.plans[0]?.currency || 'KES' }}</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Quantity: {{ sub.plans[0]?.qty || 1 }}</div>
+          </div>
+
+          <!-- Billing Period -->
+          <div class="mb-3">
+            <div class="flex items-center mb-2">
+              <i class="pi pi-calendar text-purple-400 mr-2 text-sm"></i>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Billing Period</span>
+            </div>
+            <div class="text-xs text-gray-700 dark:text-gray-300">
+              {{ sub.current_invoice_start | date:'MMM d, yyyy' }} - {{ sub.current_invoice_end | date:'MMM d, yyyy' }}
+            </div>
+          </div>
+
+          <!-- Latest Invoice -->
+          <div class="mb-4">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">Latest Invoice</div>
+            <div class="text-xs text-gray-700 dark:text-gray-300 mb-1">{{ sub.latest_invoice?.name || 'N/A' }}</div>
+            <div class="text-xs text-gray-700 dark:text-gray-300 mb-2">{{ (sub.latest_invoice?.posting_date | date:'MMM d, yyyy') || 'N/A' }}</div>
+            <div class="text-xs text-gray-700 dark:text-gray-300 mb-2">{{ sub.latest_invoice?.grand_total || 0 | number:'1.2-2' }} {{ sub.latest_invoice?.currency || 'KES' }}</div>
+            <span class="inline-block px-2 py-1 rounded text-xs font-semibold bg-blue-100 text-blue-800">
+              {{ sub.latest_invoice?.status || 'Paid' }}
+            </span>
+          </div>
+
+          <!-- View Details Button (no payment button for paid subscriptions) -->
+          <button
+            (click)="openDetailsDialog(sub)"
+            class="details-button w-full text-white py-2 px-3 rounded text-sm font-medium flex items-center justify-center"
+          >
+            <i class="pi pi-eye mr-2"></i>
+            View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- No paid subscriptions message -->
+      <div *ngIf="getPaidSubscriptions().length === 0" class="text-center py-12">
+        <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-info-circle text-2xl text-blue-500"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+          No Active Services
+        </h3>
+        <p class="text-gray-500 dark:text-gray-400">
+          No active services with current payments.
+        </p>
+      </div>
+    </div>
+
+    <!-- Pending Payments Section - SHOW SECOND -->
+    <div class="mb-8">
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Pending Payments</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Services requiring payment</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div *ngFor="let sub of getUnpaidSubscriptions()" class="subscription-card bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 relative">
+          <!-- Status Badge -->
+          <div class="absolute -top-2 -right-2">
+            <span class="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+              Past Due
+            </span>
+          </div>
+
+          <!-- Subscription Header -->
+          <div class="mb-4">
+            <div class="text-sm font-semibold text-gray-900 dark:text-white mb-1">{{ sub.name }}</div>
+            <div class="text-xs text-gray-600 dark:text-gray-300 mb-1">{{ sub.party }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">Created {{ sub.creation | date:'MMM d, yyyy' }}</div>
+          </div>
+
+          <!-- Domain Section -->
+          <div class="mb-3">
+            <div class="flex items-center mb-2">
+              <i class="pi pi-globe text-blue-400 mr-2 text-sm"></i>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Domain</span>
+            </div>
+            <div class="bg-blue-900 text-blue-100 px-2 py-1 rounded text-xs mb-2">
+              {{ sub.custom_subdomain || 'bunny-pms.techsavanna.technology' }}
+            </div>
+            <div class="flex space-x-2">
+              <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700 transition-colors">
+                <i class="pi pi-copy mr-1"></i>Copy
+              </button>
+              <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700 transition-colors">
+                <i class="pi pi-external-link mr-1"></i>Visit
+              </button>
+            </div>
+          </div>
+
+          <!-- Plan Section -->
+          <div class="mb-3">
+            <div class="flex items-center mb-2">
+              <i class="pi pi-file text-green-400 mr-2 text-sm"></i>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Plan</span>
+            </div>
+            <div class="bg-green-900 text-green-100 px-2 py-1 rounded text-xs flex justify-between items-center">
+              <span>{{ sub.plans[0]?.plan || 'PMS Basic Plan' }}</span>
+              <span class="text-green-200">{{ sub.plans[0]?.cost || 1 }} {{ sub.plans[0]?.currency || 'KES' }}</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Quantity: {{ sub.plans[0]?.qty || 1 }}</div>
+          </div>
+
+          <!-- Billing Period -->
+          <div class="mb-3">
+            <div class="flex items-center mb-2">
+              <i class="pi pi-calendar text-purple-400 mr-2 text-sm"></i>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Billing Period</span>
+            </div>
+            <div class="text-xs text-gray-700 dark:text-gray-300">
+              {{ sub.current_invoice_start | date:'MMM d, yyyy' }} - {{ sub.current_invoice_end | date:'MMM d, yyyy' }}
+            </div>
+          </div>
+
+          <!-- Latest Invoice -->
+          <div class="mb-4">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">Latest Invoice</div>
+            <div class="text-xs text-gray-700 dark:text-gray-300 mb-1">{{ sub.latest_invoice?.name || 'N/A' }}</div>
+            <div class="text-xs text-gray-700 dark:text-gray-300 mb-2">{{ (sub.latest_invoice?.posting_date | date:'MMM d, yyyy') || 'N/A' }}</div>
+            <div class="text-xs text-gray-700 dark:text-gray-300 mb-2">{{ sub.latest_invoice?.grand_total || 0 | number:'1.2-2' }} {{ sub.latest_invoice?.currency || 'KES' }}</div>
+            <span class="inline-block px-2 py-1 rounded text-xs font-semibold"
+                  [ngClass]="{
+                    'bg-blue-100 text-blue-800': sub.latest_invoice?.status === 'Paid',
+                    'bg-green-100 text-green-800': sub.latest_invoice?.status === 'Unpaid'
+                  }">
+              {{ sub.latest_invoice?.status || 'Unpaid' }}
+            </span>
+          </div>
+
+          <!-- Complete Payment Button -->
+          <button
+            (click)="processPayment(sub)"
+            [disabled]="paymentLoading()[sub.name]"
+            class="payment-button w-full text-white py-2 px-3 rounded text-sm font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <p-progress-spinner
+              *ngIf="paymentLoading()[sub.name]"
+              strokeWidth="8"
+              fill="transparent"
+              animationDuration=".5s"
+              [style]="{ width: '16px', height: '16px' }"
+            />
+            <i *ngIf="!paymentLoading()[sub.name]" class="pi pi-credit-card mr-2"></i>
+            <span *ngIf="!paymentLoading()[sub.name]">Complete Payment</span>
+            <span *ngIf="paymentLoading()[sub.name]">Processing...</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- No unpaid subscriptions message -->
+      <div *ngIf="getUnpaidSubscriptions().length === 0" class="text-center py-12">
+        <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-check-circle text-2xl text-green-500"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+          All Payments Up to Date
+        </h3>
+        <p class="text-gray-500 dark:text-gray-400">
+          No pending payments at this time.
+        </p>
+      </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="mt-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-center sm:text-left">
+          <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ totalRecords() }}</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Total Subscriptions</div>
+        </div>
+        <div class="flex items-center space-x-6 text-center">
+          <div>
+            <div class="text-lg font-semibold text-green-600 dark:text-green-400">{{ getPaidSubscriptions().length }}</div>
+            <div class="text-xs text-gray-600 dark:text-gray-400">Active Services</div>
+          </div>
+          <div>
+            <div class="text-lg font-semibold text-red-600 dark:text-red-400">{{ getUnpaidSubscriptions().length }}</div>
+            <div class="text-xs text-gray-600 dark:text-gray-400">Pending Payments</div>
           </div>
         </div>
       </div>
@@ -529,7 +549,7 @@
               <div class="flex justify-between items-start mb-10 pb-5 border-b-2 border-blue-500">
                 <div>
                   <div class="text-4xl font-bold text-gray-900 mb-2">Subscription Report</div>
-                  <div class="text-lg text-gray-600">Techsavanna ERPs Billing Platform</div>
+                  <div class="text-lg text-gray-600">Savanna ERP Billing Platform</div>
                 </div>
                 <div class="text-right">
                   <img src="/images/tech-savanna-logo.svg" alt="Techsavanna Logo" class="w-16 h-16 mb-3" />
@@ -545,33 +565,33 @@
 
               <!-- Subscription Information -->
               <div class="space-y-2 mb-8">
-                <div class="flex justify-between py-2 border-b border-gray-200">
-                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Subscriber</span>
+                <div class="py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Subscriber</span>
                   <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.party || 'N/A' }}</span>
                 </div>
-                <div class="flex justify-between py-2 border-b border-gray-200">
-                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Subscription ID</span>
+                <div class="py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Subscription ID</span>
                   <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.name }}</span>
                 </div>
-                <div class="flex justify-between py-2 border-b border-gray-200">
-                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Status</span>
-                  <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase
+                <div class="py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Status</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase inline-block
                     {{ selectedSubscription.status === 'Past Due Date' ? 'bg-red-100 text-red-700' : 
                        selectedSubscription.status === 'Active' ? 'bg-green-100 text-green-700' : 
                        'bg-yellow-100 text-yellow-700' }}">
                     {{ selectedSubscription.status || 'N/A' }}
                   </span>
                 </div>
-                <div class="flex justify-between py-2 border-b border-gray-200">
-                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Invoice Period</span>
+                <div class="py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Invoice Period</span>
                   <span class="text-sm font-medium text-gray-900">{{ formatDate(selectedSubscription.current_invoice_start) }} - {{ formatDate(selectedSubscription.current_invoice_end) }}</span>
                 </div>
-                <div class="flex justify-between py-2 border-b border-gray-200">
-                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Created</span>
+                <div class="py-2 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Created</span>
                   <span class="text-sm font-medium text-gray-900">{{ formatDate(selectedSubscription.creation) }}</span>
                 </div>
-                <div class="flex justify-between py-2">
-                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Report Generated</span>
+                <div class="py-2">
+                  <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Report Generated</span>
                   <span class="text-sm font-medium text-gray-900">{{ getCurrentDate() }}</span>
                 </div>
               </div>
@@ -610,29 +630,29 @@
               <!-- Invoice Information -->
               @if (selectedSubscription.latest_invoice) {
                 <div class="space-y-2 mb-8">
-                  <div class="flex justify-between py-2 border-b border-gray-200">
-                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Invoice Number</span>
+                  <div class="py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Invoice Number</span>
                     <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.latest_invoice.name }}</span>
                   </div>
-                  <div class="flex justify-between py-2 border-b border-gray-200">
-                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Amount</span>
+                  <div class="py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Total Amount</span>
                     <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.latest_invoice.grand_total | number:'1.2-2' }} {{ selectedSubscription.latest_invoice.currency }}</span>
                   </div>
-                  <div class="flex justify-between py-2 border-b border-gray-200">
-                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Invoice Status</span>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase
+                  <div class="py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Invoice Status</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase inline-block
                       {{ selectedSubscription.latest_invoice.status === 'Paid' ? 'bg-green-100 text-green-700' : 
                          selectedSubscription.latest_invoice.status === 'Unpaid' ? 'bg-yellow-100 text-yellow-700' : 
                          'bg-red-100 text-red-700' }}">
                       {{ selectedSubscription.latest_invoice.status }}
                     </span>
                   </div>
-                  <div class="flex justify-between py-2 border-b border-gray-200">
-                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Posting Date</span>
+                  <div class="py-2 border-b border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Posting Date</span>
                     <span class="text-sm font-medium text-gray-900">{{ formatDate(selectedSubscription.latest_invoice.posting_date) }}</span>
                   </div>
-                  <div class="flex justify-between py-2">
-                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Prorate Factor</span>
+                  <div class="py-2">
+                    <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide block mb-1">Prorate Factor</span>
                     <span class="text-sm font-medium text-gray-900">{{ selectedSubscription.latest_invoice.prorate_factor }}</span>
                   </div>
                 </div>
@@ -640,7 +660,7 @@
 
               <!-- Footer -->
               <div class="bg-gray-800 text-white p-6 text-center mt-8">
-                <div class="text-lg font-bold text-blue-400 mb-2">Techsavanna ERPs Billing Platform</div>
+                <div class="text-lg font-bold text-blue-400 mb-2">Savanna ERP Billing Platform</div>
                 <div class="my-2">
                   <img src="/images/tech-savanna-logo.svg" alt="Techsavanna Logo" class="w-10 h-10 mx-auto mb-1" />
                 </div>
@@ -654,5 +674,52 @@
       </div>
     </div>
     }
+  </p-dialog>
+
+  <!-- Payment Iframe Dialog -->
+  <p-dialog
+    [(visible)]="iframeDialog"
+    [style]="{ width: '800px', height: '700px' }"
+    header="Complete Payment"
+    [modal]="true"
+  >
+    <div *ngIf="paymentIframeUrl()" class="w-full h-full">
+      <iframe
+        [src]="paymentIframeUrl()"
+        width="100%"
+        height="650px"
+        frameborder="0"
+        sandbox="allow-scripts allow-same-origin allow-forms"
+      ></iframe>
+    </div>
+    <div class="flex justify-end mt-4">
+      <button
+        (click)="hideIframeDialog()"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+      >
+        Close
+      </button>
+    </div>
+  </p-dialog>
+
+  <!-- Error Dialog -->
+  <p-dialog
+    [(visible)]="errorDialog"
+    [style]="{ width: '400px' }"
+    header="Payment Error"
+    [modal]="true"
+  >
+    <div class="text-center py-4">
+      <div class="text-red-500 mb-4">
+        <i class="pi pi-exclamation-triangle text-4xl"></i>
+      </div>
+      <p class="text-gray-700 dark:text-gray-300 mb-4">{{ errorMessage() }}</p>
+      <button
+        (click)="hideErrorDialog()"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+      >
+        OK
+      </button>
+    </div>
   </p-dialog>
 

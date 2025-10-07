@@ -1,21 +1,23 @@
-import {Routes} from '@angular/router';
-import {Customer} from './customer';
-import {Profile} from './pages/profile/profile';
-import {Dashboard} from './pages/dashboard/dashboard';
-import {Invoices} from './pages/invoices/invoices';
-import {BillingHistory} from './pages/billing-history/billing-history';
-import {SubscriptionsComponent} from '../subscriptions/subscriptions';
-import {Subscribe} from './pages/subscribe/subscribe';
-import {SolutionDetail} from './pages/subscribe/components/solution-detail/solution-detail';
-import {Cart} from './pages/cart/cart';
-import {Checkout} from './pages/checkout/checkout';
-import {Tickets} from './pages/tickets/tickets';
-import {TicketDetail} from './pages/tickets/components/ticket-detail/ticket-detail';
-import {ThankYou} from './pages/thank-you/thank-you';
+import { Routes } from '@angular/router';
+import { Customer } from './customer';
+import { Profile } from './pages/profile/profile';
+import { Dashboard } from './pages/dashboard/dashboard';
+import { Invoices } from './pages/invoices/invoices';
+import { BillingHistory } from './pages/billing-history/billing-history';
+import { SubscriptionsComponent } from '../subscriptions/subscriptions';
+import { Subscribe } from './pages/subscribe/subscribe';
+import { SolutionDetail } from './pages/subscribe/components/solution-detail/solution-detail';
+import { Cart } from './pages/cart/cart';
+import { Checkout } from './pages/checkout/checkout';
+import { Tickets } from './pages/tickets/tickets';
+import { TicketDetail } from './pages/tickets/components/ticket-detail/ticket-detail';
+import { ThankYou } from './pages/thank-you/thank-you';
+import { CustomerFaqComponent } from './pages/faq/faq.component';
 
 export const customerRoutes: Routes = [
 
-  {path: "", component: Customer,
+  {
+    path: "", component: Customer,
 
     children: [
       {
@@ -60,7 +62,7 @@ export const customerRoutes: Routes = [
       },
 
       {
-        path : "tickets/:id",
+        path: "tickets/:id",
         component: TicketDetail
       },
 
@@ -72,9 +74,14 @@ export const customerRoutes: Routes = [
       {
         path: "thank-you",
         component: ThankYou
+      },
+
+      {
+        path: "faq",
+        component: CustomerFaqComponent
       }
 
-      ]
+    ]
   }
 
 ]

@@ -1,7 +1,6 @@
 import { Component, inject, computed, OnInit } from '@angular/core';
 import { InvoicesService } from '../invoices/services/invoices';
 import { ProgressSpinner } from 'primeng/progressspinner';
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import { SubscriptionService } from '../../../subscriptions/subscription.service';
 import { RouterLink } from '@angular/router';
 
@@ -9,8 +8,6 @@ import { RouterLink } from '@angular/router';
   selector: 'app-dashboard',
   imports: [
     ProgressSpinner,
-    CurrencyPipe,
-    DatePipe,
     RouterLink
   ],
   templateUrl: './dashboard.html',
@@ -45,11 +42,28 @@ export class Dashboard implements OnInit {
   invoicesData = computed(() => this.invoices()?.data || []);
   ledgerData = computed(() => this.ledger()?.data || []);
 
+  // Filtered subscription data based on invoice payment status
+  activeSubscriptions = computed(() => this.subscriptionsData().filter(sub => sub.latest_invoice?.status === 'Paid'));
+  inactiveSubscriptions = computed(() => this.subscriptionsData().filter(sub => sub.latest_invoice?.status === 'Unpaid'));
+  activeSubscriptionsCount = computed(() => this.activeSubscriptions().length);
+  inactiveSubscriptionsCount = computed(() => this.inactiveSubscriptions().length);
+
   getTotalOutstanding(): number {
     const invoicesData = this.invoices()?.data;
     if (!invoicesData || !Array.isArray(invoicesData)) return 0;
     return invoicesData.reduce((total, invoice) => {
       return total + (invoice.outstanding_amount || 0);
     }, 0);
+  }
+
+  copyToClipboard(text: string): void {
+    if (text) {
+      navigator.clipboard.writeText(text).then(() => {
+        // You could add a toast notification here
+        console.log('Copied to clipboard:', text);
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+    }
   }
 }

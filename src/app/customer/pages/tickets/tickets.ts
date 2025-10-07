@@ -1,22 +1,21 @@
-import {Component, computed, inject, signal} from '@angular/core';
-import {TicketService} from './services/ticket-service';
-import {Paginator, PaginatorState} from 'primeng/paginator';
-import {EmptyStateComponent} from '../../../shared/components/empty-state/empty-state.component';
-import {ProgressSpinner} from 'primeng/progressspinner';
-import {RouterLink} from '@angular/router';
-import {ButtonDirective} from 'primeng/button';
-import {FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
-import {Dialog} from 'primeng/dialog';
-import {FileUpload} from 'primeng/fileupload';
-import {ReactiveInputComponent} from '../../../shared/components/form/reactive-input/reactive-input.component';
+import { Component, computed, inject, signal } from '@angular/core';
+import { TicketService } from './services/ticket-service';
+import { Paginator, PaginatorState } from 'primeng/paginator';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { RouterLink } from '@angular/router';
+import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { Dialog } from 'primeng/dialog';
+import { FileUpload } from 'primeng/fileupload';
+import { ReactiveInputComponent } from '../../../shared/components/form/reactive-input/reactive-input.component';
 import {
   ReactiveTextAreaComponent
 } from '../../../shared/components/form/reactive-text-area/reactive-text-area.component';
-import {ReactiveSelectComponent} from '../../../shared/components/form/reactive-select/reactive-select.component';
-import {MessageService} from 'primeng/api';
-import {Functions} from '../../../shared/functions/functions';
-import {DatePipe} from '@angular/common';
-import {Calendar} from 'primeng/calendar';
+import { ReactiveSelectComponent } from '../../../shared/components/form/reactive-select/reactive-select.component';
+import { MessageService } from 'primeng/api';
+import { Functions } from '../../../shared/functions/functions';
+import { DatePipe } from '@angular/common';
+import { Calendar } from 'primeng/calendar';
 
 @Component({
   selector: 'app-tickets',
@@ -25,7 +24,6 @@ import {Calendar} from 'primeng/calendar';
     Paginator,
     ProgressSpinner,
     RouterLink,
-    ButtonDirective,
     Dialog,
     FileUpload,
     FormsModule,
@@ -61,16 +59,16 @@ export class Tickets {
   selectedFiles: File[] = [];
 
   priorities = [
-    { name: 'Low'},
-    { name: 'Medium'},
-    { name: 'High'},
-    { name: 'Urgent'}
+    { name: 'Low' },
+    { name: 'Medium' },
+    { name: 'High' },
+    { name: 'Urgent' }
   ];
 
   ticket_form = new FormGroup({
     ticket_type: new FormControl('', [Validators.required]),
     priority: new FormControl('', [Validators.required]),
-    subject : new FormControl('', [Validators.required]),
+    subject: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
   })
 

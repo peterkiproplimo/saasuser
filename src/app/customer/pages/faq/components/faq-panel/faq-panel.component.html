@@ -1,0 +1,15 @@
+<div class="my-2">
+  <p-accordion-panel [value]="faq()?.name">
+    <p-accordion-header class="customer-faq-header">
+      <div class="flex items-center justify-between w-full">
+        <span class="font-medium text-gray-900">{{ faq()?.title }}</span>
+        <i class="pi pi-chevron-down text-gray-500"></i>
+      </div>
+    </p-accordion-header>
+    <p-accordion-content class="customer-faq-content">
+      <div class="p-4 text-gray-700 leading-relaxed">
+        {{ faq()?.content }}
+      </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+</div>

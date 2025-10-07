@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import {SolutionList} from './components/solution-list/solution-list';
+import { StepperFormComponent } from './components/stepper-form/stepper-form';
 
 @Component({
   selector: 'app-subscribe',
   imports: [
-    SolutionList
+    StepperFormComponent
   ],
   templateUrl: './subscribe.html',
   styleUrl: './subscribe.scss'

@@ -1,11 +1,80 @@
-// Modern table styling
-:host ::ng-deep {
-  .p-datatable {
-    .p-datatable-tbody > tr {
-      @apply transition-all duration-200;
+// Card-based layout styling
+:host {
+  .subscription-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
+      border-color: #d1d5db;
+    }
+  }
+
+  // Dark mode specific styling
+  .dark & {
+    .subscription-card {
+      border: 1px solid #374151;
       
       &:hover {
-        @apply transform scale-[1.01] shadow-lg;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        border-color: #4b5563;
+      }
+    }
+  }
+
+  .status-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    z-index: 10;
+  }
+
+  .domain-section {
+    .domain-box {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+      border: 1px solid #3b82f6;
+    }
+  }
+
+  .plan-section {
+    .plan-box {
+      background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+      border: 1px solid #10b981;
+    }
+  }
+
+  .payment-button {
+    background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+    border: none;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    }
+  }
+
+  .details-button {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+  }
+
+  .action-buttons {
+    .btn {
+      transition: all 0.2s ease;
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
     }
   }
@@ -14,10 +83,15 @@
 // Responsive dialog styling
 :host ::ng-deep .responsive-dialog {
   .p-dialog {
-    @apply max-h-[90vh] overflow-y-auto;
+    max-height: 90vh;
+    overflow-y: auto;
     
     .p-dialog-content {
-      @apply p-4 sm:p-6;
+      padding: 1rem;
+      
+      @media (min-width: 640px) {
+        padding: 1.5rem;
+      }
     }
   }
 }
@@ -25,14 +99,16 @@
 // Details dialog styling
 :host ::ng-deep .details-dialog {
   .p-dialog {
-    @apply max-h-[90vh] overflow-hidden;
+    max-height: 90vh;
+    overflow: hidden;
     
     .p-dialog-content {
-      @apply p-0 h-full;
+      padding: 0;
+      height: 100%;
     }
     
     .p-dialog-header {
-      @apply hidden;
+      display: none;
     }
   }
 }
@@ -67,7 +143,7 @@
 @media (max-width: 640px) {
   :host ::ng-deep .p-datatable {
     .p-datatable-tbody > tr > td {
-      @apply px-2 py-2;
+      padding: 0.5rem;
     }
   }
 }
@@ -79,14 +155,27 @@
   }
   
   &::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800;
+    background-color: #f3f4f6;
+    
+    .dark & {
+      background-color: #1f2937;
+    }
   }
   
   &::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+    background-color: #d1d5db;
+    border-radius: 9999px;
+    
+    .dark & {
+      background-color: #4b5563;
+    }
   }
   
   &::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-gray-500;
+    background-color: #9ca3af;
+    
+    .dark & {
+      background-color: #6b7280;
+    }
   }
 }

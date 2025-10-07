@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
-import { SideBarItem } from './components/side-bar-item/side-bar-item';
+import { Menu } from 'primeng/menu';
 import { RouterOutlet } from '@angular/router';
-import { CustomerNavbar } from './components/customer-navbar/customer-navbar';
 import { User } from '../auth/models/responses/login-response';
 import { AuthService } from '../auth/services/auth.service';
 import { Router } from '@angular/router';
@@ -15,9 +14,8 @@ import { SubscriptionService } from '../subscriptions/subscription.service';
   imports: [
     Button,
     Drawer,
-    SideBarItem,
+    Menu,
     RouterOutlet,
-    CustomerNavbar,
   ],
   templateUrl: './customer.html',
   styleUrl: './customer.scss',
@@ -26,6 +24,7 @@ export class Customer {
   isMenuOpen = false;
   drawerVisible = false;
   sidebarCollapsed = false;
+  isDarkMode = signal(false);
   private auth_service = inject(AuthService);
   private invoices_service = inject(InvoicesService);
   private subscription_service = inject(SubscriptionService);
@@ -91,6 +90,11 @@ export class Customer {
     this.close_drawer();
   }
 
+  navigateToFAQs() {
+    this.router.navigate(['/customer/faq']);
+    this.close_drawer();
+  }
+
   navigateToTickets() {
     this.router.navigate(['/customer/tickets']);
     this.close_drawer();
@@ -103,5 +107,19 @@ export class Customer {
 
   toggleSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode.set(!this.isDarkMode());
+    // Toggle dark mode on document
+    if (this.isDarkMode()) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
+
+  logout() {
+    this.auth_service.sign_out();
   }
 }

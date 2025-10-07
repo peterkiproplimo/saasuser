@@ -1,0 +1,64 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+  <p-toolbar styleClass="mb-4">
+    <ng-template #start>
+      <div class="flex gap-6 items-center w-full justify-between">
+        <h5 class="m-0 text-gray-900">Frequently Asked Questions</h5>
+      </div>
+    </ng-template>
+
+    <ng-template #end>
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search text-gray-500" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Search FAQs"
+          [(ngModel)]="search"
+          class="p-2 w-full rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+        />
+      </p-iconfield>
+    </ng-template>
+  </p-toolbar>
+
+  <!-- Loading State -->
+  @if (is_loading()) {
+    <div class="text-center py-8">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  } @else {
+    @if (new_faqs().data?.length! > 0) {
+      <div class="faq-container space-y-4">
+        @for (faq of new_faqs().data; track faq.name) {
+          <p-accordion [multiple]="true" styleClass="customer-faq-accordion">
+            <app-customer-faq-panel [faq]="faq" />
+          </p-accordion>
+        }
+      </div>
+    } @else {
+      <app-empty-state>
+        <h3 class="text-lg font-medium text-gray-700" slot="title">
+          No FAQs Found
+        </h3>
+        <p class="text-gray-500 mt-2" slot="message">
+          Try adjusting your search term or check back later for more FAQs.
+        </p>
+      </app-empty-state>
+    }
+  }
+
+  <div class="flex justify-center w-full mt-6">
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [first]="first()"
+      [rows]="pageSize()"
+      [totalRecords]="totalRecords()"
+      dropdownAppendTo="body"
+      [showCurrentPageReport]="true"
+      [showPageLinks]="false"
+      [showJumpToPageDropdown]="false"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+      styleClass="border-0"
+    />
+  </div>
+</div>

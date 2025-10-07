@@ -11,6 +11,7 @@ export interface LatestInvoice {
   prorate_factor: number;
   status: string;
   currency: string;
+  posting_date: string;
 }
 
 export interface Subscription {
@@ -22,6 +23,8 @@ export interface Subscription {
   current_invoice_end: string;
   plans: Plan[];
   latest_invoice: LatestInvoice;
+  creation: string;
+  custom_subdomain: string;
 }
 
 export interface Pagination {

@@ -28,7 +28,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   imports: [
     Paginator,
     ProgressSpinner,
-    Button,
     EmptyStateComponent,
     DatePipe,
     DecimalPipe,
@@ -272,7 +271,7 @@ export class Invoices implements OnInit {
           <div class="header">
             <div>
               <div class="title">INVOICE</div>
-              <div class="subtitle">Techsavanna ERPs Billing Platform</div>
+              <div class="subtitle">Savanna ERP Billing Platform</div>
             </div>
             <div class="company">
               <div class="company-logo">TS</div>
@@ -372,7 +371,7 @@ export class Invoices implements OnInit {
 
           <!-- Footer -->
           <div class="footer">
-            <div class="footer-title">Techsavanna ERPs Billing Platform</div>
+            <div class="footer-title">Savanna ERP Billing Platform</div>
             <div class="footer-logo">TS</div>
             <div class="footer-text">Your trusted partner in enterprise resource planning and billing solutions</div>
             <div class="footer-text">Support: support&#64;Techsavanna.com | Website: www.Techsavanna.com</div>

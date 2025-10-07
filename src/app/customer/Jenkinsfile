@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs "NodeJS_18"
+    }
+
+    environment {
+        DEPLOY_DIR = "/var/www/html/saas-product"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'samsaf', url: 'https://bitbucket.org/unison-crm/saas-user.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Build Angular Project') {
+            steps {
+                sh 'npm run build --configuration production'
+            }
+        }
+
+        stage('Deploy to Server') {
+            steps {
+                echo "Deploying build to ${DEPLOY_DIR}"
+                sh '''
+                    sudo rm -rf ${DEPLOY_DIR}/*
+                    sudo cp -r dist/saas-user/* ${DEPLOY_DIR}/
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Deployment completed successfully!"
+        }
+        failure {
+            echo "❌ Deployment failed!"
+        }
+    }
+}

@@ -4,10 +4,14 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
+  signal,
+  DestroyRef,
 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { FormsModule } from '@angular/forms';
 import {
@@ -22,9 +26,13 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
 
 import { SubscriptionService } from './subscription.service';
+import { InvoicesService } from '../customer/pages/invoices/services/invoices';
+import { PaymentRequest } from '../customer/pages/invoices/models/requests/payment_request';
+import { PaymentResponse } from '../customer/pages/invoices/models/responses/payment_response';
 
 @Component({
   selector: 'app-subscriptions',
@@ -43,12 +51,16 @@ import { SubscriptionService } from './subscription.service';
     InputTextModule,
     ButtonModule,
     BadgeModule,
+    ProgressSpinnerModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubscriptionsComponent implements OnInit, OnDestroy {
   subscription_service = inject(SubscriptionService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+  private sanitizer = inject(DomSanitizer);
+  private invoicesService = inject(InvoicesService);
 
   // Make Math available in template
   Math = Math;
@@ -68,6 +80,14 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
   loading = false;
   error: string | null = null;
 
+  // Payment states
+  paymentLoading = signal<{ [key: string]: boolean }>({});
+  iframeDialog = signal(false);
+  errorDialog = signal(false);
+  errorMessage = signal('');
+  paymentIframeUrl = signal<SafeResourceUrl | null>(null);
+  currentPaymentSubscription: any = null;
+
   form = {
     party: '',
     plan: '',
@@ -76,11 +96,6 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
   private routerSub: Subscription | undefined;
   private searchSubject = new Subject<string>();
-
-  // Pagination state
-  page = 0;
-  pageSize = 10;
-  total = 0;
 
   ngOnInit(): void {
     this.fetchSubscriptions();
@@ -92,7 +107,6 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
         distinctUntilChanged()
       )
       .subscribe(() => {
-        this.page = 0; // Reset to first page whenever searching
         this.fetchSubscriptions();
       });
 
@@ -109,8 +123,9 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
   }
 
   fetchSubscriptions(): void {
-    this.subscription_service.page.set(this.page + 1); // API expects 1-based index
-    this.subscription_service.pageSize.set(this.pageSize);
+    // Set a very large page size to fetch all subscriptions at once
+    this.subscription_service.page.set(1);
+    this.subscription_service.pageSize.set(1000); // Large number to get all records
     this.subscription_service.searchTerm.set(this.search_text);
 
     this.subscription_service.refreshSubscriptions(); // Use the new refresh method
@@ -119,68 +134,10 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
     this.searchSubject.next(this.search_text);
   }
 
-  onPageChange(event: any): void {
-    this.page = Math.floor(event.first / event.rows);
-    this.pageSize = event.rows;
-    this.fetchSubscriptions();
-  }
-
   totalRecords(): number {
-    // Use pagination.total_records from the API response
+    // Return the actual count of subscriptions from the data
     const data = this.subscription_service.subscription_resource.value();
-    return data?.pagination?.total_records || 0;
-  }
-
-  // Pagination methods
-  onPageSizeChange(): void {
-    this.page = 0; // Reset to first page when changing page size
-    this.fetchSubscriptions();
-  }
-
-  goToFirstPage(): void {
-    this.page = 0;
-    this.fetchSubscriptions();
-  }
-
-  goToPreviousPage(): void {
-    if (this.page > 0) {
-      this.page--;
-      this.fetchSubscriptions();
-    }
-  }
-
-  goToNextPage(): void {
-    const totalPages = Math.ceil(this.totalRecords() / this.pageSize);
-    if (this.page < totalPages - 1) {
-      this.page++;
-      this.fetchSubscriptions();
-    }
-  }
-
-  goToLastPage(): void {
-    const totalPages = Math.ceil(this.totalRecords() / this.pageSize);
-    this.page = totalPages - 1;
-    this.fetchSubscriptions();
-  }
-
-  goToPage(pageNumber: number): void {
-    this.page = pageNumber;
-    this.fetchSubscriptions();
-  }
-
-  getVisiblePages(): number[] {
-    const totalPages = Math.ceil(this.totalRecords() / this.pageSize);
-    const currentPage = this.page + 1;
-    const maxVisible = 5;
-
-    if (totalPages <= maxVisible) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    const start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    const end = Math.min(totalPages, start + maxVisible - 1);
-
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    return data?.data?.length || 0;
   }
 
   createSubscription(): void {
@@ -197,6 +154,107 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
   closeDetailsDialog(): void {
     this.showDetailsDialog = false;
     this.selectedSubscription = null;
+  }
+
+  // Payment processing method
+  processPayment(subscription: any): void {
+    const subscriptionId = subscription.name;
+
+    // Set loading state for this specific subscription
+    this.paymentLoading.update(loading => ({
+      ...loading,
+      [subscriptionId]: true
+    }));
+
+    // Store current payment subscription
+    this.currentPaymentSubscription = subscription;
+
+    // Extract email from party field (format: "Name - email@domain.com")
+    const partyEmail = subscription?.party?.split(' - ')[1] || 'customer@techsavanna.technology';
+
+    const paymentRequest: PaymentRequest = {
+      invoice_name: subscription?.latest_invoice?.name || subscription?.name,
+      payment_amount: subscription?.latest_invoice?.grand_total || 0,
+      payment_mode: 'PesaPal',
+      customer_email: partyEmail,
+      customer_phone: '', // Empty phone as requested
+      domain: subscription?.custom_subdomain || ''
+    };
+
+    console.log('📤 Sending payment request for subscription:', subscriptionId);
+    console.log('📤 Payment request:', paymentRequest);
+
+    this.invoicesService
+      .pay_invoice(paymentRequest)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          console.log('✅ Payment processed for subscription:', subscriptionId, res);
+
+          // Handle payment success - redirect to iframe
+          if (res.data?.payment_url) {
+            console.log('🔗 Payment URL found:', res.data.payment_url);
+            this.paymentIframeUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(res.data.payment_url));
+            this.iframeDialog.set(true);
+          } else {
+            console.log('⚠️ No payment URL found in response:', res);
+            this.errorMessage.set(res?.message || 'Payment request failed');
+            this.errorDialog.set(true);
+          }
+        },
+        error: (err) => {
+          console.error('❌ Payment error for subscription:', subscriptionId, err);
+          this.errorMessage.set(
+            err?.error?.message || err?.message || 'Payment request failed'
+          );
+          this.errorDialog.set(true);
+        },
+        complete: () => {
+          // Clear loading state for this specific subscription
+          this.paymentLoading.update(loading => ({
+            ...loading,
+            [subscriptionId]: false
+          }));
+        },
+      });
+  }
+
+  hideErrorDialog(): void {
+    this.errorDialog.set(false);
+  }
+
+  hideIframeDialog(): void {
+    this.iframeDialog.set(false);
+    // Clear current payment subscription
+    this.currentPaymentSubscription = null;
+    // Refresh subscriptions after successful payment
+    this.subscription_service.refreshSubscriptions();
+  }
+
+  // Get paid subscriptions (those with 'Paid' status) - SHOW FIRST
+  getPaidSubscriptions(): any[] {
+    const subscriptions = this.list()?.data || [];
+    return subscriptions.filter(sub => {
+      return sub.latest_invoice && sub.latest_invoice.status === 'Paid';
+    });
+  }
+
+  // Get unpaid subscriptions (those requiring payment) - SHOW SECOND
+  getUnpaidSubscriptions(): any[] {
+    const subscriptions = this.list()?.data || [];
+    return subscriptions.filter(sub => {
+      // Consider unpaid if:
+      // 1. Latest invoice status is 'Unpaid' or 'Partly Paid'
+      // 2. No latest invoice exists
+      // 3. Latest invoice status is NOT 'Paid'
+      const hasUnpaidInvoice = !sub.latest_invoice ||
+        sub.latest_invoice.status === 'Unpaid' ||
+        sub.latest_invoice.status === 'Partly Paid';
+
+      const isNotPaid = !sub.latest_invoice || sub.latest_invoice.status !== 'Paid';
+
+      return hasUnpaidInvoice && isNotPaid;
+    });
   }
 
 
@@ -466,7 +524,7 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
           <div class="header">
             <div>
               <div class="title">Subscription Report</div>
-              <div class="subtitle">Techsavanna ERPs Billing Platform</div>
+              <div class="subtitle">Savanna ERP Billing Platform</div>
             </div>
             <div class="company">
               <img src="/images/tech-savanna-logo.svg" alt="Techsavanna Logo" class="company-logo" />
@@ -558,7 +616,7 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
           <!-- Footer -->
           <div class="footer">
-            <div class="footer-title">Techsavanna ERPs Billing Platform</div>
+            <div class="footer-title">Savanna ERP Billing Platform</div>
             <div style="margin: 8px 0;">
               <div style="width: 40px; height: 40px; background: #3b82f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 4px auto; color: white; font-weight: bold; font-size: 16px;">
                 TS
@@ -775,4 +833,5 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
         return 'info';
     }
   }
+
 }

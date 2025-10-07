@@ -18,7 +18,7 @@ export class InvoicesService {
   constructor(private datePipe: DatePipe, private http: HttpClient) { }
 
   page = signal(1);
-  page_size = signal(5);
+  page_size = signal(15);
 
   start_date = signal<Date | null>(null);
   end_date = signal<Date | null>(null);
