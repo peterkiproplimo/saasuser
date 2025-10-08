@@ -50,7 +50,7 @@ pipeline {
                 echo "🔹 Deploying build to ${DEPLOY_DIR} ..."
                 sh '''
                     # Find the actual dist folder that contains index.html
-                    BUILD_DIR=$(find dist -type d -name "*" -exec test -f {}/index.html \; -print | head -n 1)
+                    BUILD_DIR=$(find dist -type d -name "*" -exec test -f "{}/index.html" ";" -print | head -n 1)
                     echo "Detected build directory: $BUILD_DIR"
 
                     if [ -z "$BUILD_DIR" ]; then
