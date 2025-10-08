@@ -1,57 +1,107 @@
 pipeline {
     agent any
+    options {
+        disableConcurrentBuilds()
+        skipDefaultCheckout()
+    }
 
     environment {
+        APP_ROOT = '/var/lib/jenkins/saas-user'
         DEPLOY_PATH = '/var/www/html/saas-product'
+        PATH = "/var/lib/jenkins/.nvm/versions/node/v20.18.0/bin:${env.PATH}"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Clean Workspace') {
             steps {
-                git branch: 'main', url: 'https://bitbucket.org/unison-crm/saas-user.git'
+                cleanWs()
+            }
+        }
+
+        stage('Checkout Source') {
+            steps {
+                script {
+                    echo "🔹 Checking out latest code from Bitbucket..."
+                    sh "rm -rf ${APP_ROOT} || true"
+                    sh "mkdir -p ${APP_ROOT}"
+                    dir("${APP_ROOT}") {
+                        git branch: 'main',
+                            credentialsId: 'Bitbucket',
+                            url: 'https://bitbucket.org/unison-crm/saas-user.git',
+                            changelog: false,
+                            poll: true
+                    }
+                }
+            }
+        }
+
+        stage('Setup Node.js') {
+            steps {
+                script {
+                    echo "🔹 Ensuring Node.js 20.x is installed..."
+                    sh '''
+                        if ! command -v node >/dev/null 2>&1; then
+                            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+                            sudo apt-get install -y nodejs
+                        fi
+                        node -v
+                        npm -v
+                    '''
+                }
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                echo "Installing dependencies..."
-                npm install --force
-                '''
+                script {
+                    echo "🔹 Cleaning and installing dependencies..."
+                    sh """
+                        cd ${APP_ROOT}
+                        rm -rf node_modules package-lock.json || true
+                        npm cache clean --force
+                        npm install --force --legacy-peer-deps --no-audit --no-fund
+                    """
+                }
             }
         }
 
-        stage('Build Frontend') {
+        stage('Build Angular App') {
             steps {
-                sh '''
-                echo "Building the project..."
-                npm run build --if-present || ng build --configuration production
-                '''
+                script {
+                    echo "🔹 Building Angular app for production..."
+                    sh """
+                        cd ${APP_ROOT}
+                        npm run build --if-present || ng build --configuration production
+                    """
+                }
             }
         }
 
         stage('Deploy to Server') {
             steps {
-                sh '''
-                echo "Deploying build to ${DEPLOY_PATH}..."
-                sudo rm -rf ${DEPLOY_PATH}/*
-                sudo mkdir -p ${DEPLOY_PATH}
+                script {
+                    echo "🔹 Deploying to ${DEPLOY_PATH}..."
+                    sh """
+                        sudo rm -rf ${DEPLOY_PATH}/*
+                        sudo mkdir -p ${DEPLOY_PATH}
 
-                # Copy the correct output (Angular 17+ uses dist/browser)
-                if [ -d "dist/browser" ]; then
-                    sudo cp -r dist/browser/* ${DEPLOY_PATH}/
-                elif [ -d "dist/saas-product/browser" ]; then
-                    sudo cp -r dist/saas-product/browser/* ${DEPLOY_PATH}/
-                elif [ -d "browser" ]; then
-                    sudo cp -r browser/* ${DEPLOY_PATH}/
-                else
-                    echo "❌ Build folder not found!"
-                    exit 1
-                fi
+                        if [ -d "${APP_ROOT}/dist/browser" ]; then
+                            sudo cp -r ${APP_ROOT}/dist/browser/* ${DEPLOY_PATH}/
+                        elif [ -d "${APP_ROOT}/dist/saas-user/browser" ]; then
+                            sudo cp -r ${APP_ROOT}/dist/saas-user/browser/* ${DEPLOY_PATH}/
+                        elif [ -d "${APP_ROOT}/browser" ]; then
+                            sudo cp -r ${APP_ROOT}/browser/* ${DEPLOY_PATH}/
+                        else
+                            echo "❌ No valid dist folder found!"
+                            exit 1
+                        fi
 
-                echo "✅ Deployment complete!"
-                ls -la ${DEPLOY_PATH}
-                '''
+                        sudo chown -R www-data:www-data ${DEPLOY_PATH}
+                        sudo chmod -R 755 ${DEPLOY_PATH}
+                        echo "✅ Deployment completed successfully!"
+                        ls -la ${DEPLOY_PATH}
+                    """
+                }
             }
         }
     }
@@ -61,7 +111,7 @@ pipeline {
             echo '✅ Build and deployment successful!'
         }
         failure {
-            echo '❌ Build or deployment failed!'
+            echo '❌ Build or deployment failed. Check Jenkins logs for details.'
         }
     }
 }
