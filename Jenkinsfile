@@ -1,29 +1,42 @@
 pipeline {
     agent any
+    options {
+        disableConcurrentBuilds()
+        skipDefaultCheckout()
+    }
 
     environment {
-        DEPLOY_SERVER = 'techsavanna@vmi2792067'
+        APP_ROOT = '/var/lib/jenkins/saas-user'
         DEPLOY_PATH = '/var/www/html/saas-product'
-        SSH_KEY_ID = 'bitbucket-ssh-key' // name of Jenkins SSH key credentials
+        PATH = "/usr/bin:/usr/local/bin:/var/lib/jenkins/.nvm/versions/node/v20.0.0/bin:${env.PATH}"
     }
 
     stages {
-        stage('Checkout Source') {
+        stage('Clean Workspace') {
             steps {
-                echo "🔹 Checking out source code from Bitbucket..."
-                checkout([$class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[
-                        url: 'https://bitbucket.org/unison-crm/saas-user.git',
-                        credentialsId: 'Bitbucket'
-                    ]]
-                ])
+                echo '🧹 Cleaning workspace...'
+                cleanWs()
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                echo '🔹 Checking out source code from Bitbucket...'
+                script {
+                    sh "rm -rf ${APP_ROOT}/saas-frontend || true"
+                    sh "mkdir -p ${APP_ROOT}/saas-frontend"
+                    dir("${APP_ROOT}/saas-frontend") {
+                        git branch: 'main', 
+                            credentialsId: 'Bitbucket',
+                            url: 'https://bitbucket.org/unison-crm/saas-user.git'
+                    }
+                }
             }
         }
 
         stage('Setup Node.js') {
             steps {
-                echo "🔹 Setting up Node.js 20..."
+                echo '🔹 Ensuring Node.js v20 is installed...'
                 sh '''
                     curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
                     sudo apt-get install -y nodejs
@@ -35,57 +48,47 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo "🔹 Installing dependencies (forced clean install)..."
-                sh '''
+                echo '📦 Installing dependencies (clean, forced)...'
+                sh """
+                    cd ${APP_ROOT}/saas-frontend
                     npm cache clean --force
                     rm -rf node_modules package-lock.json
                     npm install --force --legacy-peer-deps --no-audit --no-fund
-                '''
+                """
             }
         }
 
         stage('Build Angular App') {
             steps {
-                echo "🔹 Building Angular project for production..."
-                sh '''
+                echo '🏗️ Building Angular project...'
+                sh """
+                    cd ${APP_ROOT}/saas-frontend
                     npm run build -- --configuration production
-                '''
+                """
             }
         }
 
-        stage('Deploy to Server') {
+        stage('Deploy to Web Directory') {
             steps {
-                echo "🔹 Deploying build to remote server..."
-                script {
-                    // Find Angular dist folder dynamically
-                    def buildDir = sh(
-                        script: "find dist -type d -name '*' -exec test -f {}/index.html \\; -print | head -n 1",
-                        returnStdout: true
-                    ).trim()
-
-                    if (!buildDir) {
-                        error "❌ No Angular build output found in dist/!"
-                    }
-
-                    echo "✅ Build directory detected: ${buildDir}"
-
-                    // Deploy build to server
-                    sh """
-                        ssh -o StrictHostKeyChecking=no ${DEPLOY_SERVER} 'sudo rm -rf ${DEPLOY_PATH}/*'
-                        scp -r ${buildDir}/* ${DEPLOY_SERVER}:${DEPLOY_PATH}/
-                        ssh ${DEPLOY_SERVER} 'sudo chown -R www-data:www-data ${DEPLOY_PATH} && sudo chmod -R 755 ${DEPLOY_PATH}'
-                    """
-                }
+                echo '🚀 Deploying build to /var/www/html/saas-product ...'
+                sh """
+                    sudo rm -rf ${DEPLOY_PATH}/*
+                    BUILD_DIR=$(find ${APP_ROOT}/saas-frontend/dist -type d -name '*' -exec test -f {}/index.html \\; -print | head -n 1)
+                    echo "✅ Build directory detected: $BUILD_DIR"
+                    sudo cp -r $BUILD_DIR/* ${DEPLOY_PATH}/
+                    sudo chown -R www-data:www-data ${DEPLOY_PATH}
+                    sudo chmod -R 755 ${DEPLOY_PATH}
+                """
             }
         }
     }
 
     post {
         success {
-            echo "✅ Deployment successful! The app is now live on ${DEPLOY_SERVER}:${DEPLOY_PATH}"
+            echo '✅ Build and deployment completed successfully! Your app is now live.'
         }
         failure {
-            echo "❌ Build or deployment failed. Please check the Jenkins logs for details."
+            echo '❌ Build or deployment failed. Please check Jenkins logs for details.'
         }
     }
 }
