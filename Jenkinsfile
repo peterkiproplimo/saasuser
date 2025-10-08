@@ -26,7 +26,7 @@ pipeline {
                     sh "rm -rf ${APP_ROOT}/saas-frontend || true"
                     sh "mkdir -p ${APP_ROOT}/saas-frontend"
                     dir("${APP_ROOT}/saas-frontend") {
-                        git branch: 'main', 
+                        git branch: 'main',
                             credentialsId: 'Bitbucket',
                             url: 'https://bitbucket.org/unison-crm/saas-user.git'
                     }
@@ -49,36 +49,36 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installing dependencies (clean, forced)...'
-                sh """
-                    cd ${APP_ROOT}/saas-frontend
+                sh '''
+                    cd /var/lib/jenkins/saas-user/saas-frontend
                     npm cache clean --force
                     rm -rf node_modules package-lock.json
                     npm install --force --legacy-peer-deps --no-audit --no-fund
-                """
+                '''
             }
         }
 
         stage('Build Angular App') {
             steps {
                 echo '🏗️ Building Angular project...'
-                sh """
-                    cd ${APP_ROOT}/saas-frontend
+                sh '''
+                    cd /var/lib/jenkins/saas-user/saas-frontend
                     npm run build -- --configuration production
-                """
+                '''
             }
         }
 
         stage('Deploy to Web Directory') {
             steps {
                 echo '🚀 Deploying build to /var/www/html/saas-product ...'
-                sh """
-                    sudo rm -rf ${DEPLOY_PATH}/*
-                    BUILD_DIR=$(find ${APP_ROOT}/saas-frontend/dist -type d -name '*' -exec test -f {}/index.html \\; -print | head -n 1)
+                sh '''
+                    sudo rm -rf /var/www/html/saas-product/*
+                    BUILD_DIR=$(find /var/lib/jenkins/saas-user/saas-frontend/dist -type d -name '*' -exec test -f {}/index.html \\; -print | head -n 1)
                     echo "✅ Build directory detected: $BUILD_DIR"
-                    sudo cp -r $BUILD_DIR/* ${DEPLOY_PATH}/
-                    sudo chown -R www-data:www-data ${DEPLOY_PATH}
-                    sudo chmod -R 755 ${DEPLOY_PATH}
-                """
+                    sudo cp -r $BUILD_DIR/* /var/www/html/saas-product/
+                    sudo chown -R www-data:www-data /var/www/html/saas-product
+                    sudo chmod -R 755 /var/www/html/saas-product
+                '''
             }
         }
     }
