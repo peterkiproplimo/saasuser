@@ -2,78 +2,90 @@ pipeline {
     agent any
 
     environment {
-        NODE_VERSION = '20'
-        DEPLOY_DIR = '/var/www/html/saas-product'
+        DEPLOY_SERVER = 'techsavanna@vmi2792067'
+        DEPLOY_PATH = '/var/www/html/saas-product'
+        SSH_KEY_ID = 'bitbucket-ssh-key' // name of Jenkins SSH key credentials
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Source') {
             steps {
-                echo '🔹 Checking out code...'
-                checkout scm
+                echo "🔹 Checking out source code from Bitbucket..."
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://bitbucket.org/unison-crm/saas-user.git',
+                        credentialsId: 'Bitbucket'
+                    ]]
+                ])
             }
         }
 
         stage('Setup Node.js') {
             steps {
-                echo "🔹 Setting up Node.js ${NODE_VERSION}"
+                echo "🔹 Setting up Node.js 20..."
                 sh '''
-                    curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash - || true
-                    sudo apt-get install -y nodejs || true
-                    node -v || true
-                    npm -v || true
+                    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+                    sudo apt-get install -y nodejs
+                    node -v
+                    npm -v
                 '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo '🔹 Installing dependencies (force mode)...'
+                echo "🔹 Installing dependencies (forced clean install)..."
                 sh '''
-                    npm cache clean --force || true
-                    npm install --force --legacy-peer-deps --no-audit --no-fund || true
+                    npm cache clean --force
+                    rm -rf node_modules package-lock.json
+                    npm install --force --legacy-peer-deps --no-audit --no-fund
                 '''
             }
         }
 
         stage('Build Angular App') {
             steps {
-                echo '🔹 Building Angular project...'
+                echo "🔹 Building Angular project for production..."
                 sh '''
-                    npm run build --configuration production || true
+                    npm run build -- --configuration production
                 '''
             }
         }
 
         stage('Deploy to Server') {
             steps {
-                echo "🔹 Deploying build to ${DEPLOY_DIR} ..."
-                sh '''
-                    # Find the actual dist folder that contains index.html
-                    BUILD_DIR=$(find dist -type d -name "*" -exec test -f "{}/index.html" ";" -print | head -n 1)
-                    echo "Detected build directory: $BUILD_DIR"
+                echo "🔹 Deploying build to remote server..."
+                script {
+                    // Find Angular dist folder dynamically
+                    def buildDir = sh(
+                        script: "find dist -type d -name '*' -exec test -f {}/index.html \\; -print | head -n 1",
+                        returnStdout: true
+                    ).trim()
 
-                    if [ -z "$BUILD_DIR" ]; then
-                      echo "❌ No Angular build output found!"
-                      exit 1
-                    fi
+                    if (!buildDir) {
+                        error "❌ No Angular build output found in dist/!"
+                    }
 
-                    sudo rm -rf ${DEPLOY_DIR}/* || true
-                    sudo cp -r $BUILD_DIR/* ${DEPLOY_DIR}/ || true
-                    sudo chown -R www-data:www-data ${DEPLOY_DIR} || true
-                    sudo chmod -R 755 ${DEPLOY_DIR} || true
-                    echo "✅ Deployment completed to ${DEPLOY_DIR}"
-                '''
+                    echo "✅ Build directory detected: ${buildDir}"
+
+                    // Deploy build to server
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_SERVER} 'sudo rm -rf ${DEPLOY_PATH}/*'
+                        scp -r ${buildDir}/* ${DEPLOY_SERVER}:${DEPLOY_PATH}/
+                        ssh ${DEPLOY_SERVER} 'sudo chown -R www-data:www-data ${DEPLOY_PATH} && sudo chmod -R 755 ${DEPLOY_PATH}'
+                    """
+                }
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build and deployment completed successfully!'
+            echo "✅ Deployment successful! The app is now live on ${DEPLOY_SERVER}:${DEPLOY_PATH}"
         }
         failure {
-            echo '❌ Build or deployment failed. Check logs for details.'
+            echo "❌ Build or deployment failed. Please check the Jenkins logs for details."
         }
     }
 }
