@@ -110,6 +110,15 @@
 
           <!-- Navigation Menu -->
           <nav class="space-y-6">
+            <!-- Home Link -->
+            <div>
+              <button (click)="navigateToHome()"
+                class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white">
+                <i class="pi pi-home text-lg"></i>
+                <span>Home</span>
+              </button>
+            </div>
+
             <!-- Dashboard Link (Highlighted) -->
             <div>
               <button (click)="navigateToDashboard()" [class]="getButtonClasses(isDashboardActive())">
@@ -268,11 +277,11 @@
 
                         <!-- Menu Items -->
                         <div class="py-2">
-                          <a routerLink="/"
-                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                          <button (click)="navigateToHome()"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
                             <i class="pi pi-home text-white"></i>
                             <span class="font-medium">Home</span>
-                          </a>
+                          </button>
 
                           <a routerLink="/customer/profile"
                             class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">

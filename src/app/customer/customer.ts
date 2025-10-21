@@ -168,6 +168,11 @@ export class Customer implements OnInit, OnDestroy {
     this.close_drawer();
   }
 
+  navigateToHome() {
+    this.router.navigate(['/']);
+    this.close_drawer();
+  }
+
   toggleSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
