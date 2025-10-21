@@ -1,13 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
 import { Menu } from 'primeng/menu';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { User } from '../auth/models/responses/login-response';
 import { AuthService } from '../auth/services/auth.service';
-import { Router } from '@angular/router';
 import { InvoicesService } from './pages/invoices/services/invoices';
 import { SubscriptionService } from '../subscriptions/subscription.service';
+import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-customer',
@@ -20,7 +21,7 @@ import { SubscriptionService } from '../subscriptions/subscription.service';
   templateUrl: './customer.html',
   styleUrl: './customer.scss',
 })
-export class Customer {
+export class Customer implements OnInit, OnDestroy {
   isMenuOpen = false;
   drawerVisible = false;
   sidebarCollapsed = false;
@@ -32,7 +33,26 @@ export class Customer {
   storedUser: User = JSON.parse(localStorage.getItem('user')!);
   loggedIn = this.auth_service.loggedIn();
 
+  // Active state tracking
+  activeRoute = signal('/customer');
+  private routerSubscription: Subscription | undefined;
+
   constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    // Track route changes to update active state
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.activeRoute.set(event.url);
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
 
   toggleDrawer() {
     this.drawerVisible = !this.drawerVisible;
@@ -51,6 +71,49 @@ export class Customer {
       return 'Afternoon';
     } else {
       return 'Evening';
+    }
+  }
+
+  // Helper methods to check if a route is active
+  isDashboardActive(): boolean {
+    const currentRoute = this.activeRoute();
+    return currentRoute === '/customer' || currentRoute === '/customer/';
+  }
+
+  isSubscriptionsActive(): boolean {
+    return this.activeRoute().includes('/customer/subscriptions');
+  }
+
+  isInvoicesActive(): boolean {
+    return this.activeRoute().includes('/customer/invoices');
+  }
+
+  isBillingActive(): boolean {
+    return this.activeRoute().includes('/customer/billing');
+  }
+
+  isProfileActive(): boolean {
+    return this.activeRoute().includes('/customer/profile');
+  }
+
+  isTicketsActive(): boolean {
+    return this.activeRoute().includes('/customer/tickets');
+  }
+
+  isFAQsActive(): boolean {
+    return this.activeRoute().includes('/customer/faq');
+  }
+
+  isSubscribeActive(): boolean {
+    return this.activeRoute().includes('/customer/subscribe');
+  }
+
+  // Helper method to get button classes based on active state
+  getButtonClasses(isActive: boolean): string {
+    if (isActive) {
+      return 'w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center space-x-3';
+    } else {
+      return 'w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white';
     }
   }
 

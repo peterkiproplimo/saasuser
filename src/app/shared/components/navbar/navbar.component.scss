@@ -1,0 +1,48 @@
+// Solutions dropdown improvements
+.solutions-dropdown {
+    .dropdown-menu {
+
+        // Ensure the dropdown stays visible when hovering over it
+        &:hover {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    }
+
+    // Better hover states for the trigger
+    .dropdown-trigger {
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    // Smooth transitions for dropdown items
+    .dropdown-item {
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            transform: translateX(4px);
+        }
+    }
+}
+
+// Ensure proper z-index stacking
+.dropdown-container {
+    position: relative;
+    z-index: 1000;
+}
+
+// Fix for mobile responsiveness
+@media (max-width: 1024px) {
+    .solutions-dropdown {
+        .dropdown-menu {
+            position: static;
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+        }
+    }
+}

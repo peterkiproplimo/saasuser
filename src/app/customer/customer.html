@@ -1,30 +1,20 @@
 <div class="min-h-screen flex flex-col w-full overflow-hidden">
   <div>
-    <p-drawer
-      class="sm:hidden"
-      autoZIndex
-      [(visible)]="drawerVisible"
-      position="left"
-      [modal]="true"
-      closable
-    >
+    <p-drawer class="sm:hidden" autoZIndex [(visible)]="drawerVisible" position="left" [modal]="true" closable>
       <ng-template #headless>
         <div class="bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700 h-full p-6">
           <!-- Mobile Header -->
           <div class="mb-8">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-3">
-                <img
-                  src="/favicon.ico"
-                  alt="Techsavanna Icon"
-                  class="h-12 w-12 rounded-lg"
-                />
+                <img src="/favicon.ico" alt="Techsavanna Icon" class="h-12 w-12 rounded-lg" />
                 <div>
                   <h2 class="text-xl font-bold text-white">Techsavanna</h2>
                   <p class="text-xs text-blue-200">Customer Portal</p>
                 </div>
               </div>
-              <button (click)="close_drawer()" class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200">
+              <button (click)="close_drawer()"
+                class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200">
                 <i class="pi pi-times text-lg"></i>
               </button>
             </div>
@@ -35,10 +25,7 @@
           <nav class="space-y-6">
             <!-- Dashboard Link (Highlighted) -->
             <div>
-              <button
-                (click)="navigateToDashboard()"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center space-x-3"
-              >
+              <button (click)="navigateToDashboard()" [class]="getButtonClasses(isDashboardActive())">
                 <i class="pi pi-chart-line text-lg"></i>
                 <span>Dashboard</span>
               </button>
@@ -48,18 +35,12 @@
             <div class="space-y-3">
               <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">SERVICES</h3>
               <div class="space-y-1">
-                <button
-                  (click)="navigateToSubscriptions()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                <button (click)="navigateToSubscriptions()" [class]="getButtonClasses(isSubscriptionsActive())">
                   <i class="pi pi-globe text-lg"></i>
                   <span>My Services</span>
                 </button>
-                
-                <button
-                  (click)="navigateToSubscribe()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <button (click)="navigateToSubscribe()" [class]="getButtonClasses(isSubscribeActive())">
                   <i class="pi pi-shopping-cart text-lg"></i>
                   <span>Purchase Plan</span>
                 </button>
@@ -70,26 +51,17 @@
             <div class="space-y-3">
               <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">BILLING</h3>
               <div class="space-y-1">
-                <button
-                  (click)="navigateToInvoices()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                <button (click)="navigateToInvoices()" [class]="getButtonClasses(isInvoicesActive())">
                   <i class="pi pi-file text-lg"></i>
                   <span>Invoices</span>
                 </button>
-                
-                <button
-                  (click)="navigateToSubscriptions()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <!-- <button (click)="navigateToSubscriptions()" [class]="getButtonClasses(isSubscriptionsActive())">
                   <i class="pi pi-credit-card text-lg"></i>
                   <span>Subscriptions</span>
-                </button>
-                
-                <button
-                  (click)="navigateToBilling()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                </button> -->
+
+                <button (click)="navigateToBilling()" [class]="getButtonClasses(isBillingActive())">
                   <i class="pi pi-refresh text-lg"></i>
                   <span>History</span>
                 </button>
@@ -100,26 +72,17 @@
             <div class="space-y-3">
               <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">SUPPORT</h3>
               <div class="space-y-1">
-                <button
-                  (click)="navigateToTickets()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                <button (click)="navigateToTickets()" [class]="getButtonClasses(isTicketsActive())">
                   <i class="pi pi-question-circle text-lg"></i>
                   <span>Tickets</span>
                 </button>
-                
-                <button
-                  (click)="navigateToFAQs()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <button (click)="navigateToFAQs()" [class]="getButtonClasses(isFAQsActive())">
                   <i class="pi pi-info-circle text-lg"></i>
                   <span>FAQs</span>
                 </button>
-                
-                <button
-                  (click)="navigateToProfile()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <button (click)="navigateToProfile()" [class]="getButtonClasses(isProfileActive())">
                   <i class="pi pi-user text-lg"></i>
                   <span>Profile</span>
                 </button>
@@ -132,16 +95,11 @@
     <div>
       <div class="flex min-h-screen">
         <aside
-          class="hidden sm:block sm:w-72 bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700 px-6 py-6 shadow-xl border-r border-blue-600"
-        >
+          class="hidden sm:block sm:w-72 bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700 px-6 py-6 shadow-xl border-r border-blue-600">
           <!-- Logo Section -->
           <div class="mb-8">
             <div class="flex items-center space-x-3 mb-4">
-                <img
-                  src="/images/favicon-100x100.jpg"
-                alt="Techsavanna Icon"
-                class="h-12 w-12 rounded-lg"
-                />
+              <img src="/images/favicon-100x100.jpg" alt="Techsavanna Icon" class="h-12 w-12 rounded-lg" />
               <div>
                 <h2 class="text-xl font-bold text-white">Techsavanna</h2>
                 <p class="text-xs text-blue-200">Customer Portal</p>
@@ -154,10 +112,7 @@
           <nav class="space-y-6">
             <!-- Dashboard Link (Highlighted) -->
             <div>
-              <button
-                (click)="navigateToDashboard()"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center space-x-3"
-              >
+              <button (click)="navigateToDashboard()" [class]="getButtonClasses(isDashboardActive())">
                 <i class="pi pi-chart-line text-lg"></i>
                 <span>Dashboard</span>
               </button>
@@ -167,18 +122,12 @@
             <div class="space-y-3">
               <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">SERVICES</h3>
               <div class="space-y-1">
-                <button
-                  (click)="navigateToSubscriptions()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                <button (click)="navigateToSubscriptions()" [class]="getButtonClasses(isSubscriptionsActive())">
                   <i class="pi pi-globe text-lg"></i>
                   <span>My Services</span>
                 </button>
-                
-                <button
-                  (click)="navigateToSubscribe()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <button (click)="navigateToSubscribe()" [class]="getButtonClasses(isSubscribeActive())">
                   <i class="pi pi-shopping-cart text-lg"></i>
                   <span>Purchase Plan</span>
                 </button>
@@ -189,26 +138,17 @@
             <div class="space-y-3">
               <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">BILLING</h3>
               <div class="space-y-1">
-                <button
-                  (click)="navigateToInvoices()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                <button (click)="navigateToInvoices()" [class]="getButtonClasses(isInvoicesActive())">
                   <i class="pi pi-file text-lg"></i>
                   <span>Invoices</span>
                 </button>
-                
-                <button
-                  (click)="navigateToSubscriptions()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <!-- <button (click)="navigateToSubscriptions()" [class]="getButtonClasses(isSubscriptionsActive())">
                   <i class="pi pi-credit-card text-lg"></i>
                   <span>Subscriptions</span>
-                </button>
-                
-                <button
-                  (click)="navigateToBilling()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                </button> -->
+
+                <button (click)="navigateToBilling()" [class]="getButtonClasses(isBillingActive())">
                   <i class="pi pi-refresh text-lg"></i>
                   <span>History</span>
                 </button>
@@ -219,26 +159,17 @@
             <div class="space-y-3">
               <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">SUPPORT</h3>
               <div class="space-y-1">
-                <button
-                  (click)="navigateToTickets()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+                <button (click)="navigateToTickets()" [class]="getButtonClasses(isTicketsActive())">
                   <i class="pi pi-question-circle text-lg"></i>
                   <span>Tickets</span>
                 </button>
-                
-                <button
-                  (click)="navigateToFAQs()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <button (click)="navigateToFAQs()" [class]="getButtonClasses(isFAQsActive())">
                   <i class="pi pi-info-circle text-lg"></i>
                   <span>FAQs</span>
                 </button>
-                
-                <button
-                  (click)="navigateToProfile()"
-                  class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white"
-                >
+
+                <button (click)="navigateToProfile()" [class]="getButtonClasses(isProfileActive())">
                   <i class="pi pi-user text-lg"></i>
                   <span>Profile</span>
                 </button>
@@ -249,27 +180,21 @@
 
         <div class="flex-1 overflow-auto">
           <!-- Header with Techsavanna Logo and User Profile -->
-          <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white shadow-lg border-b border-blue-600">
+          <div
+            class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white shadow-lg border-b border-blue-600">
             <div class="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
               <!-- Left: Mobile Menu + Techsavanna Logo -->
               <div class="flex items-center space-x-4">
                 <!-- Mobile Menu Button -->
                 <div class="sm:hidden">
-                  <p-button
-                    [icon]="drawerVisible ? 'pi pi-times' : 'pi pi-bars'"
-                    (onClick)="toggleDrawer()"
+                  <p-button [icon]="drawerVisible ? 'pi pi-times' : 'pi pi-bars'" (onClick)="toggleDrawer()"
                     styleClass="p-button-rounded p-button-text p-button-sm p-button-plain"
-                    aria-label="Toggle menu"
-                  ></p-button>
+                    aria-label="Toggle menu"></p-button>
                 </div>
 
                 <!-- Techsavanna Company Icon -->
                 <div class="flex items-center space-x-3">
-                  <img
-                    src="/images/favicon-100x100.jpg"
-                    alt="Techsavanna Icon"
-                    class="h-10 w-10 rounded-lg"
-                  />
+                  <img src="/images/favicon-100x100.jpg" alt="Techsavanna Icon" class="h-10 w-10 rounded-lg" />
                   <div>
                     <h1 class="text-lg font-bold text-white">Techsavanna</h1>
                     <p class="text-xs text-blue-200">People . Technology . Simple Life</p>
@@ -280,114 +205,111 @@
               <!-- Right: User Profile Dropdown -->
               <div class="flex items-center space-x-4">
                 <!-- Dark Mode Toggle -->
-                <button
-                  (click)="toggleDarkMode()"
-                  class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200"
-                >
+                <button (click)="toggleDarkMode()"
+                  class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200">
                   <i [class]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'" class="text-lg"></i>
                 </button>
 
                 <!-- User Profile Dropdown -->
                 @if (loggedIn) {
-                  <div class="relative">
-                    <button 
-                      (click)="userMenu.toggle($event)"
-                      class="flex items-center space-x-3 p-2 hover:bg-white/10 rounded-lg transition-all duration-200"
-                    >
-                      <!-- User Avatar with Online Status -->
-                      <div class="relative">
-                        <div class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
-                          {{ storedUser.first_name!.charAt(0).toUpperCase() }}{{ storedUser.last_name!.charAt(0).toUpperCase() }}
-                        </div>
-                        <div class="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-white"></div>
+                <div class="relative">
+                  <button (click)="userMenu.toggle($event)"
+                    class="flex items-center space-x-3 p-2 hover:bg-white/10 rounded-lg transition-all duration-200">
+                    <!-- User Avatar with Online Status -->
+                    <div class="relative">
+                      <div
+                        class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
+                        {{ storedUser.first_name!.charAt(0).toUpperCase() }}{{
+                        storedUser.last_name!.charAt(0).toUpperCase() }}
                       </div>
-                      
-                      <!-- User Info -->
-                      <div class="text-left">
-                        <p class="text-sm font-medium text-white">{{ storedUser.name }}</p>
-                        <p class="text-xs text-blue-200">{{ storedUser.email }}</p>
+                      <div class="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-white">
                       </div>
-                      
-                      <!-- Dropdown Arrow -->
-                      <i class="pi pi-chevron-down text-white text-sm"></i>
-                    </button>
+                    </div>
 
-                    <!-- Dropdown Menu -->
-                    <p-menu #userMenu [popup]="true" [appendTo]="'body'" class="w-72">
-                      <ng-template #end>
-                        <div class="bg-gray-800 dark:bg-gray-900 rounded-lg shadow-xl border border-gray-700 dark:border-gray-600 overflow-hidden">
-                          <!-- User Information Header -->
-                          <div class="flex items-center space-x-3 p-4 bg-gray-700 dark:bg-gray-800 border-b border-gray-600 dark:border-gray-700">
-                            <!-- User Avatar with Online Status -->
-                            <div class="relative">
-                              <div class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
-                                {{ storedUser.first_name!.charAt(0).toUpperCase() }}{{ storedUser.last_name!.charAt(0).toUpperCase() }}
-                              </div>
-                              <div class="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-gray-800 dark:border-gray-900"></div>
+                    <!-- User Info -->
+                    <div class="text-left">
+                      <p class="text-sm font-medium text-white">{{ storedUser.name }}</p>
+                      <p class="text-xs text-blue-200">{{ storedUser.email }}</p>
+                    </div>
+
+                    <!-- Dropdown Arrow -->
+                    <i class="pi pi-chevron-down text-white text-sm"></i>
+                  </button>
+
+                  <!-- Dropdown Menu -->
+                  <p-menu #userMenu [popup]="true" [appendTo]="'body'" class="w-72">
+                    <ng-template #end>
+                      <div
+                        class="bg-gray-800 dark:bg-gray-900 rounded-lg shadow-xl border border-gray-700 dark:border-gray-600 overflow-hidden">
+                        <!-- User Information Header -->
+                        <div
+                          class="flex items-center space-x-3 p-4 bg-gray-700 dark:bg-gray-800 border-b border-gray-600 dark:border-gray-700">
+                          <!-- User Avatar with Online Status -->
+                          <div class="relative">
+                            <div
+                              class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
+                              {{ storedUser.first_name!.charAt(0).toUpperCase() }}{{
+                              storedUser.last_name!.charAt(0).toUpperCase() }}
                             </div>
-                            
-                            <!-- User Info -->
-                            <div class="flex-1">
-                              <p class="text-sm font-bold text-white">{{ storedUser.name }}</p>
-                              <p class="text-xs text-gray-300">{{ storedUser.email }}</p>
+                            <div
+                              class="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-gray-800 dark:border-gray-900">
                             </div>
-                            
-                            <!-- Dropdown Arrow -->
-                            <i class="pi pi-chevron-down text-white text-sm"></i>
                           </div>
 
-                          <!-- Menu Items -->
-                          <div class="py-2">
-                            <a routerLink="/"
-                              class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200"
-                            >
-                              <i class="pi pi-home text-white"></i>
-                              <span class="font-medium">Home</span>
-                            </a>
-                            
-                            <a routerLink="/customer/profile"
-                              class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200"
-                            >
-                              <i class="pi pi-user text-white"></i>
-                              <span class="font-medium">My Profile</span>
-                            </a>
-                            
-                            <a routerLink="/customer/tickets"
-                              class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200"
-                            >
-                              <i class="pi pi-ticket text-white"></i>
-                              <span class="font-medium">Support Tickets</span>
-                            </a>
-                            
-                            <a routerLink="/faqs"
-                              class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200"
-                            >
-                              <i class="pi pi-question-circle text-white"></i>
-                              <span class="font-medium">FAQ</span>
-                            </a>
-                            
-                            <button
-                              (click)="toggleDarkMode()"
-                              class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left"
-                            >
-                              <i class="pi pi-moon text-white"></i>
-                              <span class="font-medium">Dark Mode</span>
-                            </button>
-                            
-                            <div class="border-t border-gray-600 dark:border-gray-700 my-2"></div>
-                            
-                            <button
-                              (click)="logout()"
-                              class="flex items-center space-x-3 p-3 hover:bg-red-900/20 text-red-400 transition-colors duration-200 w-full text-left"
-                            >
-                              <i class="pi pi-sign-out text-red-400"></i>
-                              <span class="font-medium">Logout</span>
-                            </button>
+                          <!-- User Info -->
+                          <div class="flex-1">
+                            <p class="text-sm font-bold text-white">{{ storedUser.name }}</p>
+                            <p class="text-xs text-gray-300">{{ storedUser.email }}</p>
                           </div>
+
+                          <!-- Dropdown Arrow -->
+                          <i class="pi pi-chevron-down text-white text-sm"></i>
                         </div>
-                      </ng-template>
-                    </p-menu>
-                  </div>
+
+                        <!-- Menu Items -->
+                        <div class="py-2">
+                          <a routerLink="/"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                            <i class="pi pi-home text-white"></i>
+                            <span class="font-medium">Home</span>
+                          </a>
+
+                          <a routerLink="/customer/profile"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                            <i class="pi pi-user text-white"></i>
+                            <span class="font-medium">My Profile</span>
+                          </a>
+
+                          <a routerLink="/customer/tickets"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                            <i class="pi pi-ticket text-white"></i>
+                            <span class="font-medium">Support Tickets</span>
+                          </a>
+
+                          <a routerLink="/faqs"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                            <i class="pi pi-question-circle text-white"></i>
+                            <span class="font-medium">FAQ</span>
+                          </a>
+
+                          <button (click)="toggleDarkMode()"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
+                            <i class="pi pi-moon text-white"></i>
+                            <span class="font-medium">Dark Mode</span>
+                          </button>
+
+                          <div class="border-t border-gray-600 dark:border-gray-700 my-2"></div>
+
+                          <button (click)="logout()"
+                            class="flex items-center space-x-3 p-3 hover:bg-red-900/20 text-red-400 transition-colors duration-200 w-full text-left">
+                            <i class="pi pi-sign-out text-red-400"></i>
+                            <span class="font-medium">Logout</span>
+                          </button>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </p-menu>
+                </div>
                 }
               </div>
             </div>
