@@ -766,7 +766,7 @@
 
     <!-- Payment Iframe Dialog -->
     <p-dialog [(visible)]="iframeDialog" [style]="{ width: '800px', height: '700px' }" header="Complete Payment"
-      [modal]="true">
+      [modal]="true" (onHide)="hideIframeDialog()">
       <div *ngIf="paymentIframeUrl()" class="w-full h-full">
         <iframe [src]="paymentIframeUrl()" width="100%" height="650px" frameborder="0"
           sandbox="allow-scripts allow-same-origin allow-forms"></iframe>

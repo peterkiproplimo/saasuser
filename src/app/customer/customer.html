@@ -110,15 +110,6 @@
 
           <!-- Navigation Menu -->
           <nav class="space-y-6">
-            <!-- Home Link -->
-            <div>
-              <button (click)="navigateToHome()"
-                class="w-full text-left hover:bg-white/10 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center space-x-3 text-white">
-                <i class="pi pi-home text-lg"></i>
-                <span>Home</span>
-              </button>
-            </div>
-
             <!-- Dashboard Link (Highlighted) -->
             <div>
               <button (click)="navigateToDashboard()" [class]="getButtonClasses(isDashboardActive())">

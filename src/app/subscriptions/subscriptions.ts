@@ -232,6 +232,10 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
     this.iframeDialog.set(false);
     // Clear current payment subscription
     this.currentPaymentSubscription = null;
+
+    // Stop all payment loaders when dialog is closed
+    this.paymentLoading.set({});
+
     // Refresh subscriptions after successful payment
     this.subscription_service.refreshSubscriptions();
   }
@@ -841,16 +845,24 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
   // Copy subscription domain to clipboard
   copySubscriptionDetails(subscription: any): void {
+    console.log('Copy button clicked for subscription:', subscription);
     const domain = subscription.custom_subdomain || 'bunny-pms.techsavanna.technology';
+
+    // Immediately show the success dialog
+    this.showSuccessDialog = true;
+    console.log('Success dialog set to true immediately');
 
     if (navigator.clipboard && window.isSecureContext) {
       // Use modern clipboard API
       navigator.clipboard.writeText(domain).then(() => {
-        this.showCopySuccess();
-      }).catch(() => {
+        console.log('Clipboard API success');
+        // Dialog is already shown, no need to call showCopySuccess again
+      }).catch((error) => {
+        console.log('Clipboard API failed, using fallback:', error);
         this.fallbackCopyToClipboard(domain);
       });
     } else {
+      console.log('Using fallback clipboard method');
       // Fallback for older browsers
       this.fallbackCopyToClipboard(domain);
     }
@@ -869,7 +881,8 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
     try {
       document.execCommand('copy');
-      this.showCopySuccess();
+      console.log('Fallback copy successful');
+      // Dialog is already shown, no need to call showCopySuccess again
     } catch (err) {
       console.error('Failed to copy text: ', err);
       this.showCopyError();
@@ -923,7 +936,9 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
   // Show copy success message
   private showCopySuccess(): void {
     console.log('✅ Subscription details copied to clipboard!');
+    console.log('Opening success dialog, current state:', this.showSuccessDialog);
     this.openSuccessDialog();
+    console.log('Success dialog state after opening:', this.showSuccessDialog);
   }
 
   // Show copy error message
@@ -934,13 +949,17 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
   // Show success dialog
   openSuccessDialog(): void {
+    console.log('openSuccessDialog called, setting showSuccessDialog to true');
     this.showSuccessDialog = true;
+    console.log('showSuccessDialog is now:', this.showSuccessDialog);
   }
 
   // Show error dialog
   openErrorDialog(message: string): void {
+    console.log('openErrorDialog called with message:', message);
     this.dialogMessage = message;
     this.showErrorDialog = true;
+    console.log('showErrorDialog is now:', this.showErrorDialog);
   }
 
   // Close success dialog

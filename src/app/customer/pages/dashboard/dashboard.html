@@ -19,8 +19,7 @@
     <!-- My Services -->
     <div
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
-      routerLink="/customer/subscriptions"
-    >
+      routerLink="/customer/subscriptions">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -30,9 +29,7 @@
             {{ subscriptions().pagination.total_records || 0 }}
           </p>
         </div>
-        <div
-          class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
           <i class="pi pi-briefcase text-blue-600 dark:text-blue-400 text-xl"></i>
         </div>
       </div>
@@ -41,8 +38,7 @@
     <!-- Active Services -->
     <div
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
-      routerLink="/customer/subscriptions"
-    >
+      routerLink="/customer/subscriptions">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -52,9 +48,7 @@
             {{ activeSubscriptionsCount() }}
           </p>
         </div>
-        <div
-          class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
           <i class="pi pi-check text-green-600 dark:text-green-400 text-xl"></i>
         </div>
       </div>
@@ -63,8 +57,7 @@
     <!-- Inactive Services -->
     <div
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
-      routerLink="/customer/subscriptions"
-    >
+      routerLink="/customer/subscriptions">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -74,9 +67,7 @@
             {{ inactiveSubscriptionsCount() }}
           </p>
         </div>
-        <div
-          class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
           <i class="pi pi-times text-red-600 dark:text-red-400 text-xl"></i>
         </div>
       </div>
@@ -85,8 +76,7 @@
     <!-- Total Invoices -->
     <div
       class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
-      routerLink="/customer/invoices"
-    >
+      routerLink="/customer/invoices">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -96,9 +86,7 @@
             {{ invoices().pagination?.total_records || 0 }}
           </p>
         </div>
-        <div
-          class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center"
-        >
+        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
           <i class="pi pi-file text-purple-600 dark:text-purple-400 text-xl"></i>
         </div>
       </div>
@@ -108,18 +96,14 @@
   <!-- Main Content Grid -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
     <!-- Active Solutions -->
-    <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-    >
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
       <div class="p-6 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
             Active Solutions
           </h3>
-          <a
-            routerLink="/customer/subscriptions"
-            class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
-          >
+          <a routerLink="/customer/subscriptions"
+            class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
             View All
           </a>
         </div>
@@ -127,21 +111,16 @@
       <div class="p-6">
         @if (subscriptions_loading()) {
         <div class="flex justify-center py-8">
-                <p-progressSpinner
-            [style]="{ width: '40px', height: '40px' }"
-          ></p-progressSpinner>
+          <p-progressSpinner [style]="{ width: '40px', height: '40px' }"></p-progressSpinner>
         </div>
-         } @else { @if (subscriptionsData().length > 0) {
+        } @else { @if (subscriptionsData().length > 0) {
         <div class="space-y-4">
           @for (subscription of activeSubscriptions().slice(0, 5); track
           subscription.name) {
           <div
-            class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-          >
+            class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
             <div class="flex items-center space-x-3">
-              <div
-                class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center"
-              >
+              <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                 <i class="pi pi-check text-green-600 dark:text-green-400"></i>
               </div>
               <div>
@@ -154,9 +133,8 @@
               </div>
             </div>
             <div class="text-right">
-              <button
-                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
-              >
+              <button (click)="visitSubscription(subscription)"
+                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
                 <i class="pi pi-external-link mr-1"></i>
                 Visit
               </button>
@@ -171,43 +149,34 @@
         </div>
         } }
       </div>
-  </div>
+    </div>
 
     <!-- Pending Solutions -->
-    <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-    >
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
       <div class="p-6 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
             Pending Solutions
           </h3>
-          <a
-            routerLink="/customer/subscribe"
-            class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
-          >
+          <a routerLink="/customer/subscribe"
+            class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
             Browse Solutions
           </a>
         </div>
       </div>
       <div class="p-6">
-      @if (subscriptions_loading()) {
+        @if (subscriptions_loading()) {
         <div class="flex justify-center py-8">
-              <p-progressSpinner
-            [style]="{ width: '40px', height: '40px' }"
-          ></p-progressSpinner>
+          <p-progressSpinner [style]="{ width: '40px', height: '40px' }"></p-progressSpinner>
         </div>
-         } @else { @if (inactiveSubscriptions().length > 0) {
+        } @else { @if (inactiveSubscriptions().length > 0) {
         <div class="space-y-4 max-h-96 overflow-y-auto">
           @for (subscription of inactiveSubscriptions().slice(0, 5); track
           subscription.name) {
           <div
-            class="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors duration-200"
-          >
+            class="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors duration-200">
             <div class="flex items-center space-x-3">
-              <div
-                class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center"
-              >
+              <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
                 <i class="pi pi-clock text-orange-600 dark:text-orange-400"></i>
               </div>
               <div>
@@ -219,7 +188,7 @@
                 </p>
               </div>
             </div>
-       
+
           </div>
           }
         </div>
@@ -236,18 +205,14 @@
   </div>
 
   <!-- Solution Features & Quick Actions -->
-  <div
-    class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-  >
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
     <div class="p-6 border-b border-gray-200 dark:border-gray-700">
       <div class="flex items-center justify-between">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
           Solution Features & Quick Actions
         </h3>
-        <a
-          routerLink="/customer/subscribe"
-          class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
-        >
+        <a routerLink="/customer/subscribe"
+          class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
           Explore Solutions
         </a>
       </div>
@@ -255,65 +220,80 @@
     <div class="p-6">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Custom Domains -->
-        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+        <div
+          class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
           <div class="flex items-start space-x-3">
-            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="pi pi-globe text-blue-600 dark:text-blue-400"></i>
             </div>
             <div class="flex-1">
               <h4 class="font-medium text-gray-900 dark:text-white mb-1">Custom Domains</h4>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Get your own branded domain for your solutions</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Get your own branded domain for your solutions
+              </p>
               <a href="#" class="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline">Setup Domain</a>
             </div>
           </div>
         </div>
 
         <!-- SSL Security -->
-        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+        <div
+          class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
           <div class="flex items-start space-x-3">
-            <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="pi pi-shield text-green-600 dark:text-green-400"></i>
             </div>
             <div class="flex-1">
               <h4 class="font-medium text-gray-900 dark:text-white mb-1">SSL Security</h4>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Automatic SSL certificates for secure connections</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Automatic SSL certificates for secure connections
+              </p>
               <span class="text-green-600 dark:text-green-400 text-sm font-medium">Included</span>
             </div>
           </div>
         </div>
 
         <!-- Cloud Hosting -->
-        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+        <div
+          class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
           <div class="flex items-start space-x-3">
-            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="pi pi-cloud text-purple-600 dark:text-purple-400"></i>
             </div>
             <div class="flex-1">
               <h4 class="font-medium text-gray-900 dark:text-white mb-1">Cloud Hosting</h4>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Reliable cloud infrastructure with 99.9% uptime</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Reliable cloud infrastructure with 99.9% uptime
+              </p>
               <span class="text-purple-600 dark:text-purple-400 text-sm font-medium">Managed</span>
             </div>
           </div>
         </div>
 
         <!-- 24/7 Support -->
-        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+        <div
+          class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
           <div class="flex items-start space-x-3">
-            <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="pi pi-headphones text-orange-600 dark:text-orange-400"></i>
             </div>
             <div class="flex-1">
               <h4 class="font-medium text-gray-900 dark:text-white mb-1">24/7 Support</h4>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Round-the-clock technical support for your solutions</p>
-              <a href="#" class="text-orange-600 dark:text-orange-400 text-sm font-medium hover:underline">Get Support</a>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Round-the-clock technical support for your
+                solutions</p>
+              <a href="#" class="text-orange-600 dark:text-orange-400 text-sm font-medium hover:underline">Get
+                Support</a>
             </div>
           </div>
         </div>
 
         <!-- Easy Setup -->
-        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+        <div
+          class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
           <div class="flex items-start space-x-3">
-            <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="pi pi-cog text-indigo-600 dark:text-indigo-400"></i>
             </div>
             <div class="flex-1">
@@ -325,9 +305,11 @@
         </div>
 
         <!-- Analytics -->
-        <div class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+        <div
+          class="group cursor-pointer p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
           <div class="flex items-start space-x-3">
-            <div class="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div
+              class="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="pi pi-chart-bar text-pink-600 dark:text-pink-400"></i>
             </div>
             <div class="flex-1">

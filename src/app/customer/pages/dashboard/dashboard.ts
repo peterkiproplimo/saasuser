@@ -66,4 +66,31 @@ export class Dashboard implements OnInit {
       });
     }
   }
+
+  visitSubscription(subscription: any): void {
+    let url = '';
+
+    // Check if there's a custom subdomain
+    if (subscription.custom_subdomain) {
+      // Ensure the URL has a protocol
+      if (subscription.custom_subdomain.startsWith('http://') || subscription.custom_subdomain.startsWith('https://')) {
+        url = subscription.custom_subdomain;
+      } else {
+        url = `https://${subscription.custom_subdomain}`;
+      }
+    } else {
+      // Fallback to a default URL or show a message
+      console.warn('No domain/URL available for this subscription');
+      alert('No domain/URL available for this subscription. Please contact support.');
+      return;
+    }
+
+    // Open the URL in a new tab
+    try {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error('Failed to open URL:', error);
+      alert('Failed to open the subscription URL. Please try again.');
+    }
+  }
 }
