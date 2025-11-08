@@ -5,8 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { SolutionCardComponent } from '../shared/components/solution-card/solution-card.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { filter, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-landing',
