@@ -14,6 +14,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-oursolutions',
@@ -24,7 +26,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     ProgressSpinnerModule,
     DialogModule,
     ReactiveFormsModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './oursolutions.html',
   styleUrls: ['./oursolutions.scss'],
 })
@@ -34,6 +38,7 @@ export class OursolutionsComponent implements OnInit {
   private http = inject(HttpClient);
   private cd = inject(ChangeDetectorRef);
   private destroy = inject(DestroyRef);
+  private messageService = inject(MessageService);
 
   // ▶ state
   base_url = environment.BASE_URL;
@@ -107,16 +112,42 @@ export class OursolutionsComponent implements OnInit {
   }
 
   submitTrialRequest(): void {
+    // Validate required fields
+    if (!this.trialForm.customer_name || !this.trialForm.email || !this.trialForm.phone || !this.trialForm.company) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validation Error',
+        detail: 'Please fill all required fields.',
+        life: 5000
+      });
+      return;
+    }
+
     this.http
-      .post(`${this.base_url}.trial.create_trial_request`, this.trialForm)
+      .post(`${this.base_url}.api.profile.request_free_trial`, this.trialForm)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: () => {
-          alert('✅ Free Trial request sent!');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Free trial request sent successfully! Our team will contact you soon.',
+            life: 5000
+          });
           this.closeRequestTrial();
+          // Reset form
+          this.trialForm = {
+            customer_name: '',
+            email: '',
+            phone: '',
+            company: '',
+            application_name: this.solutionData?.name || '',
+            status: 'Pending',
+            notes: '',
+          };
         },
-        error: () => {
-          alert('❌ Failed to submit free trial request.');
+        error: (error) => {
+          this.handleApiError(error, 'Failed to submit free trial request');
         },
       });
   }
@@ -163,9 +194,14 @@ export class OursolutionsComponent implements OnInit {
           this.captchaLoading = false;
           this.cd.detectChanges();
         },
-        error: () => {
+        error: (error) => {
           this.captchaLoading = false;
-          alert('Could not load CAPTCHA. Please try again.');
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'CAPTCHA Error',
+            detail: 'Could not load CAPTCHA. Please try again.',
+            life: 3000
+          });
           // Retry loading CAPTCHA after 2 seconds
           setTimeout(() => {
             this.fetchCaptcha();
@@ -212,28 +248,78 @@ export class OursolutionsComponent implements OnInit {
       (key) => !(this.demoForm[key as keyof typeof this.demoForm] || '').trim()
     );
     if (missing.length) {
-      alert('Please fill all required fields.');
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validation Error',
+        detail: 'Please fill all required fields.',
+        life: 5000
+      });
       return;
     }
 
     if (!this.demoForm.captcha_answer) {
-      alert('Please answer the CAPTCHA.');
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validation Error',
+        detail: 'Please answer the CAPTCHA.',
+        life: 5000
+      });
       return;
     }
 
     // send API request
     this.http
-      .post(`${this.base_url}.demo.create_demo_booking`, this.demoForm)
+      .post(`${this.base_url}.api.profile.request_demo`, this.demoForm)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: () => {
-          alert('✅ Demo request sent!');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Demo request sent successfully! Our team will contact you soon.',
+            life: 5000
+          });
           this.closeRequestDemo(); // reset + close
         },
-        error: () => {
-          alert('❌ Failed to submit demo request.');
+        error: (error) => {
+          this.handleApiError(error, 'Failed to submit demo request');
         },
       });
+  }
+
+  /* ------------------------- error handling -------------------------- */
+  private handleApiError(error: any, defaultMessage: string): void {
+    let errorMessage = defaultMessage;
+    let errorCode = error?.status || 'Unknown';
+
+    // Check if it's a ValidationError (API not implemented)
+    if (error?.error?.exception?.includes('ValidationError') ||
+      error?.error?.exception?.includes('No module named')) {
+      errorCode = 417;
+      errorMessage = 'Error 417: API not found. Check on frappe logs.';
+    } else if (error?.status === 417) {
+      errorCode = 417;
+      errorMessage = 'Error 417: API not found.';
+    } else if (error?.error?.message) {
+      errorMessage = `Error ${errorCode}: ${error.error.message}`;
+    } else if (error?.error?.exc) {
+      // Try to extract a meaningful error message
+      const excMatch = error.error.exc.match(/ValidationError: (.+?)\\n/);
+      if (excMatch) {
+        errorMessage = `Error ${errorCode}: ${excMatch[1]}`;
+      } else {
+        errorMessage = `Error ${errorCode}: ${defaultMessage}`;
+      }
+    } else {
+      errorMessage = `Error ${errorCode}: ${defaultMessage}`;
+    }
+
+    this.messageService.add({
+      severity: 'error',
+      summary: `Error ${errorCode}`,
+      detail: errorMessage,
+      life: 7000
+    });
   }
 
   /* ------------------------- utils -------------------------- */
