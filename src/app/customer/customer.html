@@ -268,39 +268,39 @@
 
                         <!-- Menu Items -->
                         <div class="py-2">
-                          <button (click)="navigateToHome()"
+                          <button (click)="navigateToHome(); userMenu.hide()"
                             class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
                             <i class="pi pi-home text-white"></i>
                             <span class="font-medium">Home</span>
                           </button>
 
-                          <a routerLink="/customer/profile"
-                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                          <button (click)="navigateToProfile(); userMenu.hide()"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
                             <i class="pi pi-user text-white"></i>
                             <span class="font-medium">My Profile</span>
-                          </a>
+                          </button>
 
-                          <a routerLink="/customer/tickets"
-                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                          <button (click)="navigateToTickets(); userMenu.hide()"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
                             <i class="pi pi-ticket text-white"></i>
                             <span class="font-medium">Support Tickets</span>
-                          </a>
+                          </button>
 
-                          <a routerLink="/faqs"
-                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200">
+                          <button (click)="navigateToFAQs(); userMenu.hide()"
+                            class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
                             <i class="pi pi-question-circle text-white"></i>
                             <span class="font-medium">FAQ</span>
-                          </a>
+                          </button>
 
                           <button (click)="toggleDarkMode()"
                             class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
-                            <i class="pi pi-moon text-white"></i>
+                            <i [class]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'" class="text-white"></i>
                             <span class="font-medium">Dark Mode</span>
                           </button>
 
                           <div class="border-t border-gray-600 dark:border-gray-700 my-2"></div>
 
-                          <button (click)="logout()"
+                          <button (click)="logout(); userMenu.hide()"
                             class="flex items-center space-x-3 p-3 hover:bg-red-900/20 text-red-400 transition-colors duration-200 w-full text-left">
                             <i class="pi pi-sign-out text-red-400"></i>
                             <span class="font-medium">Logout</span>

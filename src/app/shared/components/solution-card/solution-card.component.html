@@ -1,48 +1,36 @@
 <div
-  class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden p-6 flex flex-col justify-between text-center h-full transition-transform hover:-translate-y-2 duration-300"
->
-  <!-- App Logo -->
-  <img
-    class="w-32 h-32 object-contain mx-auto mb-6"
-    [src]="'https://saas.Techsavanna.technology' + solution.app_logo"
-    [alt]="solution.app_name"
-  />
+  class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden flex flex-col h-full transition-all duration-300 hover:-translate-y-2 border border-gray-200 dark:border-gray-700 group">
+  <!-- Card Header with Gradient -->
+  <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 p-6 text-center">
+    <!-- App Logo -->
+    <div class="flex justify-center mb-4">
+      <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+        <img class="w-20 h-20 object-contain" [src]="'https://saas.Techsavanna.technology' + solution.app_logo"
+          [alt]="solution.app_name || solution.name" onerror="this.src='/images/saas.png'" />
+      </div>
+    </div>
 
-  <!-- App Title -->
-  <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
-    {{ solution.app_name }}
-  </h3>
+    <!-- App Title -->
+    <h3 class="text-xl font-bold text-white mb-2">
+      {{ solution.app_name || solution.name }}
+    </h3>
+  </div>
 
-  <!-- Subtitle (Hardcoded fallback for now) -->
-  <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-    (Software Solution)
-  </p>
+  <!-- Card Body -->
+  <div class="p-6 flex flex-col flex-grow">
+    <!-- Short Description -->
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 flex-grow"
+      [innerText]="solution.short_description || solution.description || 'Comprehensive software solution for your business needs.'">
+    </p>
 
-  <!-- Short Description -->
-  <p
-    class="text-sm text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 px-2"
-    [innerText]="solution.short_description || 'No description available.'"
-  ></p>
-
-  <!-- Read More Link -->
-  <a
-    href="javascript:void(0)"
-    (click)="goToSolution(solution)"
-    class="text-sky-600 font-medium text-sm hover:underline flex items-center justify-center gap-2"
-  >
-    Read More
-    <svg
-      class="w-4 h-4"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M17 8l4 4m0 0l-4 4m4-4H3"
-      />
-    </svg>
-  </a>
+    <!-- Read More Button -->
+    <button (click)="goToSolution(solution)"
+      class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg">
+      <span>Learn More</span>
+      <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
+    </button>
+  </div>
 </div>

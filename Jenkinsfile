@@ -45,7 +45,7 @@ pipeline {
                     sh """
                     cd ${WORK_DIR}
                     rm -rf node_modules package-lock.json
-                    npm cache clean --force
+                    npm cache clean --force || true
                     npm install --force --legacy-peer-deps --no-audit --no-fund
                     """
                 }

@@ -14,8 +14,12 @@ export class SolutionCardComponent {
   private router = inject(Router);
 
   goToSolution(app: any) {
-    this.router.navigate(['/solutions', app.name], {
-      state: { solutionData: app },
-    });
+    // Use app.name or app.id for navigation
+    const solutionId = app.name || app.id || app.app_name;
+    if (solutionId) {
+      this.router.navigate(['/solutions', solutionId], {
+        state: { solutionData: app },
+      });
+    }
   }
 }

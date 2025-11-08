@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { User } from '../../../auth/models/responses/login-response';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, CommonModule } from '@angular/common';
@@ -11,6 +11,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
@@ -33,23 +37,22 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './profile.scss'
 })
 export class Profile implements OnInit {
+  private http = inject(HttpClient);
+  private destroy = inject(DestroyRef);
+  private base_url = environment.BASE_URL;
 
   user: User = JSON.parse(localStorage.getItem('user')!);
+  customerProfile: any = null;
 
   // UI State
   isEditing = signal(false);
   isLoading = signal(false);
+  isLoadingProfile = signal(false);
   showEditDialog = signal(false);
+  apiNotFound = signal(false);
 
-  // Mock data for demonstration
-  accountStats = {
-    totalSubscriptions: 3,
-    activeSubscriptions: 2,
-    totalInvoices: 15,
-    paidInvoices: 12,
-    accountAge: '2 years',
-    lastActivity: '2 hours ago'
-  };
+  // Account stats (only populated from API)
+  accountStats = signal<any>(null);
 
   // Form for editing profile
   profileForm: FormGroup;
@@ -66,7 +69,106 @@ export class Profile implements OnInit {
   }
 
   ngOnInit() {
-    // Initialize any data needed
+    // Fetch customer profile from API
+    this.fetchCustomerProfile();
+  }
+
+  /* ------------------------- API calls -------------------------- */
+  fetchCustomerProfile(): void {
+    this.isLoadingProfile.set(true);
+
+    this.http
+      .get(`${this.base_url}.api.profile.get_customer_profile`)
+      .pipe(takeUntilDestroyed(this.destroy))
+      .subscribe({
+        next: (response: any) => {
+          this.customerProfile = response?.data || response;
+          this.apiNotFound.set(false);
+
+          // Update user data if available
+          if (this.customerProfile) {
+            if (this.customerProfile.first_name) {
+              this.user.first_name = this.customerProfile.first_name;
+            }
+            if (this.customerProfile.last_name) {
+              this.user.last_name = this.customerProfile.last_name;
+            }
+            if (this.customerProfile.email) {
+              this.user.email = this.customerProfile.email;
+            }
+            if (this.customerProfile.name) {
+              this.user.name = this.customerProfile.name;
+            }
+
+            // Update form with fetched data
+            this.profileForm.patchValue({
+              firstName: this.customerProfile.first_name || this.user.first_name || '',
+              lastName: this.customerProfile.last_name || this.user.last_name || '',
+              email: this.customerProfile.email || this.user.email || '',
+              phone: this.customerProfile.phone || '',
+              company: this.customerProfile.company || '',
+              bio: this.customerProfile.bio || ''
+            });
+
+            // Update account stats only if available from API
+            if (this.customerProfile.account_stats) {
+              this.accountStats.set(this.customerProfile.account_stats);
+            }
+          }
+
+          this.isLoadingProfile.set(false);
+        },
+        error: (error) => {
+          this.isLoadingProfile.set(false);
+          this.handleApiError(error, 'Failed to load customer profile');
+        },
+      });
+  }
+
+  /* ------------------------- error handling -------------------------- */
+  private handleApiError(error: any, defaultMessage: string): void {
+    let errorMessage = defaultMessage;
+    let errorCode = error?.status || 'Unknown';
+
+    // Check if it's a ValidationError (API not implemented)
+    if (error?.error?.exception?.includes('ValidationError') ||
+      error?.error?.exception?.includes('No module named')) {
+      errorCode = 417;
+      this.apiNotFound.set(true);
+      this.accountStats.set(null);
+      // Show toast notification
+      this.messageService.add({
+        severity: 'error',
+        summary: `Error ${errorCode}`,
+        detail: 'Error 417: API not found. Check on frappe logs.',
+        life: 7000
+      });
+      return;
+    } else if (error?.status === 417) {
+      errorCode = 417;
+      this.apiNotFound.set(true);
+      this.accountStats.set(null);
+      errorMessage = 'Error 417: API not found.';
+    } else if (error?.error?.message) {
+      errorMessage = `Error ${errorCode}: ${error.error.message}`;
+    } else if (error?.error?.exc) {
+      // Try to extract a meaningful error message
+      const excMatch = error.error.exc.match(/ValidationError: (.+?)\\n/);
+      if (excMatch) {
+        errorMessage = `Error ${errorCode}: ${excMatch[1]}`;
+      } else {
+        errorMessage = `Error ${errorCode}: ${defaultMessage}`;
+      }
+    } else {
+      errorMessage = `Error ${errorCode}: ${defaultMessage}`;
+    }
+
+    this.messageService.add({
+      severity: 'error',
+      summary: `Error ${errorCode}`,
+      detail: errorMessage,
+      life: 7000
+    });
   }
 
   // Profile actions
@@ -145,6 +247,16 @@ export class Profile implements OnInit {
     if (this.profileForm.get('bio')?.value) completed++;
 
     return Math.round((completed / total) * 100);
+  }
+
+  // Getter for account stats (for template)
+  get accountStatsData() {
+    return this.accountStats();
+  }
+
+  // Check if API data is available
+  hasAccountStats(): boolean {
+    return this.accountStats() !== null && !this.apiNotFound();
   }
 
 }
