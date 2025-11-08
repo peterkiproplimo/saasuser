@@ -40,3 +40,11 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Development/Test files
+PARTNER_PRODUCTS.md
+SEED_PRODUCTS_INSTRUCTIONS.md
+SEED_PRODUCTS_SCRIPT.js
+NODE_UPGRADE.md
+*.seed.js
+*.seed.ts
