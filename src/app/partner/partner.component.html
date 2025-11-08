@@ -1,0 +1,252 @@
+<div class="min-h-screen flex flex-col w-full overflow-hidden">
+  <!-- Mobile Drawer -->
+  <p-drawer class="sm:hidden" autoZIndex [(visible)]="drawerVisible" position="left" [modal]="true" closable>
+    <ng-template #headless>
+      <div class="bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700 h-full p-6">
+        <!-- Mobile Header -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+              <img src="/images/favicon-100x100.jpg" alt="Techsavanna Icon" class="h-12 w-12 rounded-lg" />
+              <div>
+                <h2 class="text-xl font-bold text-white">Techsavanna</h2>
+                <p class="text-xs text-blue-200">Partner Portal</p>
+              </div>
+            </div>
+            <button (click)="close_drawer()"
+              class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200">
+              <i class="pi pi-times text-lg"></i>
+            </button>
+          </div>
+          <div class="h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <nav class="space-y-6">
+          <div>
+            <button (click)="navigateToDashboard(); close_drawer()" [class]="getButtonClasses(isDashboardActive())">
+              <i class="pi pi-chart-line text-lg"></i>
+              <span>Dashboard</span>
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">PRODUCTS</h3>
+            <div class="space-y-1">
+              <button (click)="navigateToProducts(); close_drawer()" [class]="getButtonClasses(isProductsActive())">
+                <i class="pi pi-box text-lg"></i>
+                <span>My Products</span>
+              </button>
+              <button (click)="router.navigate(['/partner/products/create']); close_drawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left text-blue-100 hover:bg-white/10 hover:text-white">
+                <i class="pi pi-plus text-lg"></i>
+                <span>Create Product</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">ANALYTICS</h3>
+            <div class="space-y-1">
+              <button (click)="navigateToInsights(); close_drawer()" [class]="getButtonClasses(isInsightsActive())">
+                <i class="pi pi-chart-bar text-lg"></i>
+                <span>Insights</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">GENERAL</h3>
+            <div class="space-y-1">
+              <button (click)="navigateToHome(); close_drawer()"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left text-blue-100 hover:bg-white/10 hover:text-white">
+                <i class="pi pi-home text-lg"></i>
+                <span>Home</span>
+              </button>
+              <button (click)="logout(); close_drawer()"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left text-red-400 hover:bg-red-900/20 hover:text-red-300">
+                <i class="pi pi-sign-out text-lg"></i>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </ng-template>
+  </p-drawer>
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="hidden sm:block sm:w-72 bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700 px-6 py-6 shadow-xl border-r border-blue-600">
+      <!-- Logo Section -->
+      <div class="mb-8">
+        <div class="flex items-center space-x-3 mb-4">
+          <img src="/images/favicon-100x100.jpg" alt="Techsavanna Icon" class="h-12 w-12 rounded-lg" />
+          <div>
+            <h2 class="text-xl font-bold text-white">Techsavanna</h2>
+            <p class="text-xs text-blue-200">Partner Portal</p>
+          </div>
+        </div>
+        <div class="h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="space-y-6">
+        <!-- Dashboard Link -->
+        <div>
+          <button (click)="navigateToDashboard()" [class]="getButtonClasses(isDashboardActive())">
+            <i class="pi pi-chart-line text-lg"></i>
+            <span>Dashboard</span>
+          </button>
+        </div>
+
+        <!-- PRODUCTS Section -->
+        <div class="space-y-3">
+          <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">PRODUCTS</h3>
+          <div class="space-y-1">
+            <button (click)="navigateToProducts()" [class]="getButtonClasses(isProductsActive())">
+              <i class="pi pi-box text-lg"></i>
+              <span>My Products</span>
+            </button>
+            <button (click)="router.navigate(['/partner/products/create'])" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left text-blue-100 hover:bg-white/10 hover:text-white">
+              <i class="pi pi-plus text-lg"></i>
+              <span>Create Product</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ANALYTICS Section -->
+        <div class="space-y-3">
+          <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">ANALYTICS</h3>
+          <div class="space-y-1">
+            <button (click)="navigateToInsights()" [class]="getButtonClasses(isInsightsActive())">
+              <i class="pi pi-chart-bar text-lg"></i>
+              <span>Insights</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white shadow-lg border-b border-blue-600">
+        <div class="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+          <!-- Left: Mobile Menu + Partner Info -->
+          <div class="flex items-center space-x-4">
+            <!-- Mobile Menu Button -->
+            <div class="sm:hidden">
+              <p-button [icon]="drawerVisible ? 'pi pi-times' : 'pi pi-bars'" (onClick)="toggleDrawer()"
+                styleClass="p-button-rounded p-button-text p-button-sm p-button-plain"
+                aria-label="Toggle menu"></p-button>
+            </div>
+
+          </div>
+
+          <!-- Right: User Profile Dropdown -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark Mode Toggle -->
+            <button (click)="toggleDarkMode()"
+              class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-all duration-200">
+              <i [class]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'" class="text-lg"></i>
+            </button>
+
+            <!-- Partner Profile Dropdown -->
+            @if (storedPartner && loggedIn) {
+            <div class="relative">
+              <button (click)="userMenu.toggle($event)"
+                class="flex items-center space-x-3 p-2 hover:bg-white/10 rounded-lg transition-all duration-200">
+                <!-- Partner Avatar with Online Status -->
+                <div class="relative">
+                  @if (storedPartner.logo) {
+                    <img [src]="storedPartner.logo" alt="Partner Logo" class="h-10 w-10 rounded-full border-2 border-white object-cover" />
+                  } @else {
+                    <div class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
+                      {{ storedPartner.first_name?.charAt(0)?.toUpperCase() }}{{ storedPartner.last_name?.charAt(0)?.toUpperCase() }}
+                    </div>
+                  }
+                  <div class="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-white">
+                  </div>
+                </div>
+
+                <!-- Partner Info -->
+                <div class="text-left hidden sm:block">
+                  <p class="text-sm font-medium text-white">{{ storedPartner.first_name }} {{ storedPartner.last_name }}</p>
+                  <p class="text-xs text-blue-200">{{ storedPartner.email }}</p>
+                </div>
+
+                <!-- Dropdown Arrow -->
+                <i class="pi pi-chevron-down text-white text-sm"></i>
+              </button>
+
+              <!-- Dropdown Menu -->
+              <p-menu #userMenu [popup]="true" [appendTo]="'body'" class="w-72">
+                <ng-template #end>
+                  <div
+                    class="bg-gray-800 dark:bg-gray-900 rounded-lg shadow-xl border border-gray-700 dark:border-gray-600 overflow-hidden">
+                    <!-- Partner Information Header -->
+                    <div
+                      class="flex items-center space-x-3 p-4 bg-gray-700 dark:bg-gray-800 border-b border-gray-600 dark:border-gray-700">
+                      <!-- Partner Avatar with Online Status -->
+                      <div class="relative">
+                        @if (storedPartner.logo) {
+                          <img [src]="storedPartner.logo" alt="Partner Logo" class="h-10 w-10 rounded-full border-2 border-gray-800 dark:border-gray-900 object-cover" />
+                        } @else {
+                          <div
+                            class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
+                            {{ storedPartner.first_name?.charAt(0)?.toUpperCase() }}{{
+                            storedPartner.last_name?.charAt(0)?.toUpperCase() }}
+                          </div>
+                        }
+                        <div
+                          class="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-gray-800 dark:border-gray-900">
+                        </div>
+                      </div>
+
+                      <!-- Partner Info -->
+                      <div class="flex-1">
+                        <p class="text-sm font-bold text-white">{{ storedPartner.first_name }} {{ storedPartner.last_name }}</p>
+                        <p class="text-xs text-gray-300">{{ storedPartner.email }}</p>
+                      </div>
+
+                      <!-- Dropdown Arrow -->
+                      <i class="pi pi-chevron-down text-white text-sm"></i>
+                    </div>
+
+                    <!-- Menu Items -->
+                    <div class="py-2">
+                      <button (click)="navigateToHome(); userMenu.hide()"
+                        class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
+                        <i class="pi pi-home text-white"></i>
+                        <span class="font-medium">Home</span>
+                      </button>
+
+                      <button (click)="toggleDarkMode()"
+                        class="flex items-center space-x-3 p-3 hover:bg-gray-700 dark:hover:bg-gray-800 text-white transition-colors duration-200 w-full text-left">
+                        <i [class]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'" class="text-white"></i>
+                        <span class="font-medium">Dark Mode</span>
+                      </button>
+
+                      <div class="border-t border-gray-600 dark:border-gray-700 my-2"></div>
+
+                      <button (click)="logout(); userMenu.hide()"
+                        class="flex items-center space-x-3 p-3 hover:bg-red-900/20 text-red-400 transition-colors duration-200 w-full text-left">
+                        <i class="pi pi-sign-out text-red-400"></i>
+                        <span class="font-medium">Logout</span>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-menu>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Router Outlet -->
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+

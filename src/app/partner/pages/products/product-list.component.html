@@ -1,0 +1,254 @@
+<div class="p-6">
+  <!-- Header -->
+  <div class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Products</h1>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">Manage your SaaS products and subscription plans</p>
+      </div>
+      <p-button
+        icon="pi pi-plus"
+        label="Create New Product"
+        [outlined]="false"
+        severity="primary"
+        [routerLink]="['/partner/products/create']"
+        styleClass="shadow-lg"
+      />
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  @if (loading()) {
+  <div class="flex justify-center items-center py-20">
+    <p-progress-spinner [style]="{ width: '60px', height: '60px' }" strokeWidth="4" />
+  </div>
+  } @else if (products().length === 0) {
+  <p-card styleClass="shadow-lg">
+    <div class="text-center py-12">
+      <div class="w-24 h-24 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i class="pi pi-box text-blue-600 dark:text-blue-400 text-5xl"></i>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">No Products Yet</h3>
+      <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+        Get started by creating your first SaaS product and start offering subscription plans to customers.
+      </p>
+      <p-button
+        icon="pi pi-plus"
+        label="Create Your First Product"
+        severity="primary"
+        [routerLink]="['/partner/products/create']"
+        styleClass="shadow-lg"
+      />
+    </div>
+  </p-card>
+  } @else {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (product of products(); track product.id) {
+    <p-card
+      [style]="{ height: '100%' }"
+      styleClass="hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700"
+    >
+      <ng-template pTemplate="header">
+        <div class="relative h-48 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 overflow-hidden">
+          @if (product.logo) {
+            <img [src]="product.logo" [alt]="product.name" class="w-full h-full object-cover" />
+          } @else {
+            <div class="flex items-center justify-center h-full">
+              <i class="pi pi-box text-white text-7xl opacity-30"></i>
+            </div>
+          }
+          <div class="absolute top-3 right-3">
+            <p-badge [value]="product.subscription_plans.length + ' Plan' + (product.subscription_plans.length !== 1 ? 's' : '')" severity="success" />
+          </div>
+        </div>
+      </ng-template>
+
+      <div class="space-y-4 flex flex-col h-full">
+        <div class="flex-1">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-1">{{ product.name }}</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 min-h-[6rem]">{{ product.description }}</p>
+        </div>
+        
+        <!-- View Plans Button -->
+        <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+          <p-button
+            icon="pi pi-eye"
+            label="View Plans & Pricing"
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="viewPlans(product)"
+            styleClass="w-full"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2 pt-3 border-t border-gray-200 dark:border-gray-700 mt-auto">
+          <p-button
+            icon="pi pi-pencil"
+            label="Edit"
+            severity="primary"
+            [outlined]="true"
+            (onClick)="editProduct(product.id)"
+            styleClass="flex-1"
+          />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [outlined]="true"
+            (onClick)="deleteProduct(product.id, $event)"
+            pTooltip="Delete Product"
+            tooltipPosition="top"
+          />
+        </div>
+      </div>
+    </p-card>
+    }
+  </div>
+  }
+
+  <!-- Plans Detail Dialog -->
+  <p-dialog
+    [(visible)]="plansDialogVisible"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '90vw', maxWidth: '900px' }"
+    [baseZIndex]="10000"
+    (onHide)="closePlansDialog()"
+  >
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-3">
+        @if (selectedProduct()?.logo) {
+          <img [src]="selectedProduct()!.logo" [alt]="selectedProduct()!.name" class="w-12 h-12 rounded-lg object-cover" />
+        }
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white m-0">
+                {{ selectedProduct()?.name }} - Subscription Plans
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 m-0 mt-1">
+                {{ selectedProduct()?.description }}
+              </p>
+            </div>
+            @if (selectedProduct()?.subscription_plans && selectedProduct()!.subscription_plans.length > 0) {
+              <div class="text-right">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Currency</p>
+                <p-tag [value]="selectedProduct()!.subscription_plans[0].currency" severity="info" />
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    @if (selectedProduct()) {
+    <div class="space-y-6">
+      <!-- Plans Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        @for (plan of selectedProduct()!.subscription_plans; track plan.id) {
+        <p-card
+          [style]="{ height: '100%' }"
+          styleClass="border-2 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300"
+          [styleClass]="'h-full'"
+        >
+          <ng-template pTemplate="header">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-center">
+              <h3 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h3>
+              <div class="flex flex-col items-center gap-1">
+                <div class="flex items-baseline justify-center gap-2">
+                  <span class="text-4xl font-extrabold text-white">{{ formatPrice(plan.price, plan.currency) }}</span>
+                  <span class="text-white/80 text-sm">/month</span>
+                </div>
+                @if (plan.currency === 'KES') {
+                  <span class="text-white/70 text-xs">≈ ${{ convertToUSD(plan.price).toFixed(2) }} USD</span>
+                }
+              </div>
+            </div>
+          </ng-template>
+
+          <div class="space-y-4">
+            @if (plan.features && plan.features.length > 0) {
+            <div>
+              <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                <i class="pi pi-star-fill text-yellow-500"></i>
+                Features Included
+              </h4>
+              <ul class="space-y-2">
+                @for (feature of plan.features; track feature) {
+                <li class="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <i class="pi pi-check-circle text-green-500 mt-0.5 flex-shrink-0"></i>
+                  <span>{{ feature }}</span>
+                </li>
+                }
+              </ul>
+            </div>
+            } @else {
+            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <i class="pi pi-info-circle text-2xl mb-2"></i>
+              <p class="text-sm">No features specified</p>
+            </div>
+            }
+          </div>
+
+          <ng-template pTemplate="footer">
+            <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+              <span class="text-xs text-gray-500 dark:text-gray-400">
+                @if (plan.currency === 'KES') {
+                  <span>KES (Kenyan Shilling)</span>
+                } @else {
+                  <span>{{ plan.currency }}</span>
+                }
+              </span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">
+                Plan ID: {{ plan.id }}
+              </span>
+            </div>
+          </ng-template>
+        </p-card>
+        }
+      </div>
+
+      <!-- Summary Stats -->
+      <p-divider />
+      <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <i class="pi pi-chart-bar text-blue-600"></i>
+          Plan Statistics
+        </h4>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+              {{ getTotalPlans() }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Total Plans</div>
+          </div>
+          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+              {{ getStartingPrice() }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Starting From</div>
+          </div>
+          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">
+              {{ getTotalFeatures() }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Total Features</div>
+          </div>
+          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">
+              {{ getHighestPrice() }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Highest Price</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </p-dialog>
+
+  <!-- Toast and Confirm Dialog -->
+  <p-toast position="top-right" />
+  <p-confirmDialog />
+</div>

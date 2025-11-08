@@ -56,6 +56,11 @@ export const routes: Routes = [
       import('./customer/routes').then((m) => m.customerRoutes),
     canActivate: [authGuard],
   },
+  {
+    path: 'partner',
+    loadChildren: () =>
+      import('./partner/routes').then((m) => m.partnerRoutes),
+  },
 
   // wildcard
   { path: '**', redirectTo: '/' },

@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Product Insights</h1>
+    <p class="mt-2 text-gray-600 dark:text-gray-400">Analytics and performance metrics for your products</p>
+  </div>
+
+  @if (loading()) {
+  <div class="flex justify-center py-12">
+    <p-progress-spinner [style]="{ width: '50px', height: '50px' }"></p-progress-spinner>
+  </div>
+  } @else {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Products</p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ insights().total_products }}</p>
+        </div>
+        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-box text-blue-600 dark:text-blue-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Views</p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ insights().total_views | number }}</p>
+        </div>
+        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-eye text-green-600 dark:text-green-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Subscriptions</p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ insights().total_subscriptions | number }}</p>
+        </div>
+        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-users text-purple-600 dark:text-purple-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ formatCurrency(insights().total_revenue) }}</p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-money-bill text-yellow-600 dark:text-yellow-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Insights -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Performance Overview</h3>
+    <div class="space-y-4">
+      <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <span class="text-gray-700 dark:text-gray-300">Average Views per Product</span>
+        <span class="font-semibold text-gray-900 dark:text-white">
+          {{ insights().total_products > 0 ? (insights().total_views / insights().total_products | number:'1.0-0') : 0 }}
+        </span>
+      </div>
+      <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <span class="text-gray-700 dark:text-gray-300">Average Subscriptions per Product</span>
+        <span class="font-semibold text-gray-900 dark:text-white">
+          {{ insights().total_products > 0 ? (insights().total_subscriptions / insights().total_products | number:'1.0-0') : 0 }}
+        </span>
+      </div>
+      <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <span class="text-gray-700 dark:text-gray-300">Average Revenue per Product</span>
+        <span class="font-semibold text-gray-900 dark:text-white">
+          {{ insights().total_products > 0 ? formatCurrency(insights().total_revenue / insights().total_products) : formatCurrency(0) }}
+        </span>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+

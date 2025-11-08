@@ -1,0 +1,226 @@
+<div class="w-full max-w-lg mx-auto space-y-2 sm:space-y-3">
+  <!-- Centered Logo -->
+  <div class="flex justify-center">
+    <a routerLink="/">
+      <img
+        src="/images/images.jpeg"
+        alt="Logo"
+        class="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover"
+      />
+    </a>
+  </div>
+
+  <!-- Welcome Message -->
+  <div class="text-center">
+    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
+      Become a Partner
+    </h2>
+    <p class="mt-1 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+      Join us and start offering your SaaS products to customers.
+    </p>
+  </div>
+
+  <!-- Signup Form -->
+  <form class="space-y-2 sm:space-y-3" (ngSubmit)="signup()" [formGroup]="signup_form">
+    <!-- Company Information -->
+    <div class="bg-blue-50 dark:bg-blue-900/20 p-2 sm:p-3 rounded-lg">
+      <h3 class="text-xs sm:text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">Company Information</h3>
+      <app-reactive-input
+        [form]="signup_form"
+        [id]="'company_name'"
+        [key]="'company_name'"
+        [label]="'Company Name'"
+        [type]="'text'"
+        [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-white focus:bg-white transition-colors duration-200'"
+      ></app-reactive-input>
+      
+      <!-- Business Number (KYC) -->
+      <app-reactive-input
+        [form]="signup_form"
+        [id]="'business_number'"
+        [key]="'business_number'"
+        [label]="'Business Number (Kenya)'"
+        [type]="'text'"
+        [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-white focus:bg-white transition-colors duration-200 mt-2'"
+      ></app-reactive-input>
+
+      <!-- Company Logo Upload -->
+      <div class="mt-2 space-y-2">
+        <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+          Company Logo
+        </label>
+        <div class="flex items-center gap-3">
+          <input
+            type="file"
+            id="logo"
+            accept="image/*"
+            (change)="onLogoSelected($event)"
+            class="hidden"
+            #logoInput
+          />
+          <button
+            type="button"
+            (click)="logoInput.click()"
+            class="px-3 py-2 text-xs sm:text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50 text-gray-700 transition-colors duration-200"
+          >
+            Choose Logo
+          </button>
+          @if (logoPreview) {
+            <img [src]="logoPreview" alt="Logo Preview" class="h-12 w-12 rounded-lg object-cover border border-gray-300" />
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Information -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+      <app-reactive-input
+        [form]="signup_form"
+        [id]="'first_name'"
+        [key]="'first_name'"
+        [label]="'First Name'"
+        [type]="'text'"
+        [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'"
+      ></app-reactive-input>
+      <app-reactive-input
+        [form]="signup_form"
+        [id]="'last_name'"
+        [key]="'last_name'"
+        [label]="'Last Name'"
+        [type]="'text'"
+        [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'"
+      ></app-reactive-input>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="space-y-2 sm:space-y-3">
+      <app-reactive-input
+        [form]="signup_form"
+        [id]="'email'"
+        [key]="'email'"
+        [label]="'Email Address'"
+        [type]="'email'"
+        [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'"
+      ></app-reactive-input>
+      <app-reactive-input
+        [form]="signup_form"
+        [id]="'phone'"
+        [key]="'phone'"
+        [label]="'Phone Number'"
+        [type]="'tel'"
+        [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'"
+      ></app-reactive-input>
+    </div>
+
+    <!-- Additional Contact Information -->
+    <div class="bg-green-50 dark:bg-green-900/20 p-2 sm:p-3 rounded-lg">
+      <h3 class="text-xs sm:text-sm font-semibold text-green-800 dark:text-green-200 mb-2">Additional Contact Information</h3>
+      <div class="space-y-2 sm:space-y-3">
+        <app-reactive-input
+          [form]="signup_form"
+          [id]="'address'"
+          [key]="'address'"
+          [label]="'Address'"
+          [type]="'text'"
+          [classes]="'border border-gray-300 focus:border-green-500 focus:ring-green-500 bg-white focus:bg-white transition-colors duration-200'"
+        ></app-reactive-input>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+          <app-reactive-input
+            [form]="signup_form"
+            [id]="'city'"
+            [key]="'city'"
+            [label]="'City'"
+            [type]="'text'"
+            [classes]="'border border-gray-300 focus:border-green-500 focus:ring-green-500 bg-white focus:bg-white transition-colors duration-200'"
+          ></app-reactive-input>
+          <app-reactive-input
+            [form]="signup_form"
+            [id]="'country'"
+            [key]="'country'"
+            [label]="'Country'"
+            [type]="'text'"
+            [classes]="'border border-gray-300 focus:border-green-500 focus:ring-green-500 bg-white focus:bg-white transition-colors duration-200'"
+          ></app-reactive-input>
+        </div>
+        <app-reactive-input
+          [form]="signup_form"
+          [id]="'website'"
+          [key]="'website'"
+          [label]="'Website (Optional)'"
+          [type]="'url'"
+          [classes]="'border border-gray-300 focus:border-green-500 focus:ring-green-500 bg-white focus:bg-white transition-colors duration-200'"
+        ></app-reactive-input>
+      </div>
+    </div>
+
+    <!-- Security Information -->
+    <div class="bg-slate-50 dark:bg-slate-900/20 p-2 sm:p-3 rounded-lg">
+      <h3 class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">Security Information</h3>
+      <div class="space-y-2 sm:space-y-3">
+        <app-reactive-input
+          [form]="signup_form"
+          [id]="'password'"
+          [key]="'password'"
+          [label]="'Password'"
+          [type]="'password'"
+          [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-white focus:bg-white transition-colors duration-200'"
+        ></app-reactive-input>
+        <app-reactive-input
+          [form]="signup_form"
+          [id]="'confirm_password'"
+          [key]="'confirm_password'"
+          [label]="'Confirm Password'"
+          [type]="'password'"
+          [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-white focus:bg-white transition-colors duration-200'"
+        ></app-reactive-input>
+      </div>
+    </div>
+
+    @if (signup_form.hasError('passwordMismatch') &&
+    signup_form.get('confirm_password')?.value) {
+    <div class="text-red-500 text-xs sm:text-sm bg-red-50 dark:bg-red-900/20 p-2 sm:p-3 rounded-lg border border-red-200 dark:border-red-800">
+      <i class="pi pi-exclamation-triangle mr-1 text-xs"></i>
+      Passwords do not match.
+    </div>
+    }
+
+    <!-- Buttons -->
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+      <button
+        type="submit"
+        class="flex-1 flex justify-center gap-2 rounded-md bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-700 hover:to-slate-700 focus:ring-2 focus:ring-blue-500 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-white transition-all duration-200 shadow-lg hover:shadow-xl"
+      >
+        Create Partner Account @if (loading) {
+        <p-progress-spinner
+          strokeWidth="8"
+          fill="transparent"
+          animationDuration=".5s"
+          [style]="{ width: '16px', height: '16px' }"
+          class="text-white"
+        />
+        }
+      </button>
+      <a
+        routerLink="/"
+        class="flex-1 flex justify-center items-center gap-2 rounded-md bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-gray-700 transition-all duration-200 border border-gray-300"
+      >
+        <i class="pi pi-home text-xs sm:text-sm"></i>
+        Home
+      </a>
+    </div>
+
+    <!-- Login Link -->
+    <div class="text-center mt-2 sm:mt-3">
+      <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+        Already have a partner account? 
+        <a
+          routerLink="/partner/login"
+          class="text-blue-600 hover:text-blue-700 hover:underline transition-colors duration-200 font-medium"
+        >
+          Sign in here
+        </a>
+      </div>
+    </div>
+  </form>
+</div>
+
