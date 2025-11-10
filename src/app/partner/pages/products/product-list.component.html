@@ -1,19 +1,23 @@
 <div class="p-6">
   <!-- Header -->
-  <div class="mb-8">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Products</h1>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">Manage your SaaS products and subscription plans</p>
+  <div class="mb-10">
+    <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-8 shadow-2xl overflow-hidden mb-6">
+      <div class="absolute inset-0 bg-black/10"></div>
+      <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-48 translate-x-48"></div>
+      <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-4xl font-extrabold text-white mb-2">My Products</h1>
+          <p class="text-blue-100 text-base">Manage your SaaS products and subscription plans</p>
+        </div>
+        <p-button
+          icon="pi pi-plus"
+          label="Add New Product"
+          [outlined]="false"
+          severity="success"
+          [routerLink]="['/partner/products/create']"
+          styleClass="shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105"
+        />
       </div>
-      <p-button
-        icon="pi pi-plus"
-        label="Create New Product"
-        [outlined]="false"
-        severity="primary"
-        [routerLink]="['/partner/products/create']"
-        styleClass="shadow-lg"
-      />
     </div>
   </div>
 
@@ -34,7 +38,7 @@
       </p>
       <p-button
         icon="pi pi-plus"
-        label="Create Your First Product"
+        label="Add Your First Product"
         severity="primary"
         [routerLink]="['/partner/products/create']"
         styleClass="shadow-lg"
@@ -46,27 +50,30 @@
     @for (product of products(); track product.id) {
     <p-card
       [style]="{ height: '100%' }"
-      styleClass="hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700"
+      styleClass="hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden"
     >
       <ng-template pTemplate="header">
-        <div class="relative h-48 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 overflow-hidden">
+        <div class="relative h-56 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
           @if (product.logo) {
             <img [src]="product.logo" [alt]="product.name" class="w-full h-full object-cover" />
           } @else {
             <div class="flex items-center justify-center h-full">
-              <i class="pi pi-box text-white text-7xl opacity-30"></i>
+              <i class="pi pi-box text-white text-8xl opacity-20"></i>
             </div>
           }
-          <div class="absolute top-3 right-3">
-            <p-badge [value]="product.subscription_plans.length + ' Plan' + (product.subscription_plans.length !== 1 ? 's' : '')" severity="success" />
+          <div class="absolute top-4 right-4">
+            <p-badge [value]="product.subscription_plans.length + ' Plan' + (product.subscription_plans.length !== 1 ? 's' : '')" severity="success" styleClass="shadow-lg" />
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+            <h3 class="text-white font-bold text-lg drop-shadow-lg">{{ product.name }}</h3>
           </div>
         </div>
       </ng-template>
 
-      <div class="space-y-4 flex flex-col h-full">
+      <div class="space-y-4 flex flex-col h-full p-6">
         <div class="flex-1">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-1">{{ product.name }}</h3>
-          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 min-h-[6rem]">{{ product.description }}</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 min-h-[5rem] line-clamp-4">{{ product.description }}</p>
         </div>
         
         <!-- View Plans Button -->
@@ -75,9 +82,8 @@
             icon="pi pi-eye"
             label="View Plans & Pricing"
             severity="secondary"
-            [outlined]="true"
             (onClick)="viewPlans(product)"
-            styleClass="w-full"
+            styleClass="w-full shadow-md hover:shadow-lg transition-all"
           />
         </div>
 
@@ -87,17 +93,16 @@
             icon="pi pi-pencil"
             label="Edit"
             severity="primary"
-            [outlined]="true"
             (onClick)="editProduct(product.id)"
-            styleClass="flex-1"
+            styleClass="flex-1 shadow-md hover:shadow-lg transition-all"
           />
           <p-button
             icon="pi pi-trash"
             severity="danger"
-            [outlined]="true"
             (onClick)="deleteProduct(product.id, $event)"
             pTooltip="Delete Product"
             tooltipPosition="top"
+            styleClass="shadow-md hover:shadow-lg transition-all"
           />
         </div>
       </div>
@@ -118,26 +123,21 @@
     (onHide)="closePlansDialog()"
   >
     <ng-template pTemplate="header">
-      <div class="flex items-center gap-3">
-        @if (selectedProduct()?.logo) {
-          <img [src]="selectedProduct()!.logo" [alt]="selectedProduct()!.name" class="w-12 h-12 rounded-lg object-cover" />
-        }
-        <div class="flex-1">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-white m-0">
-                {{ selectedProduct()?.name }} - Subscription Plans
-              </h2>
-              <p class="text-sm text-gray-600 dark:text-gray-400 m-0 mt-1">
-                {{ selectedProduct()?.description }}
-              </p>
+      <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-6 rounded-t-lg overflow-hidden">
+        <div class="absolute inset-0 bg-black/10"></div>
+        <div class="relative flex items-center gap-4">
+          @if (selectedProduct()?.logo) {
+            <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl p-1 shadow-lg">
+              <img [src]="selectedProduct()!.logo" [alt]="selectedProduct()!.name" class="w-full h-full rounded-lg object-cover" />
             </div>
-            @if (selectedProduct()?.subscription_plans && selectedProduct()!.subscription_plans.length > 0) {
-              <div class="text-right">
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Currency</p>
-                <p-tag [value]="selectedProduct()!.subscription_plans[0].currency" severity="info" />
-              </div>
-            }
+          }
+          <div class="flex-1">
+            <h2 class="text-3xl font-extrabold text-white m-0 mb-1">
+              {{ selectedProduct()?.name }}
+            </h2>
+            <p class="text-blue-100 text-sm m-0">
+              {{ selectedProduct()?.description }}
+            </p>
           </div>
         </div>
       </div>
@@ -150,20 +150,20 @@
         @for (plan of selectedProduct()!.subscription_plans; track plan.id) {
         <p-card
           [style]="{ height: '100%' }"
-          styleClass="border-2 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300"
+          styleClass="border-2 border-gray-200/50 dark:border-gray-700/50 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 rounded-xl overflow-hidden"
           [styleClass]="'h-full'"
         >
           <ng-template pTemplate="header">
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-center">
-              <h3 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h3>
-              <div class="flex flex-col items-center gap-1">
-                <div class="flex items-baseline justify-center gap-2">
-                  <span class="text-4xl font-extrabold text-white">{{ formatPrice(plan.price, plan.currency) }}</span>
-                  <span class="text-white/80 text-sm">/month</span>
+            <div class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-8 text-center overflow-hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+              <div class="relative">
+                <h3 class="text-3xl font-extrabold text-white mb-3 drop-shadow-lg">{{ plan.name }}</h3>
+                <div class="flex flex-col items-center gap-2">
+                  <div class="flex items-baseline justify-center gap-2">
+                    <span class="text-5xl font-black text-white drop-shadow-lg">{{ formatPrice(plan.price, plan.currency) }}</span>
+                    <span class="text-white/90 text-lg font-semibold">/month</span>
+                  </div>
                 </div>
-                @if (plan.currency === 'KES') {
-                  <span class="text-white/70 text-xs">≈ ${{ convertToUSD(plan.price).toFixed(2) }} USD</span>
-                }
               </div>
             </div>
           </ng-template>
@@ -212,35 +212,41 @@
 
       <!-- Summary Stats -->
       <p-divider />
-      <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
-        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <i class="pi pi-chart-bar text-blue-600"></i>
-          Plan Statistics
-        </h4>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-              {{ getTotalPlans() }}
-            </div>
-            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Total Plans</div>
+      <div class="relative bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 border-2 border-blue-200/50 dark:border-blue-800/50 shadow-xl overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full -translate-y-32 translate-x-32"></div>
+        <div class="relative">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
+            <h4 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <i class="pi pi-chart-bar text-blue-600 text-2xl"></i>
+              Plan Statistics
+            </h4>
           </div>
-          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-            <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-              {{ getStartingPrice() }}
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="text-center p-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-blue-200/50 dark:border-blue-700/50 hover:scale-105 transition-transform duration-300">
+              <div class="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">
+                {{ getTotalPlans() }}
+              </div>
+              <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Total Plans</div>
             </div>
-            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Starting From</div>
-          </div>
-          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-            <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">
-              {{ getTotalFeatures() }}
+            <div class="text-center p-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-purple-200/50 dark:border-purple-700/50 hover:scale-105 transition-transform duration-300">
+              <div class="text-3xl font-extrabold bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent mb-2">
+                {{ getStartingPrice() }}
+              </div>
+              <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Starting From</div>
             </div>
-            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Total Features</div>
-          </div>
-          <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-            <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">
-              {{ getHighestPrice() }}
+            <div class="text-center p-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-green-200/50 dark:border-green-700/50 hover:scale-105 transition-transform duration-300">
+              <div class="text-4xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent mb-2">
+                {{ getTotalFeatures() }}
+              </div>
+              <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Total Features</div>
             </div>
-            <div class="text-xs font-medium text-gray-600 dark:text-gray-400">Highest Price</div>
+            <div class="text-center p-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-amber-200/50 dark:border-amber-700/50 hover:scale-105 transition-transform duration-300">
+              <div class="text-3xl font-extrabold bg-gradient-to-r from-amber-600 to-orange-700 bg-clip-text text-transparent mb-2">
+                {{ getHighestPrice() }}
+              </div>
+              <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Highest Price</div>
+            </div>
           </div>
         </div>
       </div>

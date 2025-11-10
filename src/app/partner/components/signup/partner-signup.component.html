@@ -101,14 +101,22 @@
     <!-- Contact Information -->
     <div class="space-y-2 sm:space-y-3">
       @if (isLastNameReady()) {
-        <app-reactive-input
-          [form]="signup_form"
-          [id]="'email'"
-          [key]="'email'"
-          [label]="'Email Address'"
-          [type]="'email'"
-          [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'"
-        ></app-reactive-input>
+        <div>
+          <app-reactive-input
+            [form]="signup_form"
+            [id]="'email'"
+            [key]="'email'"
+            [label]="'Email Address'"
+            [type]="'email'"
+            [classes]="'border border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 focus:bg-white transition-colors duration-200'"
+          ></app-reactive-input>
+          @if (signup_form.get('email')?.hasError('emailExists') && signup_form.get('email')?.touched) {
+            <small class="text-red-500 text-xs block mt-1">
+              <i class="pi pi-exclamation-circle mr-1"></i>
+              This email is already registered
+            </small>
+          }
+        </div>
       }
       @if (isEmailReady()) {
         <app-reactive-input

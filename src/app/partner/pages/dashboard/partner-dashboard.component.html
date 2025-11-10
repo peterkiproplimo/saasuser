@@ -13,9 +13,9 @@
       </div>
       <button
         routerLink="/partner/products/create"
-        class="mt-4 sm:mt-0 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2">
-        <i class="pi pi-plus"></i>
-        Create New Product
+        class="mt-4 sm:mt-0 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 flex items-center gap-2 transform">
+        <i class="pi pi-plus text-lg"></i>
+        Add New Product
       </button>
     </div>
   </div>
@@ -29,119 +29,156 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Total Products -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
+      class="group relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 rounded-2xl shadow-xl p-6 border-2 border-blue-200/50 dark:border-blue-700/50 cursor-pointer hover:shadow-2xl hover:scale-105 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 overflow-hidden"
       routerLink="/partner/products">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-blue-400/10 dark:bg-blue-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+      <div class="relative flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
             Total Products
           </p>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+          <p class="text-4xl font-extrabold text-gray-900 dark:text-white mb-1">
             {{ insights().total_products }}
           </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Active products</p>
         </div>
-        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-          <i class="pi pi-box text-blue-600 dark:text-blue-400 text-xl"></i>
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+          <i class="pi pi-box text-white text-2xl"></i>
         </div>
       </div>
     </div>
 
     <!-- Total Views -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+      class="group relative bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/30 dark:to-emerald-800/20 rounded-2xl shadow-xl p-6 border-2 border-green-200/50 dark:border-green-700/50 cursor-pointer hover:shadow-2xl hover:scale-105 hover:border-green-300 dark:hover:border-green-600 transition-all duration-300 overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-green-400/10 dark:bg-green-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+      <div class="relative flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wider mb-2">
             Total Views
           </p>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+          <p class="text-4xl font-extrabold text-gray-900 dark:text-white mb-1">
             {{ insights().total_views | number }}
           </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Product views</p>
         </div>
-        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-          <i class="pi pi-eye text-green-600 dark:text-green-400 text-xl"></i>
+        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+          <i class="pi pi-eye text-white text-2xl"></i>
         </div>
       </div>
     </div>
 
     <!-- Total Subscriptions -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Total Subscriptions
+      class="group relative bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-900/30 dark:to-violet-800/20 rounded-2xl shadow-xl p-6 border-2 border-purple-200/50 dark:border-purple-700/50 cursor-pointer hover:shadow-2xl hover:scale-105 hover:border-purple-300 dark:hover:border-purple-600 transition-all duration-300 overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-purple-400/10 dark:bg-purple-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+      <div class="relative flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2">
+            Subscriptions
           </p>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+          <p class="text-4xl font-extrabold text-gray-900 dark:text-white mb-1">
             {{ insights().total_subscriptions | number }}
           </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Active subscribers</p>
         </div>
-        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-          <i class="pi pi-users text-purple-600 dark:text-purple-400 text-xl"></i>
+        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+          <i class="pi pi-users text-white text-2xl"></i>
         </div>
       </div>
     </div>
 
     <!-- Total Revenue -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+      class="group relative bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-800/20 rounded-2xl shadow-xl p-6 border-2 border-amber-200/50 dark:border-amber-700/50 cursor-pointer hover:shadow-2xl hover:scale-105 hover:border-amber-300 dark:hover:border-amber-600 transition-all duration-300 overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 dark:bg-amber-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+      <div class="relative flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">
             Total Revenue
           </p>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+          <p class="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">
             {{ formatCurrency(insights().total_revenue) }}
           </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Monthly revenue</p>
         </div>
-        <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-          <i class="pi pi-money-bill text-yellow-600 dark:text-yellow-400 text-xl"></i>
+        <div class="w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+          <i class="pi pi-money-bill text-white text-2xl"></i>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Quick Actions -->
-  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 mb-8">
-    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border-2 border-gray-200/50 dark:border-gray-700/50 p-8 mb-8">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white">Quick Actions</h3>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <button
         routerLink="/partner/products/create"
-        class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800">
-        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-          <i class="pi pi-plus text-white"></i>
+        class="group flex items-center gap-4 p-5 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 rounded-xl hover:from-blue-100 hover:to-blue-200 dark:hover:from-blue-800/40 dark:hover:to-blue-700/30 transition-all duration-300 border-2 border-blue-200/50 dark:border-blue-700/50 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-xl hover:scale-105 transform">
+        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <i class="pi pi-plus text-white text-xl"></i>
         </div>
-        <div class="text-left">
-          <p class="font-medium text-gray-900 dark:text-white">Create Product</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Add a new SaaS product</p>
+        <div class="text-left flex-1">
+          <p class="font-bold text-gray-900 dark:text-white text-base">Add Product</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Create a new SaaS product</p>
         </div>
+        <i class="pi pi-arrow-right text-blue-600 dark:text-blue-400 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-300"></i>
       </button>
 
       <button
         routerLink="/partner/products"
-        class="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200 border border-green-200 dark:border-green-800">
-        <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-          <i class="pi pi-list text-white"></i>
+        class="group flex items-center gap-4 p-5 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/30 dark:to-emerald-800/20 rounded-xl hover:from-green-100 hover:to-emerald-200 dark:hover:from-green-800/40 dark:hover:to-emerald-700/30 transition-all duration-300 border-2 border-green-200/50 dark:border-green-700/50 hover:border-green-300 dark:hover:border-green-600 hover:shadow-xl hover:scale-105 transform">
+        <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <i class="pi pi-list text-white text-xl"></i>
         </div>
-        <div class="text-left">
-          <p class="font-medium text-gray-900 dark:text-white">View Products</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Manage your products</p>
+        <div class="text-left flex-1">
+          <p class="font-bold text-gray-900 dark:text-white text-base">View Products</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage your products</p>
         </div>
+        <i class="pi pi-arrow-right text-green-600 dark:text-green-400 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-300"></i>
       </button>
 
       <button
         routerLink="/partner/insights"
-        class="flex items-center gap-3 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors duration-200 border border-purple-200 dark:border-purple-800">
-        <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
-          <i class="pi pi-chart-bar text-white"></i>
+        class="group flex items-center gap-4 p-5 bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-900/30 dark:to-violet-800/20 rounded-xl hover:from-purple-100 hover:to-violet-200 dark:hover:from-purple-800/40 dark:hover:to-violet-700/30 transition-all duration-300 border-2 border-purple-200/50 dark:border-purple-700/50 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-xl hover:scale-105 transform">
+        <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <i class="pi pi-chart-bar text-white text-xl"></i>
         </div>
-        <div class="text-left">
-          <p class="font-medium text-gray-900 dark:text-white">View Insights</p>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Analytics & reports</p>
+        <div class="text-left flex-1">
+          <p class="font-bold text-gray-900 dark:text-white text-base">View Insights</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Analytics & reports</p>
         </div>
+        <i class="pi pi-arrow-right text-purple-600 dark:text-purple-400 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-300"></i>
       </button>
     </div>
   </div>
+
+  <!-- Charts Section -->
+  @if (!loading() && revenueChartData) {
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Revenue Chart -->
+    <div class="bg-gradient-to-br from-white to-blue-50/30 dark:from-gray-800 dark:to-blue-900/10 rounded-2xl shadow-xl border-2 border-blue-200/30 dark:border-blue-700/30 p-6 hover:shadow-2xl transition-all duration-300">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full"></div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Revenue Trend</h3>
+      </div>
+      <p-chart type="line" [data]="revenueChartData" [options]="chartOptions" [style]="{'height': '300px'}"></p-chart>
+    </div>
+
+    <!-- Subscription Chart -->
+    <div class="bg-gradient-to-br from-white to-green-50/30 dark:from-gray-800 dark:to-green-900/10 rounded-2xl shadow-xl border-2 border-green-200/30 dark:border-green-700/30 p-6 hover:shadow-2xl transition-all duration-300">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-1 h-8 bg-gradient-to-b from-green-500 to-emerald-600 rounded-full"></div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Subscription Growth</h3>
+      </div>
+      <p-chart type="line" [data]="subscriptionChartData" [options]="chartOptions" [style]="{'height': '300px'}"></p-chart>
+    </div>
+  </div>
+  }
   }
 </div>
 

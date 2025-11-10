@@ -4,9 +4,11 @@ import { PartnerDashboardComponent } from './pages/dashboard/partner-dashboard.c
 import { ProductListComponent } from './pages/products/product-list.component';
 import { ProductFormComponent } from './pages/products/product-form.component';
 import { PartnerInsightsComponent } from './pages/insights/partner-insights.component';
+import { PartnerClientsComponent } from './pages/clients/partner-clients.component';
 import { PartnerAuthComponent } from './components/auth/partner-auth.component';
 import { PartnerSignupComponent } from './components/signup/partner-signup.component';
 import { PartnerLoginComponent } from './components/login/partner-login.component';
+import { PartnerForgotPasswordComponent } from './components/forgot-password/partner-forgot-password.component';
 import { partnerAuthGuard } from './guards/partner-auth.guard';
 
 export const partnerRoutes: Routes = [
@@ -28,6 +30,16 @@ export const partnerRoutes: Routes = [
       {
         path: '',
         component: PartnerLoginComponent
+      }
+    ]
+  },
+  {
+    path: 'forgot-password',
+    component: PartnerAuthComponent,
+    children: [
+      {
+        path: '',
+        component: PartnerForgotPasswordComponent
       }
     ]
   },
@@ -61,6 +73,10 @@ export const partnerRoutes: Routes = [
       {
         path: 'insights',
         component: PartnerInsightsComponent
+      },
+      {
+        path: 'clients',
+        component: PartnerClientsComponent
       }
     ]
   }
