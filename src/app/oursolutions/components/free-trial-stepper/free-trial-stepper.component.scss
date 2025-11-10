@@ -1,0 +1,11 @@
+.step-content {
+    min-height: 400px;
+}
+
+.plan-card {
+    transition: all 0.2s ease-in-out;
+}
+
+.plan-card:hover {
+    transform: translateY(-2px);
+}

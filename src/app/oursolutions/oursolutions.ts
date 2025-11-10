@@ -16,6 +16,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { FreeTrialStepperComponent } from './components/free-trial-stepper/free-trial-stepper.component';
 
 @Component({
   selector: 'app-oursolutions',
@@ -27,6 +28,7 @@ import { ToastModule } from 'primeng/toast';
     DialogModule,
     ReactiveFormsModule,
     ToastModule,
+    FreeTrialStepperComponent,
   ],
   providers: [MessageService],
   templateUrl: './oursolutions.html',
@@ -86,70 +88,16 @@ export class OursolutionsComponent implements OnInit {
   }
 
   // ▶ state
-  showTrialDialog = false; // 👈 add this
-
-  // ▶ trial form payload
-  trialForm = {
-    customer_name: '',
-    email: '',
-    phone: '',
-    company: '',
-    application_name: '',
-    status: 'Pending',
-    notes: '',
-  };
+  showTrialStepper = false; // Show free trial stepper instead of dialog
 
   openRequestTrial(): void {
-    this.trialForm = {
-      ...this.trialForm,
-      application_name: this.solutionData?.name || '',
-    };
-    this.showTrialDialog = true;
+    console.log('Opening free trial stepper...', this.solutionData);
+    this.showTrialStepper = true;
+    this.cd.detectChanges();
   }
 
   closeRequestTrial(): void {
-    this.showTrialDialog = false;
-  }
-
-  submitTrialRequest(): void {
-    // Validate required fields
-    if (!this.trialForm.customer_name || !this.trialForm.email || !this.trialForm.phone || !this.trialForm.company) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Validation Error',
-        detail: 'Please fill all required fields.',
-        life: 5000
-      });
-      return;
-    }
-
-    this.http
-      .post(`${this.base_url}.api.profile.request_free_trial`, this.trialForm)
-      .pipe(takeUntilDestroyed(this.destroy))
-      .subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Free trial request sent successfully! Our team will contact you soon.',
-            life: 5000
-          });
-          this.closeRequestTrial();
-          // Reset form
-          this.trialForm = {
-            customer_name: '',
-            email: '',
-            phone: '',
-            company: '',
-            application_name: this.solutionData?.name || '',
-            status: 'Pending',
-            notes: '',
-          };
-        },
-        error: (error) => {
-          this.handleApiError(error, 'Failed to submit free trial request');
-        },
-      });
+    this.showTrialStepper = false;
   }
 
   /* --------------------------- API calls -------------------------- */

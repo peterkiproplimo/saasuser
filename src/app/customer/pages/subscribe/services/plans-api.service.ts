@@ -65,7 +65,33 @@ export class PlansApiService {
                 this.isLoading.set(false);
             },
             error: (error) => {
-                this.error.set(error.message || 'Failed to fetch plans');
+                // Extract detailed error message from API response
+                let errorMessage = 'Failed to fetch plans';
+                const errorCode = error?.status || 'Unknown';
+
+                if (error?.error?.exception?.includes('ValidationError') ||
+                    error?.error?.exception?.includes('No module named')) {
+                    errorMessage = `Error 417: API not found. Check on frappe logs.`;
+                } else if (error?.status === 417) {
+                    errorMessage = `Error 417: API not found.`;
+                } else if (error?.error?.message) {
+                    errorMessage = `Error ${errorCode}: ${error.error.message}`;
+                } else if (error?.error?.exc) {
+                    const excMatch = error.error.exc.match(/ValidationError: (.+?)\\n/);
+                    if (excMatch) {
+                        errorMessage = `Error ${errorCode}: ${excMatch[1]}`;
+                    } else {
+                        errorMessage = `Error ${errorCode}: ${error.error.exc}`;
+                    }
+                } else if (error?.error?.exception) {
+                    errorMessage = `Error ${errorCode}: ${error.error.exception}`;
+                } else if (error?.message) {
+                    errorMessage = `Error ${errorCode}: ${error.message}`;
+                } else {
+                    errorMessage = `Error ${errorCode}: Failed to fetch plans`;
+                }
+
+                this.error.set(errorMessage);
                 this.isLoading.set(false);
             }
         });

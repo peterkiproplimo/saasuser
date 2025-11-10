@@ -1,0 +1,268 @@
+import { Component, OnInit, signal, inject, DestroyRef, Input, Output, EventEmitter } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PlansApiService, Plan } from '../../../customer/pages/subscribe/services/plans-api.service';
+import { AuthService } from '../../../auth/services/auth.service';
+import { RegisterRequest } from '../../../auth/models/requests/register-request';
+import { ReactiveInputComponent } from '../../../shared/components/form/reactive-input/reactive-input.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { environment } from '../../../../environments/environment';
+
+@Component({
+    selector: 'app-free-trial-stepper',
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule,
+        RouterLink,
+        ReactiveInputComponent,
+        ProgressSpinnerModule,
+        ToastModule
+    ],
+    providers: [MessageService],
+    templateUrl: './free-trial-stepper.component.html',
+    styleUrls: ['./free-trial-stepper.component.scss']
+})
+export class FreeTrialStepperComponent implements OnInit {
+    @Input() solutionData: any = null;
+    @Output() close = new EventEmitter<void>();
+
+    private router = inject(Router);
+    private destroyRef = inject(DestroyRef);
+    private http = inject(HttpClient);
+    private authService = inject(AuthService);
+    private messageService = inject(MessageService);
+
+    plansApiService = inject(PlansApiService);
+
+    // Stepper state
+    currentStep = signal(1);
+
+    // Form data
+    selectedPlan: Plan | null = null;
+    subdomainName = '';
+
+    // Signup form - simplified to only email and password
+    signupForm = new FormGroup({
+        email: new FormControl('', [Validators.required, Validators.email]),
+        password: new FormControl('', [Validators.required]),
+    });
+
+    // Loading states
+    signupLoading = signal(false);
+    trialCreationLoading = signal(false);
+
+    // Error states
+    signupError = signal<string | null>(null);
+    trialCreationError = signal<string | null>(null);
+
+    // API data signals
+    plans = this.plansApiService.plans;
+    isLoadingPlans = this.plansApiService.isLoading;
+    plansError = this.plansApiService.error;
+
+    base_url = environment.BASE_URL;
+
+    ngOnInit() {
+        // Load plans for the selected solution
+        if (this.solutionData?.name) {
+            this.plansApiService.loadPlans(this.solutionData.name);
+        }
+    }
+
+    selectPlan(plan: Plan) {
+        this.selectedPlan = plan;
+    }
+
+    onImageError(event: any): void {
+        event.target.style.display = 'none';
+    }
+
+    goToNextStep() {
+        if (this.canProceed()) {
+            // If moving from step 2 to step 3, validate domain
+            if (this.currentStep() === 2) {
+                this.currentStep.update(step => step + 1);
+            }
+            // If moving from step 3 to step 4, submit signup and create trial
+            else if (this.currentStep() === 3) {
+                this.submitSignupAndCreateTrial();
+            } else {
+                this.currentStep.update(step => step + 1);
+            }
+        }
+    }
+
+    goToPreviousStep() {
+        if (this.currentStep() > 1) {
+            this.currentStep.update(step => step - 1);
+        }
+    }
+
+    canProceed(): boolean {
+        switch (this.currentStep()) {
+            case 1:
+                return this.selectedPlan !== null;
+            case 2:
+                return this.subdomainName.length >= 3 && this.subdomainName.length <= 20;
+            case 3:
+                return this.signupForm.valid;
+            default:
+                return false;
+        }
+    }
+
+    submitSignupAndCreateTrial() {
+        this.signupForm.markAllAsTouched();
+        if (this.signupForm.invalid) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Validation Error',
+                detail: 'Please fill all required fields correctly.',
+                life: 5000
+            });
+            return;
+        }
+
+        // Clear previous errors
+        this.signupError.set(null);
+        this.trialCreationError.set(null);
+        this.signupLoading.set(true);
+
+        const registerRequest: RegisterRequest = {
+            email: this.signupForm.value.email!,
+            password: this.signupForm.value.password!,
+            first_name: '', // Default empty, API might handle this
+            last_name: '', // Default empty, API might handle this
+            organization: '', // Default empty, API might handle this
+            confirm_password: this.signupForm.value.password! // Use password as confirm_password
+        };
+
+        // First, register the user
+        this.authService.register(registerRequest)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: () => {
+                    // After successful registration, create the free trial
+                    this.createFreeTrial();
+                },
+                error: (error) => {
+                    this.signupLoading.set(false);
+                    const errorMessage = this.extractErrorMessage(error, 'Registration failed');
+                    this.signupError.set(errorMessage);
+
+                    // Also show toast notification
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Registration Error',
+                        detail: errorMessage,
+                        life: 7000
+                    });
+                }
+            });
+    }
+
+    createFreeTrial() {
+        // Clear previous errors
+        this.trialCreationError.set(null);
+        this.trialCreationLoading.set(true);
+
+        const trialRequest = {
+            customer_name: '', // Will be set from email or API
+            email: this.signupForm.value.email!,
+            phone: '', // Not collected in simplified form
+            company: '', // Not collected in simplified form
+            application_name: this.solutionData?.name || '',
+            plan: this.selectedPlan?.plan_name || '',
+            subdomain: this.subdomainName,
+            status: 'Active',
+            notes: `Free trial for ${this.solutionData?.name} - Plan: ${this.selectedPlan?.plan_name}`
+        };
+
+        this.http
+            .post(`${this.base_url}.api.profile.request_free_trial`, trialRequest)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: () => {
+                    this.trialCreationLoading.set(false);
+                    this.signupLoading.set(false);
+                    // Clear any errors on success
+                    this.signupError.set(null);
+                    this.trialCreationError.set(null);
+                    // Move to success step
+                    this.currentStep.update(step => step + 1);
+                },
+                error: (error) => {
+                    this.trialCreationLoading.set(false);
+                    this.signupLoading.set(false);
+                    const errorMessage = this.extractErrorMessage(error, 'Failed to create free trial');
+                    this.trialCreationError.set(errorMessage);
+
+                    // Also show toast notification
+                    this.handleApiError(error, 'Failed to create free trial');
+                }
+            });
+    }
+
+    private extractErrorMessage(error: any, defaultMessage: string): string {
+        let errorMessage = defaultMessage;
+        let errorCode = error?.status || 'Unknown';
+
+        // Check for API not found errors
+        if (error?.error?.exception?.includes('ValidationError') ||
+            error?.error?.exception?.includes('No module named')) {
+            errorCode = 417;
+            errorMessage = 'Error 417: API not found. Check on frappe logs.';
+        } else if (error?.status === 417) {
+            errorCode = 417;
+            errorMessage = 'Error 417: API not found.';
+        }
+        // Try to extract detailed error message
+        else if (error?.error?.message) {
+            errorMessage = `Error ${errorCode}: ${error.error.message}`;
+        } else if (error?.error?.exc) {
+            // Try to extract from exception traceback
+            const excMatch = error.error.exc.match(/ValidationError: (.+?)\\n/);
+            if (excMatch) {
+                errorMessage = `Error ${errorCode}: ${excMatch[1]}`;
+            } else {
+                errorMessage = `Error ${errorCode}: ${defaultMessage}`;
+            }
+        } else if (error?.error?.exception) {
+            errorMessage = `Error ${errorCode}: ${error.error.exception}`;
+        } else if (error?.message) {
+            errorMessage = `Error ${errorCode}: ${error.message}`;
+        } else {
+            errorMessage = `Error ${errorCode}: ${defaultMessage}`;
+        }
+
+        return errorMessage;
+    }
+
+    private handleApiError(error: any, defaultMessage: string): void {
+        const errorMessage = this.extractErrorMessage(error, defaultMessage);
+        const errorCode = error?.status || 'Unknown';
+
+        this.messageService.add({
+            severity: 'error',
+            summary: `Error ${errorCode}`,
+            detail: errorMessage,
+            life: 7000
+        });
+    }
+
+    navigateToLogin() {
+        this.router.navigate(['/auth/login']);
+    }
+
+    closeStepper() {
+        this.close.emit();
+    }
+}
+
