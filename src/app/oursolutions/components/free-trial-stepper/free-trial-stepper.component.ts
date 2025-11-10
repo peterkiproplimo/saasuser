@@ -7,6 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlansApiService, Plan } from '../../../customer/pages/subscribe/services/plans-api.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { RegisterRequest } from '../../../auth/models/requests/register-request';
+import { Functions, passwordMatchValidator } from '../../../shared/functions/functions';
 import { ReactiveInputComponent } from '../../../shared/components/form/reactive-input/reactive-input.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from 'primeng/api';
@@ -38,6 +39,7 @@ export class FreeTrialStepperComponent implements OnInit {
     private http = inject(HttpClient);
     private authService = inject(AuthService);
     private messageService = inject(MessageService);
+    private functions = new Functions();
 
     plansApiService = inject(PlansApiService);
 
@@ -48,11 +50,16 @@ export class FreeTrialStepperComponent implements OnInit {
     selectedPlan: Plan | null = null;
     subdomainName = '';
 
-    // Signup form - simplified to only email and password
+    // Signup form
     signupForm = new FormGroup({
+        company_name: new FormControl('', [Validators.required]),
+        first_name: new FormControl('', [Validators.required]),
+        last_name: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
+        phone: new FormControl('', [Validators.required]),
         password: new FormControl('', [Validators.required]),
-    });
+        confirm_password: new FormControl('', [Validators.required]),
+    }, { validators: passwordMatchValidator() });
 
     // Loading states
     signupLoading = signal(false);
@@ -138,10 +145,10 @@ export class FreeTrialStepperComponent implements OnInit {
         const registerRequest: RegisterRequest = {
             email: this.signupForm.value.email!,
             password: this.signupForm.value.password!,
-            first_name: '', // Default empty, API might handle this
-            last_name: '', // Default empty, API might handle this
-            organization: '', // Default empty, API might handle this
-            confirm_password: this.signupForm.value.password! // Use password as confirm_password
+            first_name: this.signupForm.value.first_name!,
+            last_name: this.signupForm.value.last_name!,
+            organization: this.signupForm.value.company_name!,
+            confirm_password: this.signupForm.value.confirm_password!
         };
 
         // First, register the user
@@ -174,10 +181,10 @@ export class FreeTrialStepperComponent implements OnInit {
         this.trialCreationLoading.set(true);
 
         const trialRequest = {
-            customer_name: '', // Will be set from email or API
+            customer_name: `${this.signupForm.value.first_name} ${this.signupForm.value.last_name}`,
             email: this.signupForm.value.email!,
-            phone: '', // Not collected in simplified form
-            company: '', // Not collected in simplified form
+            phone: this.signupForm.value.phone!,
+            company: this.signupForm.value.company_name!,
             application_name: this.solutionData?.name || '',
             plan: this.selectedPlan?.plan_name || '',
             subdomain: this.subdomainName,

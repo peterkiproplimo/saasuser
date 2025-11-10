@@ -261,20 +261,57 @@
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Create Your Account</h2>
                 <p class="text-gray-600 dark:text-gray-400 mb-6">Sign up to access your free trial</p>
 
-                <form [formGroup]="signupForm" class="space-y-4 max-w-md mx-auto">
-                    <!-- Email -->
-                    <div class="space-y-2">
-                        <app-reactive-input [form]="signupForm" [id]="'email'" [key]="'email'" [label]="'Email Address'"
-                            [type]="'email'"
+                <form [formGroup]="signupForm" class="space-y-4">
+                    <!-- Company Information -->
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                        <h3 class="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3">Company Information</h3>
+                        <app-reactive-input [form]="signupForm" [id]="'company_name'" [key]="'company_name'"
+                            [label]="'Company Name'" [type]="'text'"
                             [classes]="'border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 transition-colors duration-200'"></app-reactive-input>
                     </div>
 
-                    <!-- Password -->
-                    <div class="space-y-2">
-                        <app-reactive-input [form]="signupForm" [id]="'password'" [key]="'password'"
-                            [label]="'Password'" [type]="'password'"
+                    <!-- Personal Information -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <app-reactive-input [form]="signupForm" [id]="'first_name'" [key]="'first_name'"
+                            [label]="'First Name'" [type]="'text'"
+                            [classes]="'border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 transition-colors duration-200'"></app-reactive-input>
+                        <app-reactive-input [form]="signupForm" [id]="'last_name'" [key]="'last_name'"
+                            [label]="'Last Name'" [type]="'text'"
                             [classes]="'border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 transition-colors duration-200'"></app-reactive-input>
                     </div>
+
+                    <!-- Contact Information -->
+                    <div class="space-y-4">
+                        <app-reactive-input [form]="signupForm" [id]="'email'" [key]="'email'" [label]="'Email Address'"
+                            [type]="'email'"
+                            [classes]="'border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 transition-colors duration-200'"></app-reactive-input>
+                        <app-reactive-input [form]="signupForm" [id]="'phone'" [key]="'phone'" [label]="'Phone Number'"
+                            [type]="'tel'"
+                            [classes]="'border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 transition-colors duration-200'"></app-reactive-input>
+                    </div>
+
+                    <!-- Security Information -->
+                    <div class="bg-slate-50 dark:bg-slate-900/20 p-4 rounded-lg">
+                        <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">Security Information
+                        </h3>
+                        <div class="space-y-4">
+                            <app-reactive-input [form]="signupForm" [id]="'password'" [key]="'password'"
+                                [label]="'Password'" [type]="'password'"
+                                [classes]="'border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 transition-colors duration-200'"></app-reactive-input>
+                            <app-reactive-input [form]="signupForm" [id]="'confirm_password'" [key]="'confirm_password'"
+                                [label]="'Confirm Password'" [type]="'password'"
+                                [classes]="'border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-700 transition-colors duration-200'"></app-reactive-input>
+                        </div>
+                    </div>
+
+                    @if (signupForm.hasError('passwordMismatch') &&
+                    signupForm.get('confirm_password')?.value) {
+                    <div
+                        class="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+                        <i class="pi pi-exclamation-triangle mr-1 text-xs"></i>
+                        Passwords do not match.
+                    </div>
+                    }
 
                     <!-- Signup API Error Display -->
                     @if (signupError()) {
