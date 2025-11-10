@@ -45,3 +45,5 @@ export interface PartnerInsights {
   currency: string;
 }
 
+
+

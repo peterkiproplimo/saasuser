@@ -24,6 +24,28 @@ export class PartnerSignupComponent {
   logoPreview: string | null = null;
   logoFile: File | null = null;
 
+  // Ordered field cascade for progressive disclosure UX
+  // Each next field appears once the previous becomes valid/filled.
+  private isFieldReady(controlName: string): boolean {
+    const control = this.signup_form.get(controlName);
+    if (!control) return false;
+    const value = control.value;
+    const hasContent = value !== null && value !== undefined && String(value).trim().length > 0;
+    return control.valid && hasContent;
+  }
+
+  // Expose helpers for template readability
+  isCompanyNameReady() { return this.isFieldReady('company_name'); }
+  isBusinessNumberReady() { return this.isFieldReady('business_number'); }
+  isFirstNameReady() { return this.isFieldReady('first_name'); }
+  isLastNameReady() { return this.isFieldReady('last_name'); }
+  isEmailReady() { return this.isFieldReady('email'); }
+  isPhoneReady() { return this.isFieldReady('phone'); }
+  isAddressReady() { return this.isFieldReady('address'); }
+  isCityReady() { return this.isFieldReady('city'); }
+  isCountryReady() { return this.isFieldReady('country'); }
+  isPasswordReady() { return this.isFieldReady('password'); }
+
   private router = inject(Router);
   private partnerAuth = inject(PartnerAuthService);
   private destroyRef = inject(DestroyRef);
