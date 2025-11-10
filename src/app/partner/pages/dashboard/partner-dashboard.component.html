@@ -1,0 +1,147 @@
+<!-- Partner Dashboard -->
+<div class="p-6">
+  <!-- Header Section -->
+  <div class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+          Partner Dashboard
+        </h1>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">
+          Manage and monitor your SaaS products
+        </p>
+      </div>
+      <button
+        routerLink="/partner/products/create"
+        class="mt-4 sm:mt-0 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2">
+        <i class="pi pi-plus"></i>
+        Create New Product
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  @if (loading()) {
+  <div class="flex justify-center py-12">
+    <p-progress-spinner [style]="{ width: '50px', height: '50px' }"></p-progress-spinner>
+  </div>
+  } @else {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Products -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300"
+      routerLink="/partner/products">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Total Products
+          </p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+            {{ insights().total_products }}
+          </p>
+        </div>
+        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-box text-blue-600 dark:text-blue-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Views -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Total Views
+          </p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+            {{ insights().total_views | number }}
+          </p>
+        </div>
+        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-eye text-green-600 dark:text-green-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Subscriptions -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Total Subscriptions
+          </p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+            {{ insights().total_subscriptions | number }}
+          </p>
+        </div>
+        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-users text-purple-600 dark:text-purple-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Revenue -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Total Revenue
+          </p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">
+            {{ formatCurrency(insights().total_revenue) }}
+          </p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
+          <i class="pi pi-money-bill text-yellow-600 dark:text-yellow-400 text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 mb-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <button
+        routerLink="/partner/products/create"
+        class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800">
+        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+          <i class="pi pi-plus text-white"></i>
+        </div>
+        <div class="text-left">
+          <p class="font-medium text-gray-900 dark:text-white">Create Product</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Add a new SaaS product</p>
+        </div>
+      </button>
+
+      <button
+        routerLink="/partner/products"
+        class="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200 border border-green-200 dark:border-green-800">
+        <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+          <i class="pi pi-list text-white"></i>
+        </div>
+        <div class="text-left">
+          <p class="font-medium text-gray-900 dark:text-white">View Products</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Manage your products</p>
+        </div>
+      </button>
+
+      <button
+        routerLink="/partner/insights"
+        class="flex items-center gap-3 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors duration-200 border border-purple-200 dark:border-purple-800">
+        <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+          <i class="pi pi-chart-bar text-white"></i>
+        </div>
+        <div class="text-left">
+          <p class="font-medium text-gray-900 dark:text-white">View Insights</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Analytics & reports</p>
+        </div>
+      </button>
+    </div>
+  </div>
+  }
+</div>
+
