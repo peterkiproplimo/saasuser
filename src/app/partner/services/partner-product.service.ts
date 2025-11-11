@@ -1,114 +1,50 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { PartnerProduct, SubscriptionPlan } from '../models/partner.model';
 import { PartnerAuthService } from './partner-auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PartnerProductService {
-  private readonly STORAGE_KEY = 'partner_products';
+  private http = inject(HttpClient);
 
-  constructor(private partnerAuth: PartnerAuthService) {
-    // Initialize storage if it doesn't exist
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
-    }
-  }
+  constructor(private partnerAuth: PartnerAuthService) {}
 
   /**
    * Get all products for current partner
    */
   getProducts(): Observable<PartnerProduct[]> {
-    const partner = this.partnerAuth.getCurrentPartner();
-    if (!partner) {
-      return of([]);
-    }
-
-    const products = this.getAllProducts();
-    const partnerProducts = products.filter(p => p.partner_id === partner.id);
-    return of(partnerProducts).pipe(delay(300));
+    return this.http.get<PartnerProduct[]>('/api/partner/products');
   }
 
   /**
    * Get product by ID
    */
   getProductById(id: string): Observable<PartnerProduct | null> {
-    const products = this.getAllProducts();
-    const product = products.find(p => p.id === id);
-    return of(product || null).pipe(delay(300));
+    return this.http.get<PartnerProduct>(`/api/partner/products/${id}`);
   }
 
   /**
    * Create new product
    */
   createProduct(productData: Omit<PartnerProduct, 'id' | 'partner_id' | 'created_at' | 'updated_at'>): Observable<PartnerProduct> {
-    const partner = this.partnerAuth.getCurrentPartner();
-    if (!partner) {
-      throw new Error('Partner not logged in');
-    }
-
-    const newProduct: PartnerProduct = {
-      ...productData,
-      id: this.generateId(),
-      partner_id: partner.id,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-
-    const products = this.getAllProducts();
-    products.push(newProduct);
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(products));
-
-    return of(newProduct).pipe(delay(500));
+    return this.http.post<PartnerProduct>('/api/partner/products', productData);
   }
 
   /**
    * Update product
    */
   updateProduct(id: string, productData: Partial<PartnerProduct>): Observable<PartnerProduct> {
-    const products = this.getAllProducts();
-    const index = products.findIndex(p => p.id === id);
-    
-    if (index === -1) {
-      throw new Error('Product not found');
-    }
-
-    const partner = this.partnerAuth.getCurrentPartner();
-    if (products[index].partner_id !== partner?.id) {
-      throw new Error('Unauthorized');
-    }
-
-    products[index] = {
-      ...products[index],
-      ...productData,
-      updated_at: new Date().toISOString()
-    };
-
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(products));
-    return of(products[index]).pipe(delay(500));
+    return this.http.put<PartnerProduct>(`/api/partner/products/${id}`, productData);
   }
 
   /**
    * Delete product
    */
   deleteProduct(id: string): Observable<{ success: boolean }> {
-    const products = this.getAllProducts();
-    const index = products.findIndex(p => p.id === id);
-    
-    if (index === -1) {
-      throw new Error('Product not found');
-    }
-
-    const partner = this.partnerAuth.getCurrentPartner();
-    if (products[index].partner_id !== partner?.id) {
-      throw new Error('Unauthorized');
-    }
-
-    products.splice(index, 1);
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(products));
-    return of({ success: true }).pipe(delay(300));
+    return this.http.delete<{ success: boolean }>(`/api/partner/products/${id}`);
   }
 
   /**
@@ -121,54 +57,13 @@ export class PartnerProductService {
     total_revenue: number;
     currency: string;
   }> {
-    const partner = this.partnerAuth.getCurrentPartner();
-    if (!partner) {
-      return of({
-        total_products: 0,
-        total_views: 0,
-        total_subscriptions: 0,
-        total_revenue: 0,
-        currency: 'KES'
-      });
-    }
-
-    const products = this.getAllProducts().filter(p => p.partner_id === partner.id);
-    
-    // Calculate dummy insights
-    const total_products = products.length;
-    const total_views = products.reduce((sum, p) => sum + Math.floor(Math.random() * 1000) + 100, 0);
-    const total_subscriptions = products.reduce((sum, p) => {
-      return sum + p.subscription_plans.reduce((planSum, plan) => planSum + Math.floor(Math.random() * 50) + 5, 0);
-    }, 0);
-    const total_revenue = products.reduce((sum, p) => {
-      return sum + p.subscription_plans.reduce((planSum, plan) => {
-        const subscriptions = Math.floor(Math.random() * 50) + 5;
-        return planSum + (plan.price * subscriptions);
-      }, 0);
-    }, 0);
-
-    return of({
-      total_products,
-      total_views,
-      total_subscriptions,
-      total_revenue,
-      currency: 'KES'
-    }).pipe(delay(300));
-  }
-
-  /**
-   * Get all products (internal)
-   */
-  private getAllProducts(): PartnerProduct[] {
-    const productsStr = localStorage.getItem(this.STORAGE_KEY);
-    return productsStr ? JSON.parse(productsStr) : [];
-  }
-
-  /**
-   * Generate unique ID
-   */
-  private generateId(): string {
-    return 'product_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    return this.http.get<{
+      total_products: number;
+      total_views: number;
+      total_subscriptions: number;
+      total_revenue: number;
+      currency: string;
+    }>('/api/partner/analytics/summary');
   }
 
   /**
@@ -185,33 +80,10 @@ export class PartnerProductService {
       features?: string[];
     }>;
   }>): Observable<PartnerProduct[]> {
-    const partner = this.partnerAuth.getCurrentPartner();
-    if (!partner) {
-      throw new Error('Partner not logged in');
-    }
-
-    const products = this.getAllProducts();
-    const newProducts: PartnerProduct[] = productsData.map(productData => {
-      const newProduct: PartnerProduct = {
-        ...productData,
-        id: this.generateId(),
-        partner_id: partner.id,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        subscription_plans: productData.subscription_plans.map(plan => ({
-          id: 'plan_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-          name: plan.name,
-          price: plan.price,
-          currency: plan.currency,
-          features: plan.features || []
-        }))
-      };
-      products.push(newProduct);
-      return newProduct;
-    });
-
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(products));
-    return of(newProducts).pipe(delay(500));
+    // For mock API, call create endpoint in a loop
+    const creations = productsData.map(p => this.createProduct(p as any));
+    // The caller can subscribe to each or we could combineLatest—keeping simple for now.
+    return this.http.get<PartnerProduct[]>('/api/partner/products');
   }
 }
 

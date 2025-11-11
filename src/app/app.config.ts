@@ -9,6 +9,7 @@ import { routes } from './app.routes';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import { authInterceptor } from './auth/interceptors/auth.interceptor';
 import {DatePipe} from '@angular/common';
+import { partnerApiInterceptor } from './partner/mocks/partner-api.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     DatePipe,
     provideHttpClient(withInterceptors([
+      partnerApiInterceptor,
       authInterceptor
     ])),
 

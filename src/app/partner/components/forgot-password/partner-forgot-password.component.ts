@@ -8,7 +8,7 @@ import { ProgressSpinner } from 'primeng/progressspinner';
 import { Functions } from '../../../shared/functions/functions';
 
 @Component({
-  selector: 'app-partner-login',
+  selector: 'app-partner-forgot-password',
   imports: [
     ReactiveFormsModule,
     FormsModule,
@@ -16,45 +16,43 @@ import { Functions } from '../../../shared/functions/functions';
     ProgressSpinner,
     RouterLink
   ],
-  templateUrl: './partner-login.component.html',
-  styleUrl: './partner-login.component.scss'
+  templateUrl: './partner-forgot-password.component.html',
+  styleUrl: './partner-forgot-password.component.scss'
 })
-export class PartnerLoginComponent {
+export class PartnerForgotPasswordComponent {
   loading: boolean = false;
+  emailSent: boolean = false;
 
   private router = inject(Router);
   private partnerAuth = inject(PartnerAuthService);
   private destroyRef = inject(DestroyRef);
   private functions = new Functions();
 
-  login_form = new FormGroup({
+  forgotPasswordForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
   });
 
-  login() {
-    this.login_form?.markAllAsTouched();
-    if (this.login_form?.invalid) return;
+  submitRequest() {
+    this.forgotPasswordForm?.markAllAsTouched();
+    if (this.forgotPasswordForm?.invalid) return;
 
     this.loading = true;
-    const email = this.login_form.value.email!;
-    const password = this.login_form.value.password!;
+    const email = this.forgotPasswordForm.value.email!;
 
-    this.partnerAuth.login(email, password).pipe(
+    this.partnerAuth.forgotPassword(email).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/partner/dashboard']);
+        this.emailSent = true;
+        this.functions.show_toast('Email Sent', 'success', 'Password reset instructions have been sent to your email.');
       },
       error: (error) => {
         this.loading = false;
-        this.functions.show_toast('Login Failed', 'error', error.error?.message || 'Invalid email or password.');
+        this.functions.show_toast('Error', 'error', error.error?.message || 'Failed to send reset email.');
       }
     });
   }
 }
-
-
 
 

@@ -39,7 +39,7 @@
               </button>
               <button (click)="router.navigate(['/partner/products/create']); close_drawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left text-blue-100 hover:bg-white/10 hover:text-white">
                 <i class="pi pi-plus text-lg"></i>
-                <span>Create Product</span>
+                <span>Add Product</span>
               </button>
             </div>
           </div>
@@ -50,6 +50,16 @@
               <button (click)="navigateToInsights(); close_drawer()" [class]="getButtonClasses(isInsightsActive())">
                 <i class="pi pi-chart-bar text-lg"></i>
                 <span>Insights</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">CLIENTS</h3>
+            <div class="space-y-1">
+              <button (click)="router.navigate(['/partner/clients']); close_drawer()" [class]="getButtonClasses(router.url.includes('/clients'))">
+                <i class="pi pi-users text-lg"></i>
+                <span>My Clients</span>
               </button>
             </div>
           </div>
@@ -109,7 +119,7 @@
             </button>
             <button (click)="router.navigate(['/partner/products/create'])" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left text-blue-100 hover:bg-white/10 hover:text-white">
               <i class="pi pi-plus text-lg"></i>
-              <span>Create Product</span>
+              <span>Add Product</span>
             </button>
           </div>
         </div>
@@ -121,6 +131,17 @@
             <button (click)="navigateToInsights()" [class]="getButtonClasses(isInsightsActive())">
               <i class="pi pi-chart-bar text-lg"></i>
               <span>Insights</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CLIENTS Section -->
+        <div class="space-y-3">
+          <h3 class="text-sm font-semibold text-blue-200 uppercase tracking-wider px-3">CLIENTS</h3>
+          <div class="space-y-1">
+            <button (click)="router.navigate(['/partner/clients'])" [class]="getButtonClasses(router.url.includes('/clients'))">
+              <i class="pi pi-users text-lg"></i>
+              <span>My Clients</span>
             </button>
           </div>
         </div>
