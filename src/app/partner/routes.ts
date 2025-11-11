@@ -5,6 +5,11 @@ import { ProductListComponent } from './pages/products/product-list.component';
 import { ProductFormComponent } from './pages/products/product-form.component';
 import { PartnerInsightsComponent } from './pages/insights/partner-insights.component';
 import { PartnerClientsComponent } from './pages/clients/partner-clients.component';
+import { PartnerUsersComponent } from './pages/users/partner-users.component';
+import { UserFormComponent } from './pages/users/user-form.component';
+import { PartnerRolesComponent } from './pages/roles/partner-roles.component';
+import { RoleFormComponent } from './pages/roles/role-form.component';
+import { PartnerPermissionsComponent } from './pages/permissions/partner-permissions.component';
 import { PartnerAuthComponent } from './components/auth/partner-auth.component';
 import { PartnerSignupComponent } from './components/signup/partner-signup.component';
 import { PartnerLoginComponent } from './components/login/partner-login.component';
@@ -77,6 +82,34 @@ export const partnerRoutes: Routes = [
       {
         path: 'clients',
         component: PartnerClientsComponent
+      },
+      {
+        path: 'users',
+        component: PartnerUsersComponent
+      },
+      {
+        path: 'users/create',
+        component: UserFormComponent
+      },
+      {
+        path: 'users/edit/:id',
+        component: UserFormComponent
+      },
+      {
+        path: 'roles',
+        component: PartnerRolesComponent
+      },
+      {
+        path: 'roles/create',
+        component: RoleFormComponent
+      },
+      {
+        path: 'roles/edit/:id',
+        component: RoleFormComponent
+      },
+      {
+        path: 'permissions',
+        component: PartnerPermissionsComponent
       }
     ]
   }

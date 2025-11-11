@@ -1,0 +1,171 @@
+<div class="p-6">
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-8 mb-6 shadow-2xl overflow-hidden">
+        <div class="absolute inset-0 bg-black/10"></div>
+        <div class="relative flex items-center gap-4">
+          <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+            <i class="pi pi-{{ isEditMode() ? 'pencil' : 'shield' }} text-3xl text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-4xl font-extrabold text-white mb-2">
+              {{ isEditMode() ? 'Edit Role' : 'Create New Role' }}
+            </h1>
+            <p class="text-blue-100 text-base">
+              {{ isEditMode() ? 'Update role information and permissions' : 'Create a new role and assign permissions' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (loading() && !formInitialized) {
+    <div class="flex justify-center items-center py-20">
+      <p-progress-spinner [style]="{ width: '60px', height: '60px' }" strokeWidth="4" />
+    </div>
+    }
+
+    <!-- Form -->
+    @if (formInitialized && roleForm) {
+    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Role Information -->
+      <p-card styleClass="border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden">
+        <ng-template pTemplate="header">
+          <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                <i class="pi pi-info-circle text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold m-0">Role Information</h3>
+            </div>
+          </div>
+        </ng-template>
+        <div class="space-y-5 p-6">
+          <!-- Role Name -->
+          <div class="field">
+            <label for="role_name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Role Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="role_name"
+              type="text"
+              formControlName="role_name"
+              placeholder="e.g., Manager, Admin, Viewer"
+              [class.ng-invalid]="roleForm.get('role_name')?.invalid && roleForm.get('role_name')?.touched"
+              class="w-full p-inputtext p-component border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+            />
+            @if (roleForm.get('role_name')?.invalid && roleForm.get('role_name')?.touched) {
+              <small class="p-error block mt-1">
+                <i class="pi pi-exclamation-circle mr-1"></i>
+                Role name is required
+              </small>
+            }
+          </div>
+
+          <!-- Description -->
+          <div class="field">
+            <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Description
+            </label>
+            <textarea
+              id="description"
+              formControlName="description"
+              rows="3"
+              placeholder="Describe the role and its responsibilities..."
+              class="w-full p-inputtextarea p-component border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+            ></textarea>
+          </div>
+
+          <!-- Is Default (Create Mode Only) -->
+          @if (!isEditMode()) {
+            <div class="field">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  formControlName="is_default"
+                  class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  Set as default role
+                </span>
+              </label>
+            </div>
+          }
+        </div>
+      </p-card>
+
+      <!-- Permissions -->
+      <p-card styleClass="border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden">
+        <ng-template pTemplate="header">
+          <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-6 text-white">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                <i class="pi pi-key text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold m-0">Permissions</h3>
+            </div>
+          </div>
+        </ng-template>
+        <div class="p-6">
+          @if (allPermissions().length === 0) {
+            <div class="text-center py-8">
+              <p class="text-gray-600 dark:text-gray-400">No permissions available. Please create permissions first.</p>
+            </div>
+          } @else {
+            <div class="space-y-6">
+              @for (categoryGroup of getPermissionsByCategory(); track categoryGroup.category) {
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
+                  <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 capitalize">
+                    {{ categoryGroup.category }}
+                  </h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    @for (permission of categoryGroup.permissions; track permission.permission_key) {
+                      @let permControl = getPermissionControlForKey(permission.permission_key);
+                      @if (permControl) {
+                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                          <p-checkbox
+                            [formControl]="permControl"
+                            [inputId]="'perm_' + permission.permission_key"
+                          ></p-checkbox>
+                          <label [for]="'perm_' + permission.permission_key" class="flex-1 cursor-pointer">
+                            <div class="font-medium text-gray-900 dark:text-white">{{ permission.permission_name }}</div>
+                            @if (permission.description) {
+                              <div class="text-sm text-gray-500 dark:text-gray-400">{{ permission.description }}</div>
+                            }
+                            <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ permission.permission_key }}</div>
+                          </label>
+                        </div>
+                      }
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </p-card>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-4">
+        <button
+          type="button"
+          (click)="router.navigate(['/partner/roles'])"
+          class="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-semibold transition-all">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="loading() || roleForm.invalid"
+          class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-semibold transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (loading()) {
+            <i class="pi pi-spin pi-spinner mr-2"></i>
+          }
+          {{ isEditMode() ? 'Update Role' : 'Create Role' }}
+        </button>
+      </div>
+    </form>
+    }
+  </div>
+</div>
+

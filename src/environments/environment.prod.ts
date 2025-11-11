@@ -1,4 +1,5 @@
 export const environment = {
-  production: false,
-  BASE_URL: 'https://saas.Techsavanna.technology/api/method/saas.apis'
+  production: true,
+  BASE_URL: 'https://saas.techsavanna.technology',
+  PARTNER_API_BASE: 'https://saas.techsavanna.technology/api/method/saas.apis.partner'
 }

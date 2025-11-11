@@ -83,6 +83,7 @@ export class ProductFormComponent implements OnInit {
     this.productForm = this.fb.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
+      category: [''],
       logo: [null],
       subscription_plans: this.fb.array([
         this.createPlanFormGroup()
@@ -141,13 +142,17 @@ export class ProductFormComponent implements OnInit {
 
   loadProduct(id: string) {
     this.loading = true;
+    console.log('Loading product with ID:', id);
     this.productService.getProductById(id).subscribe({
       next: (product) => {
+        console.log('Product loaded:', product);
         if (product) {
+          // Patch form with product data
           this.productForm.patchValue({
-            name: product.name,
-            description: product.description,
-            logo: product.logo
+            name: product.name || '',
+            description: product.description || '',
+            category: (product as any).category || '',
+            logo: product.logo || null
           });
           this.logoPreview = product.logo || null;
 
@@ -155,16 +160,26 @@ export class ProductFormComponent implements OnInit {
           while (this.plansArray.length !== 0) {
             this.plansArray.removeAt(0);
           }
-          product.subscription_plans.forEach(plan => {
-            this.plansArray.push(this.fb.group({
-              id: [plan.id],
-              name: [plan.name, [Validators.required]],
-              price: [plan.price, [Validators.required, Validators.min(0)]],
-              currency: [plan.currency || 'KES', [Validators.required]],
-              features: [plan.features ? (Array.isArray(plan.features) ? plan.features.join(', ') : plan.features) : '']
-            }));
-          });
+          
+          // Add plans if they exist
+          if (product.subscription_plans && product.subscription_plans.length > 0) {
+            product.subscription_plans.forEach(plan => {
+              this.plansArray.push(this.fb.group({
+                id: [plan.id || ''],
+                name: [plan.name || '', [Validators.required]],
+                price: [plan.price || 0, [Validators.required, Validators.min(0)]],
+                currency: [plan.currency || 'KES', [Validators.required]],
+                features: [plan.features ? (Array.isArray(plan.features) ? plan.features.join(', ') : plan.features) : '']
+              }));
+            });
+          } else {
+            // If no plans, add one empty plan
+            this.plansArray.push(this.createPlanFormGroup());
+          }
+          
+          console.log('Form patched with product data');
         } else {
+          console.error('Product is null or undefined');
           this.functions.show_toast('Error', 'error', 'Product not found.');
           this.router.navigate(['/partner/products']);
         }
@@ -173,7 +188,12 @@ export class ProductFormComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.error('Load product error:', error);
-        this.functions.show_toast('Error', 'error', 'Failed to load product.');
+        console.error('Error details:', {
+          status: error.status,
+          message: error.message,
+          error: error.error
+        });
+        this.functions.show_toast('Error', 'error', error?.error?.message || 'Failed to load product.');
         this.router.navigate(['/partner/products']);
       }
     });
@@ -200,16 +220,26 @@ export class ProductFormComponent implements OnInit {
           : plan.features) : []
       }));
 
+      // Use logoPreview if formValue.logo is empty (in case it wasn't patched correctly)
+      const logoToSend = formValue.logo || this.logoPreview || undefined;
+      
       const productData = {
         name: formValue.name,
         description: formValue.description,
-        logo: formValue.logo || undefined,
+        category: formValue.category || undefined,
+        logo: logoToSend,
         subscription_plans: subscriptionPlans
       };
 
+      console.log('Submitting product data:', {
+        ...productData,
+        logo: logoToSend ? `${logoToSend.substring(0, 50)}... (${logoToSend.length} chars)` : 'null'
+      });
+
       if (this.isEditMode && this.productId) {
         this.productService.updateProduct(this.productId, productData).subscribe({
-          next: () => {
+          next: (updatedProduct) => {
+            console.log('Product updated, response:', updatedProduct);
             this.loading = false;
             this.functions.show_toast('Success', 'success', 'Product updated successfully.');
             this.router.navigate(['/partner/products']);

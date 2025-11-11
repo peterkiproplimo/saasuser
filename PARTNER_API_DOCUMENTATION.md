@@ -215,9 +215,129 @@ Get the authenticated partner's profile information.
 
 ---
 
+### 5. Check Email Exists
+
+Check if an email address is already registered. Used for real-time email validation during signup.
+
+**Endpoint:** `POST /api/partner/check-email`
+
+**Request Body:**
+```json
+{
+  "email": "string (required, valid email format)"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "exists": "boolean (true if email is already registered, false otherwise)"
+}
+```
+
+**Frontend Usage:**
+```typescript
+// File: partner-auth.service.ts
+checkEmailExists(email: string): Observable<boolean> {
+  return this.http.post<{ exists: boolean }>('/api/partner/check-email', { email }).pipe(
+    map(res => res.exists)
+  );
+}
+```
+
+**Used In:**
+- Partner Signup Form (`partner-signup.component.ts`) - Async validator for email field
+
+---
+
+### 6. Forgot Password
+
+Request password reset instructions. The backend should send a password reset email with a token.
+
+**Endpoint:** `POST /api/partner/forgot-password`
+
+**Request Body:**
+```json
+{
+  "email": "string (required, valid email format)"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "If the email exists, reset instructions have been sent."
+}
+```
+
+**Note:** For security reasons, always return the same success message regardless of whether the email exists. This prevents email enumeration attacks.
+
+**Frontend Usage:**
+```typescript
+// File: partner-auth.service.ts
+forgotPassword(email: string): Observable<{ success: boolean; message: string }> {
+  return this.http.post<{ success: boolean; message: string }>('/api/partner/forgot-password', { email });
+}
+```
+
+**Used In:**
+- Partner Forgot Password Component (`partner-forgot-password.component.ts`)
+
+---
+
+### 7. Reset Password
+
+Reset password using a token received via email.
+
+**Endpoint:** `POST /api/partner/reset-password`
+
+**Request Body:**
+```json
+{
+  "token": "string (required, password reset token from email)",
+  "newPassword": "string (required, min 6 characters)"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Password has been reset successfully."
+}
+```
+
+**Error Responses:**
+- `400 Bad Request`: Invalid or expired token
+  ```json
+  {
+    "status": 400,
+    "error": {
+      "message": "Invalid or expired reset token"
+    }
+  }
+  ```
+
+**Frontend Usage:**
+```typescript
+// File: partner-auth.service.ts
+resetPassword(token: string, newPassword: string): Observable<{ success: boolean; message: string }> {
+  return this.http.post<{ success: boolean; message: string }>('/api/partner/reset-password', { token, newPassword });
+}
+```
+
+**Backend Implementation Notes:**
+- Validate the reset token (check expiration, single-use, etc.)
+- Hash the new password before storing
+- Invalidate the token after successful reset
+- Consider rate limiting to prevent abuse
+
+---
+
 ## Product Management Endpoints
 
-### 5. Get All Products
+### 8. Get All Products
 
 Get all products for the authenticated partner.
 
@@ -261,7 +381,7 @@ getProducts(): Observable<PartnerProduct[]> {
 
 ---
 
-### 6. Get Product by ID
+### 9. Get Product by ID
 
 Get a specific product by its ID.
 
@@ -318,7 +438,7 @@ getProductById(id: string): Observable<PartnerProduct | null> {
 
 ---
 
-### 7. Create Product
+### 10. Create Product
 
 Create a new product for the authenticated partner.
 
@@ -383,7 +503,7 @@ createProduct(productData: Omit<PartnerProduct, 'id' | 'partner_id' | 'created_a
 
 ---
 
-### 8. Update Product
+### 11. Update Product
 
 Update an existing product. Only the product owner can update their products.
 
@@ -454,7 +574,7 @@ updateProduct(id: string, productData: Partial<PartnerProduct>): Observable<Part
 
 ---
 
-### 9. Delete Product
+### 12. Delete Product
 
 Delete a product. Only the product owner can delete their products.
 
@@ -488,9 +608,59 @@ deleteProduct(id: string): Observable<{ success: boolean }> {
 
 ---
 
+## Client Management Endpoints
+
+### 13. Get Clients
+
+Get all clients/subscribers for the authenticated partner's products.
+
+**Endpoint:** `GET /api/partner/clients`
+
+**Headers:**
+- `Authorization: Bearer {token}` (required)
+
+**Success Response (200):**
+```json
+[
+  {
+    "id": "string",
+    "name": "string",
+    "email": "string",
+    "company": "string",
+    "subscription_plan": "string",
+    "product_name": "string",
+    "status": "active | inactive | trial",
+    "subscription_date": "ISO 8601 datetime string",
+    "monthly_revenue": "number",
+    "currency": "KES | USD"
+  }
+]
+```
+
+**Error Responses:**
+- `401 Unauthorized`: Not authenticated
+
+**Frontend Usage:**
+```typescript
+// File: partner-product.service.ts
+getClients(): Observable<PartnerClient[]> {
+  return this.http.get<PartnerClient[]>('/api/partner/clients');
+}
+```
+
+**Used In:**
+- Partner Clients Component (`partner-clients.component.ts`)
+
+**Backend Implementation Notes:**
+- Aggregate client data from subscriptions across all partner's products
+- Include subscription status, dates, and revenue information
+- Filter by authenticated partner's products only
+
+---
+
 ## Analytics Endpoints
 
-### 10. Get Analytics Summary
+### 14. Get Analytics Summary
 
 Get analytics summary for the authenticated partner's products.
 
@@ -601,6 +771,22 @@ interface PartnerInsights {
 }
 ```
 
+### PartnerClient Model
+```typescript
+interface PartnerClient {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+  subscription_plan: string;
+  product_name: string;
+  status: 'active' | 'inactive' | 'trial';
+  subscription_date: string; // ISO 8601 datetime
+  monthly_revenue: number;
+  currency: 'KES' | 'USD';
+}
+```
+
 ---
 
 ## Error Response Format
@@ -658,20 +844,46 @@ To test the API endpoints:
 
 ## Backend Implementation Checklist
 
+### Authentication & Security
 - [ ] Implement JWT or session-based authentication
 - [ ] Create partner signup endpoint with email uniqueness validation
 - [ ] Create partner login endpoint with password verification
+- [ ] Implement email existence check endpoint (for real-time validation)
+- [ ] Implement forgot password endpoint with email sending
+- [ ] Implement reset password endpoint with token validation
 - [ ] Implement token validation middleware for protected routes
+- [ ] Implement proper password hashing (bcrypt, argon2, etc.)
+- [ ] Add rate limiting for authentication endpoints
+- [ ] Implement password reset token expiration and single-use logic
+
+### Product Management
 - [ ] Create product CRUD endpoints with ownership validation
+- [ ] Implement subscription plan management within products
+- [ ] Add validation for product data and subscription plans
+
+### Client Management
+- [ ] Implement client listing endpoint
+- [ ] Aggregate subscription data across partner's products
+- [ ] Calculate monthly revenue per client
+
+### Analytics
 - [ ] Implement analytics calculation logic
+- [ ] Calculate total products, views, subscriptions, and revenue
+- [ ] Aggregate data from subscriptions and product views
+
+### General
 - [ ] Add proper error handling and status codes
 - [ ] Implement request validation and sanitization
-- [ ] Add rate limiting if needed
 - [ ] Set up CORS for frontend domain
 - [ ] Implement file upload for partner/product logos
-- [ ] Add database schema for partners, products, and subscription plans
-- [ ] Implement proper password hashing (bcrypt, argon2, etc.)
+- [ ] Add database schema for:
+  - [ ] Partners table
+  - [ ] Products table
+  - [ ] Subscription plans table
+  - [ ] Clients/subscriptions table
+  - [ ] Password reset tokens table
 - [ ] Add logging and monitoring
+- [ ] Implement email service for password reset
 
 ---
 
@@ -681,5 +893,8 @@ If you have questions about the API specification or need clarification on any e
 - Frontend service files: `partner-auth.service.ts`, `partner-product.service.ts`
 - Mock interceptor: `partner-api.interceptor.ts`
 - Component usage: `partner-dashboard.component.ts`, `partner-insights.component.ts`, `product-list.component.ts`, `product-form.component.ts`
+
+
+
 
 

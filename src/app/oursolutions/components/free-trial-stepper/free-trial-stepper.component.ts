@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject, DestroyRef, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlansApiService, Plan } from '../../../customer/pages/subscribe/services/plans-api.service';
@@ -21,7 +21,6 @@ import { environment } from '../../../../environments/environment';
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        RouterLink,
         ReactiveInputComponent,
         ProgressSpinnerModule,
         ToastModule

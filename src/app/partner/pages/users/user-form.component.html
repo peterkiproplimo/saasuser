@@ -1,0 +1,211 @@
+<div class="p-6">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-8 mb-6 shadow-2xl overflow-hidden">
+        <div class="absolute inset-0 bg-black/10"></div>
+        <div class="relative flex items-center gap-4">
+          <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+            <i class="pi pi-{{ isEditMode() ? 'pencil' : 'user-plus' }} text-3xl text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-4xl font-extrabold text-white mb-2">
+              {{ isEditMode() ? 'Edit User' : 'Add New User' }}
+            </h1>
+            <p class="text-blue-100 text-base">
+              {{ isEditMode() ? 'Update user information and role' : 'Create a new user for your partner account' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (loading() && !formInitialized) {
+    <div class="flex justify-center items-center py-20">
+      <p-progress-spinner [style]="{ width: '60px', height: '60px' }" strokeWidth="4" />
+    </div>
+    }
+
+    <!-- Form -->
+    @if (formInitialized && userForm) {
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <p-card styleClass="border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden">
+        <ng-template pTemplate="header">
+          <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                <i class="pi pi-info-circle text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold m-0">User Information</h3>
+            </div>
+          </div>
+        </ng-template>
+        <div class="space-y-5 p-6">
+          <!-- Email -->
+          <div class="field">
+            <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Email <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="user@example.com"
+              [readonly]="isEditMode()"
+              [class.ng-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+              class="w-full p-inputtext p-component border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+            />
+            @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+              <small class="p-error block mt-1">
+                <i class="pi pi-exclamation-circle mr-1"></i>
+                Valid email is required
+              </small>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="field">
+            <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Password <span class="text-red-500">*</span>
+              @if (isEditMode()) {
+                <span class="text-gray-500 text-xs">(Leave blank to keep current password)</span>
+              }
+            </label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              placeholder="••••••••"
+              [class.ng-invalid]="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+              class="w-full p-inputtext p-component border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+            />
+            @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+              <small class="p-error block mt-1">
+                <i class="pi pi-exclamation-circle mr-1"></i>
+                Password is required and must be at least 6 characters
+              </small>
+            }
+          </div>
+
+          <!-- First Name and Last Name -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="field">
+              <label for="first_name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                First Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="first_name"
+                type="text"
+                formControlName="first_name"
+                placeholder="John"
+                [class.ng-invalid]="userForm.get('first_name')?.invalid && userForm.get('first_name')?.touched"
+                class="w-full p-inputtext p-component border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+              />
+              @if (userForm.get('first_name')?.invalid && userForm.get('first_name')?.touched) {
+                <small class="p-error block mt-1">
+                  <i class="pi pi-exclamation-circle mr-1"></i>
+                  First name is required
+                </small>
+              }
+            </div>
+
+            <div class="field">
+              <label for="last_name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Last Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="last_name"
+                type="text"
+                formControlName="last_name"
+                placeholder="Doe"
+                [class.ng-invalid]="userForm.get('last_name')?.invalid && userForm.get('last_name')?.touched"
+                class="w-full p-inputtext p-component border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+              />
+              @if (userForm.get('last_name')?.invalid && userForm.get('last_name')?.touched) {
+                <small class="p-error block mt-1">
+                  <i class="pi pi-exclamation-circle mr-1"></i>
+                  Last name is required
+                </small>
+              }
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="field">
+            <label for="phone" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Phone
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              placeholder="+254700000000"
+              class="w-full p-inputtext p-component border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
+            />
+          </div>
+
+          <!-- Role -->
+          <div class="field">
+            <label for="role" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Role <span class="text-red-500">*</span>
+            </label>
+            <select
+              id="role"
+              formControlName="role"
+              [class.ng-invalid]="userForm.get('role')?.invalid && userForm.get('role')?.touched"
+              class="w-full border-2 border-gray-400 dark:border-gray-500 rounded-lg px-4 py-2 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+              <option value="">Select a role</option>
+              @for (role of roles(); track role) {
+                <option [value]="role">{{ role }}</option>
+              }
+            </select>
+            @if (userForm.get('role')?.invalid && userForm.get('role')?.touched) {
+              <small class="p-error block mt-1">
+                <i class="pi pi-exclamation-circle mr-1"></i>
+                Role is required
+              </small>
+            }
+          </div>
+
+          <!-- Enabled Status (Edit Mode Only) -->
+          @if (isEditMode()) {
+            <div class="field">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  formControlName="enabled"
+                  class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  User is enabled (active)
+                </span>
+              </label>
+            </div>
+          }
+        </div>
+      </p-card>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-4">
+        <button
+          type="button"
+          (click)="router.navigate(['/partner/users'])"
+          class="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-semibold transition-all">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="loading() || userForm.invalid"
+          class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-semibold transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (loading()) {
+            <i class="pi pi-spin pi-spinner mr-2"></i>
+          }
+          {{ isEditMode() ? 'Update User' : 'Create User' }}
+        </button>
+      </div>
+    </form>
+    }
+  </div>
+</div>
+
+
