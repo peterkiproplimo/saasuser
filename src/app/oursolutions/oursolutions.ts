@@ -215,16 +215,54 @@ export class OursolutionsComponent implements OnInit {
       return;
     }
 
+    // Combine demo_date and demo_time into single datetime string
+    // Format: "YYYY-MM-DD HH:MM:SS"
+    const combinedDateTime = this.combineDateTime(
+      this.demoForm.demo_date,
+      this.demoForm.demo_time
+    );
+
+    if (!combinedDateTime) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validation Error',
+        detail: 'Please select both date and time for the demo.',
+        life: 5000
+      });
+      return;
+    }
+
+    // Map demo_type: "Online Demo" -> "Online", "Onsite Demo" -> "Onsite"
+    const demoType = this.demoForm.demo_type === 'Online Demo'
+      ? 'Online'
+      : this.demoForm.demo_type === 'Onsite Demo'
+        ? 'Onsite'
+        : this.demoForm.demo_type;
+
+    // Prepare request payload matching API specification
+    const demoRequest = {
+      customer_name: this.demoForm.customer_name.trim(),
+      email: this.demoForm.email.trim(),
+      phone: this.demoForm.phone.trim(),
+      application_name: this.demoForm.application_name.trim(),
+      demo_type: demoType,
+      demo_date: combinedDateTime,
+      status: this.demoForm.status || 'Open',
+      notes: this.demoForm.notes?.trim() || '',
+      captcha_answer: this.demoForm.captcha_answer.trim(),
+      token: this.demoForm.token
+    };
+
     // send API request
     this.http
-      .post(`${this.base_url}.api.profile.request_demo`, this.demoForm)
+      .post(`${this.base_url}.demo.create_demo_booking`, demoRequest)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
-        next: () => {
+        next: (response: any) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Demo request sent successfully! Our team will contact you soon.',
+            detail: response?.message?.message || 'Demo request sent successfully! Our team will contact you soon.',
             life: 5000
           });
           this.closeRequestDemo(); // reset + close
@@ -233,6 +271,19 @@ export class OursolutionsComponent implements OnInit {
           this.handleApiError(error, 'Failed to submit demo request');
         },
       });
+  }
+
+  /**
+   * Combine date and time into "YYYY-MM-DD HH:MM:SS" format
+   */
+  private combineDateTime(date: string, time: string): string | null {
+    if (!date || !time) {
+      return null;
+    }
+
+    // date is in format "YYYY-MM-DD", time is in format "HH:MM"
+    // Combine to "YYYY-MM-DD HH:MM:SS"
+    return `${date} ${time}:00`;
   }
 
   /* ------------------------- error handling -------------------------- */

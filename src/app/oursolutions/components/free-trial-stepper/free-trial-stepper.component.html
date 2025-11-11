@@ -373,11 +373,42 @@
                     </div>
 
                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                        <p>Your trial details:</p>
-                        <ul class="mt-2 space-y-1">
-                            <li>Plan: <span class="font-semibold">{{ selectedPlan?.plan_name }}</span></li>
-                            <li>Domain: <span class="font-semibold">{{ subdomainName }}{{
-                                    selectedPlan?.application?.subdomain || '-pms.techsavanna.technology' }}</span></li>
+                        <p class="font-semibold mb-2">Your trial details:</p>
+                        <ul class="mt-2 space-y-2">
+                            @if (trialResponse()?.subscription) {
+                            <li class="flex items-center justify-between">
+                                <span>Subscription ID:</span>
+                                <span class="font-semibold text-blue-600 dark:text-blue-400">{{
+                                    trialResponse()?.subscription }}</span>
+                            </li>
+                            }
+                            @if (trialResponse()?.domain) {
+                            <li class="flex items-center justify-between">
+                                <span>Domain:</span>
+                                <a [href]="trialResponse()?.domain" target="_blank"
+                                    class="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                                    {{ trialResponse()?.domain }}
+                                </a>
+                            </li>
+                            }
+                            @if (trialResponse()?.trial_ends_on) {
+                            <li class="flex items-center justify-between">
+                                <span>Trial Ends On:</span>
+                                <span class="font-semibold">{{ trialResponse()?.trial_ends_on }}</span>
+                            </li>
+                            }
+                            @if (trialResponse()?.email) {
+                            <li class="flex items-center justify-between">
+                                <span>Email:</span>
+                                <span class="font-semibold">{{ trialResponse()?.email }}</span>
+                            </li>
+                            }
+                            @if (selectedPlan?.plan_name) {
+                            <li class="flex items-center justify-between">
+                                <span>Plan:</span>
+                                <span class="font-semibold">{{ selectedPlan?.plan_name }}</span>
+                            </li>
+                            }
                         </ul>
                     </div>
                 </div>

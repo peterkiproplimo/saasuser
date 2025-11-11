@@ -69,6 +69,9 @@ export class FreeTrialStepperComponent implements OnInit {
     signupError = signal<string | null>(null);
     trialCreationError = signal<string | null>(null);
 
+    // Trial response data
+    trialResponse = signal<any>(null);
+
     // API data signals
     plans = this.plansApiService.plans;
     isLoadingPlans = this.plansApiService.isLoading;
@@ -180,30 +183,50 @@ export class FreeTrialStepperComponent implements OnInit {
         this.trialCreationError.set(null);
         this.trialCreationLoading.set(true);
 
+        // API expects: { plan, email, subdomain }
         const trialRequest = {
-            customer_name: `${this.signupForm.value.first_name} ${this.signupForm.value.last_name}`,
-            email: this.signupForm.value.email!,
-            phone: this.signupForm.value.phone!,
-            company: this.signupForm.value.company_name!,
-            application_name: this.solutionData?.name || '',
             plan: this.selectedPlan?.plan_name || '',
-            subdomain: this.subdomainName,
-            status: 'Active',
-            notes: `Free trial for ${this.solutionData?.name} - Plan: ${this.selectedPlan?.plan_name}`
+            email: this.signupForm.value.email!,
+            subdomain: this.subdomainName
         };
 
         this.http
-            .post(`${this.base_url}.api.profile.request_free_trial`, trialRequest)
+            .post(`${this.base_url}.subscription.create_free_trial_subscription`, trialRequest)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
-                next: () => {
+                next: (response: any) => {
                     this.trialCreationLoading.set(false);
                     this.signupLoading.set(false);
-                    // Clear any errors on success
-                    this.signupError.set(null);
-                    this.trialCreationError.set(null);
-                    // Move to success step
-                    this.currentStep.update(step => step + 1);
+
+                    // Parse response - API returns { message: { ... } }
+                    if (response?.message) {
+                        // Store the response data for display in success step
+                        this.trialResponse.set(response.message);
+
+                        // Clear any errors on success
+                        this.signupError.set(null);
+                        this.trialCreationError.set(null);
+
+                        // Show success toast
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: response.message.message || 'Free trial subscription created successfully.',
+                            life: 5000
+                        });
+
+                        // Move to success step
+                        this.currentStep.update(step => step + 1);
+                    } else {
+                        // Unexpected response format
+                        this.trialCreationError.set('Unexpected response format from server');
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Unexpected response format from server',
+                            life: 7000
+                        });
+                    }
                 },
                 error: (error) => {
                     this.trialCreationLoading.set(false);
