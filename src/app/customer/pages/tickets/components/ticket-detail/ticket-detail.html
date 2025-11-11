@@ -1,43 +1,54 @@
-<div
-  class="max-w-5xl mx-auto p-6 my-10 bg-white dark:bg-gray-900 rounded shadow text-gray-800 dark:text-gray-200"
->
+<div class="max-w-5xl mx-auto p-6 my-10 bg-white dark:bg-gray-900 rounded shadow text-gray-800 dark:text-gray-200">
   <div class="flex items-center justify-between mb-6">
     <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">
       Ticket Details
     </h1>
-    <a
-      routerLink="/customer/tickets"
-      class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >Back to Tickets</a
-    >
+    <a routerLink="/customer/tickets" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Back to
+      Tickets</a>
   </div>
 
   @if (ticket_is_loading()) {
   <div class="w-full flex justify-center">
-    <p-progressSpinner
-      class="text-gray-500 dark:text-gray-400"
-      [style]="{ width: '40px', height: '40px' }"
-    >
+    <p-progressSpinner class="text-gray-500 dark:text-gray-400" [style]="{ width: '40px', height: '40px' }">
     </p-progressSpinner>
   </div>
   } @else {
   <div class="mb-8">
     <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">
-      Ticket: {{ ticket().data?.subject }}
+      {{ sanitizeText(ticket().data?.subject) }}
     </h2>
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-700 dark:text-gray-300"
-    >
-      <div><strong>ID:</strong> {{ ticket().data?.id }}</div>
-      <div><strong>Owner:</strong> {{ ticket().data?.owner }}</div>
-      <div><strong>Priority:</strong> {{ ticket().data?.priority }}</div>
-      <div><strong>Status:</strong> {{ ticket().data?.status }}</div>
-      <div><strong>Type:</strong> {{ ticket().data?.ticket_type }}</div>
-      <div>
-        <strong>Created:</strong> {{ ticket().data?.creation | date:'medium' }}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+      <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Reference Number</div>
+        <div class="font-medium text-gray-900 dark:text-white">{{ formatId(ticket().data?.id) }}</div>
       </div>
-      <div class="col-span-1 md:col-span-2 lg:col-span-3">
-        <strong>Description:</strong> {{ ticket().data?.description }}
+      <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Contact Email</div>
+        <div class="font-medium text-gray-900 dark:text-white">{{ sanitizeText(ticket().data?.owner) }}</div>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Priority Level</div>
+        <div class="font-medium text-gray-900 dark:text-white capitalize">{{ sanitizeText(ticket().data?.priority) }}
+        </div>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Current Status</div>
+        <div class="font-medium text-gray-900 dark:text-white capitalize">{{ sanitizeText(ticket().data?.status) }}
+        </div>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Ticket Category</div>
+        <div class="font-medium text-gray-900 dark:text-white capitalize">{{ sanitizeText(ticket().data?.ticket_type) }}
+        </div>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Date Submitted</div>
+        <div class="font-medium text-gray-900 dark:text-white">{{ ticket().data?.creation | date:'medium' }}</div>
+      </div>
+      <div class="col-span-1 md:col-span-2 lg:col-span-3 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">Details</div>
+        <div class="text-gray-900 dark:text-white whitespace-pre-wrap">{{ sanitizeText(ticket().data?.description) }}
+        </div>
       </div>
     </div>
   </div>
@@ -47,15 +58,9 @@
     <strong class="text-gray-700 dark:text-gray-300"> Attachments:</strong>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
       @for (attachment of ticket().data?.attachments; track attachment.name) {
-      <div
-        class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded p-2"
-      >
+      <div class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded p-2">
         <a [href]="attachment.url" target="_blank">
-          <img
-            [src]="attachment.url"
-            alt="{{ attachment.name }}"
-            class="w-full h-32 object-cover rounded shadow"
-          />
+          <img [src]="attachment.url" alt="{{ attachment.name }}" class="w-full h-32 object-cover rounded shadow" />
           <p class="mt-2 text-sm text-center text-blue-600 truncate">
             {{ attachment.name }}
           </p>
@@ -74,10 +79,7 @@
 
     @if (comments_is_loading()) {
     <div class="w-full flex justify-center">
-      <p-progressSpinner
-        class="text-gray-500 dark:text-gray-400"
-        [style]="{ width: '40px', height: '40px' }"
-      >
+      <p-progressSpinner class="text-gray-500 dark:text-gray-400" [style]="{ width: '40px', height: '40px' }">
       </p-progressSpinner>
     </div>
     } @else if (comments().data?.length === 0) {
@@ -89,26 +91,18 @@
     <div class="max-h-[60vh] overflow-y-auto">
       @for (comment of comments().data; track comment.id) {
 
-      <div
-        class="mb-6 flex"
-        [ngClass]="{
+      <div class="mb-6 flex" [ngClass]="{
     'justify-start': comment.direction === 'inbound',
     'justify-end': comment.direction === 'outbound'
-  }"
-      >
-        <div
-          class="p-4 mx-4 border rounded-lg w-full max-w-2xl"
-          [ngClass]="{
+  }">
+        <div class="p-4 mx-4 border rounded-lg w-full max-w-2xl" [ngClass]="{
       'bg-blue-100 border-blue-400 text-blue-900 dark:bg-blue-900 dark:border-blue-600 dark:text-blue-100': comment.direction === 'inbound',
       'bg-gray-100 border-gray-400 text-gray-900 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100': comment.direction === 'outbound'
-    }"
-        >
+    }">
           <!-- Metadata -->
-          <div
-            class="flex flex-col md:flex-row justify-between md:gap-4 items-start md:items-center mb-2 text-sm"
-          >
+          <div class="flex flex-col md:flex-row justify-between md:gap-4 items-start md:items-center mb-2 text-sm">
             <div class="capitalize">
-              <strong>Author:</strong> {{ comment.author?.name }}
+              <strong>Author:</strong> {{ sanitizeText(comment.author?.name) }}
             </div>
             <div>
               <strong>Created:</strong> {{ comment.created | date:'short' }}
@@ -116,25 +110,18 @@
           </div>
 
           <!-- Comment Text -->
-          <div class="mb-2">{{ comment.comment_text }}</div>
+          <div class="mb-2 whitespace-pre-wrap">{{ sanitizeText(comment.comment_text) }}</div>
 
           <!-- Attachments -->
           @if (comment.has_attachments) {
           <div class="mt-3">
-            <strong class="text-gray-700 dark:text-gray-300"
-              >Attachments:</strong
-            >
+            <strong class="text-gray-700 dark:text-gray-300">Attachments:</strong>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               @for (attachment of comment.attachments; track attachment.name) {
-              <div
-                class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded p-2"
-              >
+              <div class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded p-2">
                 <a [href]="attachment.url" target="_blank">
-                  <img
-                    [src]="attachment.url"
-                    alt="{{ attachment.name }}"
-                    class="w-full h-32 object-cover rounded shadow"
-                  />
+                  <img [src]="attachment.url" alt="{{ attachment.name }}"
+                    class="w-full h-32 object-cover rounded shadow" />
                   <p class="mt-2 text-sm text-center text-blue-600 truncate">
                     {{ attachment.name }}
                   </p>
@@ -184,10 +171,7 @@
     }
 
     <div class="flex items-center justify-end mb-6">
-      <button
-        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        (click)="open_dialog()"
-      >
+      <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" (click)="open_dialog()">
         Add Comment
       </button>
     </div>
@@ -195,76 +179,36 @@
   }
 </div>
 
-<p-dialog
-  [(visible)]="ticket_dialog"
-  [style]="{ width: '450px' }"
-  header="Add Comment"
-  [modal]="true"
->
-  <form
-    class="w-full space-y-6"
-    enctype="multipart/form-data"
-    (ngSubmit)="save_ticket()"
-  >
+<p-dialog [(visible)]="ticket_dialog" [style]="{ width: '450px' }" header="Add Comment" [modal]="true">
+  <form class="w-full space-y-6" enctype="multipart/form-data" (ngSubmit)="save_ticket()">
     <div>
-      <app-reactive-input
-        [readonly]="true"
-        [form]="ticket_form"
-        [id]="'ticket_id'"
-        [key]="'ticket_id'"
-        [label]="'Ticket ID'"
-        [type]="'text'"
-      >
+      <app-reactive-input [readonly]="true" [form]="ticket_form" [id]="'ticket_id'" [key]="'ticket_id'"
+        [label]="'Ticket ID'" [type]="'text'">
       </app-reactive-input>
 
-      <app-reactive-text-area
-        [form]="ticket_form"
-        [id]="'comment_text'"
-        [key]="'comment_text'"
-        [label]="'Comment'"
-        [type]="'text'"
-      >
+      <app-reactive-text-area [form]="ticket_form" [id]="'comment_text'" [key]="'comment_text'" [label]="'Comment'"
+        [type]="'text'">
       </app-reactive-text-area>
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-gray-700 dark:text-gray-200"
-        >Attachments</label
-      >
-      <p-fileUpload
-        name="files"
-        multiple
-        customUpload="true"
-        accept=".png,.jpg,.jpeg,.pdf"
-        (uploadHandler)="onFileUpload($event)"
-        [showUploadButton]="false"
-        [auto]="true"
-        [chooseLabel]="'Choose Files'"
-        [cancelLabel]="'Clear'"
-        [styleClass]="'w-full'"
-      >
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">Attachments</label>
+      <p-fileUpload name="files" multiple customUpload="true" accept=".png,.jpg,.jpeg,.pdf"
+        (uploadHandler)="onFileUpload($event)" [showUploadButton]="false" [auto]="true" [chooseLabel]="'Choose Files'"
+        [cancelLabel]="'Clear'" [styleClass]="'w-full'">
       </p-fileUpload>
     </div>
 
     <div class="flex w-full justify-end gap-2">
-      <button
-        type="button"
-        (click)="hideDialog()"
-        class="flex justify-center items-center gap-2 rounded-md bg-gray-800 dark:bg-gray-700 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-gray-700 dark:hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800 dark:focus-visible:outline-gray-700"
-      >
+      <button type="button" (click)="hideDialog()"
+        class="flex justify-center items-center gap-2 rounded-md bg-gray-800 dark:bg-gray-700 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs hover:bg-gray-700 dark:hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800 dark:focus-visible:outline-gray-700">
         Cancel
       </button>
-      <button
-        [disabled]="loading()"
-        class="flex justify-center items-center gap-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-700"
-      >
+      <button [disabled]="loading()"
+        class="flex justify-center items-center gap-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-3 py-1.5 text-sm/6 font-semibold text-white dark:text-gray-100 shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-700">
         Add Comment @if (loading()) {
-        <p-progress-spinner
-          strokeWidth="8"
-          fill="transparent"
-          animationDuration=".5s"
-          [style]="{ width: '20px', height: '20px' }"
-        />
+        <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s"
+          [style]="{ width: '20px', height: '20px' }" />
         } @else { }
       </button>
     </div>

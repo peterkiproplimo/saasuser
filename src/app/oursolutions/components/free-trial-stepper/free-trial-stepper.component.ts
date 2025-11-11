@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject, DestroyRef, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlansApiService, Plan } from '../../../customer/pages/subscribe/services/plans-api.service';
@@ -21,7 +21,6 @@ import { environment } from '../../../../environments/environment';
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        RouterLink,
         ReactiveInputComponent,
         ProgressSpinnerModule,
         ToastModule
@@ -80,8 +79,9 @@ export class FreeTrialStepperComponent implements OnInit {
     base_url = environment.BASE_URL;
 
     ngOnInit() {
-        // Load plans for the selected solution
+        // Load plans for the selected solution using the solution name
         if (this.solutionData?.name) {
+            // Use solution name to get plans via the new API
             this.plansApiService.loadPlans(this.solutionData.name);
         }
     }

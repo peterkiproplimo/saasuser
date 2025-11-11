@@ -36,11 +36,13 @@ export interface PlansResponse {
     };
 }
 
+import { environment } from '../../../../../environments/environment';
+
 @Injectable({
     providedIn: 'root'
 })
 export class PlansApiService {
-    private baseUrl = 'https://saas.techsavanna.technology/api/method/saas.apis.subscription.list_plans';
+    private baseUrl = environment.BASE_URL;
 
     // Signals for reactive state management
     plans = signal<Plan[]>([]);
@@ -49,19 +51,32 @@ export class PlansApiService {
 
     constructor(private http: HttpClient) { }
 
-    fetchPlans(application: string, page: number = 1, pageSize: number = 5): Observable<PlansResponse> {
+    fetchPlans(application: string): Observable<any> {
         this.isLoading.set(true);
         this.error.set(null);
 
-        const url = `${this.baseUrl}?application=${encodeURIComponent(application)}&page=${page}&page_size=${pageSize}&_t`;
+        const url = `${this.baseUrl}.subscription.get_subscription_plans?application=${encodeURIComponent(application)}`;
 
-        return this.http.get<PlansResponse>(url);
+        return this.http.get<any>(url);
     }
 
-    loadPlans(application: string, page: number = 1, pageSize: number = 5): void {
-        this.fetchPlans(application, page, pageSize).subscribe({
+    loadPlans(application: string): void {
+        this.fetchPlans(application).subscribe({
             next: (response) => {
-                this.plans.set(response.data);
+                // Handle different response formats
+                let plansData: Plan[] = [];
+
+                if (response?.data && Array.isArray(response.data)) {
+                    plansData = response.data;
+                } else if (response?.message?.data && Array.isArray(response.message.data)) {
+                    plansData = response.message.data;
+                } else if (Array.isArray(response)) {
+                    plansData = response;
+                } else if (response?.plans && Array.isArray(response.plans)) {
+                    plansData = response.plans;
+                }
+
+                this.plans.set(plansData);
                 this.isLoading.set(false);
             },
             error: (error) => {

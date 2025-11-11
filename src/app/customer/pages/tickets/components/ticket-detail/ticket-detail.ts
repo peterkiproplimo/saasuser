@@ -1,17 +1,18 @@
-import {Component, DestroyRef, inject, signal} from '@angular/core';
-import {DatePipe, NgClass} from '@angular/common';
-import {ActivatedRoute, RouterLink} from '@angular/router';
-import {TicketService} from '../../services/ticket-service';
-import {ProgressSpinner} from 'primeng/progressspinner';
-import {Dialog} from 'primeng/dialog';
-import {FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
-import {Functions} from '../../../../../shared/functions/functions';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { DatePipe, NgClass } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TicketService } from '../../services/ticket-service';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { Dialog } from 'primeng/dialog';
+import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { Functions } from '../../../../../shared/functions/functions';
 import {
   ReactiveTextAreaComponent
 } from '../../../../../shared/components/form/reactive-text-area/reactive-text-area.component';
-import {MessageService} from 'primeng/api';
-import {ReactiveInputComponent} from '../../../../../shared/components/form/reactive-input/reactive-input.component';
-import {FileUpload} from 'primeng/fileupload';
+import { MessageService } from 'primeng/api';
+import { ReactiveInputComponent } from '../../../../../shared/components/form/reactive-input/reactive-input.component';
+import { FileUpload } from 'primeng/fileupload';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -35,6 +36,7 @@ export class TicketDetail {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private functions = new Functions();
+  private sanitizer = inject(DomSanitizer);
   selectedFiles: File[] = [];
   uploading = false;
 
@@ -57,9 +59,9 @@ export class TicketDetail {
   comments_is_loading = this.ticket_service.comment_resource.isLoading;
 
   ticket_form = new FormGroup({
-    ticket_id : new FormControl('', [Validators.required]),
+    ticket_id: new FormControl('', [Validators.required]),
     comment_text: new FormControl('', [Validators.required]),
-    })
+  })
 
   hideDialog() {
     this.ticket_form.reset({ ticket_id: this.ticket_id });
@@ -112,11 +114,48 @@ export class TicketDetail {
       },
       error: (error) => {
         this.loading.set(false);
-        this.functions.show_toast("Comment Addition Failed", 'error',error.error?.message);
+        this.functions.show_toast("Comment Addition Failed", 'error', error.error?.message);
       }
     });
 
   }
 
+  // Sanitize text to prevent XSS and make it less obvious
+  sanitizeText(text: string | null | undefined): string {
+    if (!text) return '';
+    // Remove potentially dangerous characters and escape HTML
+    return text
+      .replace(/[<>]/g, '') // Remove angle brackets
+      .replace(/javascript:/gi, '') // Remove javascript: protocol
+      .replace(/on\w+=/gi, '') // Remove event handlers
+      .trim();
+  }
+
+  // Format ID to be less obvious (mask middle digits)
+  formatId(id: number | string | null | undefined): string {
+    if (!id) return 'N/A';
+    const idStr = String(id);
+    if (idStr.length <= 4) return idStr;
+    // Show first 2 and last 2 digits, mask the middle
+    return `${idStr.substring(0, 2)}***${idStr.substring(idStr.length - 2)}`;
+  }
+
+  // Sanitize email (mask part of it)
+  sanitizeEmail(email: string | null | undefined): string {
+    if (!email) return '';
+    const parts = email.split('@');
+    if (parts.length !== 2) return this.sanitizeText(email);
+    const [local, domain] = parts;
+    if (local.length <= 2) return email;
+    const masked = local.substring(0, 2) + '***' + '@' + domain;
+    return this.sanitizeText(masked);
+  }
+
+  // Get safe HTML for description
+  getSafeDescription(description: string | null | undefined): SafeHtml {
+    if (!description) return this.sanitizer.sanitize(1, '') as SafeHtml;
+    const sanitized = this.sanitizeText(description);
+    return this.sanitizer.sanitize(1, sanitized) as SafeHtml;
+  }
 
 }

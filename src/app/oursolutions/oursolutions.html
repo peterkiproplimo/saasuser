@@ -835,6 +835,35 @@
   </div>
 </div>
 
+<!-- Existing Member Dialog -->
+<p-dialog [(visible)]="showExistingMemberDialog" [modal]="true" [closable]="true" [draggable]="false"
+  [resizable]="false" [style]="{ width: '500px' }" (onHide)="closeExistingMemberDialog()" styleClass="p-fluid">
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-3">
+      <i class="pi pi-user text-blue-600 text-2xl"></i>
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white">Are you an existing member?</h3>
+    </div>
+  </ng-template>
+  <div class="p-6">
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+      If you already have an account with us, please log in to your customer profile to manage your subscriptions and
+      start a free trial.
+    </p>
+    <div class="flex flex-col gap-3">
+      <button (click)="onExistingMemberYes()"
+        class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+        <i class="pi pi-sign-in"></i>
+        <span>Yes, I'm an existing member</span>
+      </button>
+      <button (click)="onExistingMemberNo()"
+        class="w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+        <i class="pi pi-user-plus"></i>
+        <span>No, I'm new here</span>
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
 <!-- Free Trial Stepper Modal -->
 <div *ngIf="showTrialStepper"
   class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">

@@ -17,6 +17,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { FreeTrialStepperComponent } from './components/free-trial-stepper/free-trial-stepper.component';
+import { AuthService } from '../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-oursolutions',
@@ -41,6 +43,8 @@ export class OursolutionsComponent implements OnInit {
   private cd = inject(ChangeDetectorRef);
   private destroy = inject(DestroyRef);
   private messageService = inject(MessageService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   // ▶ state
   base_url = environment.BASE_URL;
@@ -89,15 +93,48 @@ export class OursolutionsComponent implements OnInit {
 
   // ▶ state
   showTrialStepper = false; // Show free trial stepper instead of dialog
+  showExistingMemberDialog = false; // Dialog to ask if user is existing member
 
   openRequestTrial(): void {
-    console.log('Opening free trial stepper...', this.solutionData);
-    this.showTrialStepper = true;
+    // Check if user is already logged in
+    if (this.authService.loggedIn()) {
+      // User is logged in, tell them to go to customer profile
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Already Logged In',
+        detail: 'You are already logged in. Please go to your customer profile to manage subscriptions.',
+        life: 5000
+      });
+      // Optionally navigate to customer profile
+      setTimeout(() => {
+        this.router.navigate(['/customer']);
+      }, 2000);
+      return;
+    }
+
+    // User is not logged in, ask if they're an existing member
+    this.showExistingMemberDialog = true;
     this.cd.detectChanges();
   }
 
   closeRequestTrial(): void {
     this.showTrialStepper = false;
+  }
+
+  // Handle existing member dialog responses
+  onExistingMemberYes(): void {
+    this.showExistingMemberDialog = false;
+    this.router.navigate(['/auth/login']);
+  }
+
+  onExistingMemberNo(): void {
+    this.showExistingMemberDialog = false;
+    this.showTrialStepper = true;
+    this.cd.detectChanges();
+  }
+
+  closeExistingMemberDialog(): void {
+    this.showExistingMemberDialog = false;
   }
 
   /* --------------------------- API calls -------------------------- */
