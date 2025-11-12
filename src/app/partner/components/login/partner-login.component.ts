@@ -5,6 +5,8 @@ import { ReactiveInputComponent } from '../../../shared/components/form/reactive
 import { PartnerAuthService } from '../../services/partner-auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { Functions } from '../../../shared/functions/functions';
 
 @Component({
@@ -14,8 +16,10 @@ import { Functions } from '../../../shared/functions/functions';
     FormsModule,
     ReactiveInputComponent,
     ProgressSpinner,
-    RouterLink
+    RouterLink,
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './partner-login.component.html',
   styleUrl: './partner-login.component.scss'
 })
@@ -43,17 +47,59 @@ export class PartnerLoginComponent {
     this.partnerAuth.login(email, password).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigate(['/partner/dashboard']);
+      next: (response) => {
+        console.log('Login component - response received:', response);
+        // Small delay to ensure localStorage is set (tap runs synchronously, but just to be safe)
+        setTimeout(() => {
+          this.loading = false;
+          // Verify login was successful before navigating
+          const isLoggedIn = this.partnerAuth.isLoggedIn();
+          const partner = this.partnerAuth.getCurrentPartner();
+          console.log('Login check - isLoggedIn:', isLoggedIn, 'partner:', partner);
+          
+          if (isLoggedIn && partner) {
+            this.router.navigate(['/partner/dashboard']).catch(err => {
+              console.error('Navigation error:', err);
+              this.functions.show_toast('Login Successful', 'success', 'Redirecting to dashboard...');
+            });
+          } else {
+            console.error('Login failed - session not saved. isLoggedIn:', isLoggedIn, 'partner:', partner);
+            this.functions.show_toast('Login Failed', 'error', 'Failed to save login session. Please try again.');
+          }
+        }, 100);
       },
       error: (error) => {
         this.loading = false;
-        this.functions.show_toast('Login Failed', 'error', error.error?.message || 'Invalid email or password.');
+        console.error('Login error - Full error object:', error);
+        console.error('Login error - Status:', error.status);
+        console.error('Login error - Error body:', error.error);
+        console.error('Login error - Error message:', error.message);
+        
+        // Extract error message from different possible structures
+        let errorMessage = 'Invalid email or password.';
+        if (error.error) {
+          if (typeof error.error === 'string') {
+            errorMessage = error.error;
+          } else if (error.error.message) {
+            errorMessage = error.error.message;
+          } else if (error.error.error?.message) {
+            errorMessage = error.error.error.message;
+          } else if (error.error.exc_type) {
+            errorMessage = error.error.exc || error.error.message || 'An error occurred';
+          }
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
+        console.error('Login error - Final error message:', errorMessage);
+        this.functions.show_toast('Login Failed', 'error', errorMessage);
       }
     });
   }
 }
+
+
+
 
 
 

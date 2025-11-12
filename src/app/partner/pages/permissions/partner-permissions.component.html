@@ -1,0 +1,81 @@
+<div class="p-6">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Permissions</h1>
+    <p class="mt-2 text-gray-600 dark:text-gray-400">View all available permissions that can be assigned to roles</p>
+  </div>
+
+  @if (loading()) {
+  <div class="flex justify-center py-12">
+    <p-progress-spinner [style]="{ width: '50px', height: '50px' }"></p-progress-spinner>
+  </div>
+  } @else {
+  <!-- Search -->
+  <div class="mb-6">
+    <div class="max-w-md">
+      <span class="p-input-icon-left w-full block">
+        <i class="pi pi-search text-gray-400"></i>
+        <input
+          type="text"
+          pInputText
+          placeholder="Search permissions by name, key, description, or category..."
+          [value]="searchQuery()"
+          (input)="onSearchChange($any($event.target).value)"
+          class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400"
+        />
+      </span>
+    </div>
+  </div>
+
+  <!-- Permissions Table -->
+  <p-card>
+    <p-table
+      [value]="filteredPermissions()"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} permissions"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      styleClass="p-datatable-striped">
+      <ng-template pTemplate="header">
+        <tr>
+          <th scope="col">Permission Name</th>
+          <th scope="col">Permission Key</th>
+          <th scope="col">Description</th>
+          <th scope="col">Category</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-permission>
+        <tr>
+          <td class="font-semibold">{{ permission.permission_name }}</td>
+          <td>
+            <code class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">{{ permission.permission_key }}</code>
+          </td>
+          <td>{{ permission.description || '-' }}</td>
+          <td>
+            <p-tag [value]="permission.category || 'Other'" severity="info" />
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4" class="text-center py-8">
+            <div class="flex flex-col items-center gap-3">
+              <i class="pi pi-key text-4xl text-gray-400"></i>
+              <p class="text-gray-600 dark:text-gray-400">
+                @if (searchQuery()) {
+                  No permissions match your search criteria
+                } @else {
+                  No permissions found
+                }
+              </p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+  }
+</div>
+
+

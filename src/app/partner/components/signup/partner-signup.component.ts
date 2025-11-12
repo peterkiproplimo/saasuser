@@ -1,13 +1,11 @@
 import { Component, DestroyRef, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveInputComponent } from '../../../shared/components/form/reactive-input/reactive-input.component';
 import { PartnerAuthService } from '../../services/partner-auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Functions, passwordMatchValidator } from '../../../shared/functions/functions';
-import { Observable, of } from 'rxjs';
-import { map, catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-partner-signup',
@@ -70,10 +68,7 @@ export class PartnerSignupComponent {
     company_name: new FormControl('', [Validators.required]),
     first_name: new FormControl('', [Validators.required]),
     last_name: new FormControl('', [Validators.required]),
-    email: new FormControl('', 
-      [Validators.required, Validators.email],
-      [this.emailExistsValidator.bind(this)]
-    ),
+    email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl('', [Validators.required]),
     business_number: new FormControl('', [Validators.required]), // KYC - Business number in Kenya
     address: new FormControl(''),
@@ -84,29 +79,13 @@ export class PartnerSignupComponent {
     confirm_password: new FormControl('', [Validators.required]),
   }, { validators: passwordMatchValidator() });
 
-  emailExistsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-    if (!control.value || !control.value.includes('@')) {
-      return of(null);
-    }
-    return of(control.value).pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      switchMap(email => {
-        // Check if email exists by attempting to register
-        return this.partnerAuth.checkEmailExists(email).pipe(
-          map(exists => exists ? { emailExists: true } : null),
-          catchError(() => of(null))
-        );
-      })
-    );
-  }
-
   onLogoSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       this.logoFile = input.files[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
+        // Store full data URL (data:image/png;base64,...) for both preview and API
         this.logoPreview = e.target.result;
       };
       reader.readAsDataURL(this.logoFile);
@@ -127,7 +106,7 @@ export class PartnerSignupComponent {
       company_name: this.signup_form.value.company_name!,
       phone: this.signup_form.value.phone!,
       business_number: this.signup_form.value.business_number!,
-      logo: this.logoPreview || undefined,
+      logo: this.logoPreview || undefined, // Send full data URL string: "data:image/png;base64,..."
       contact_info: {
         address: this.signup_form.value.address || undefined,
         city: this.signup_form.value.city || undefined,

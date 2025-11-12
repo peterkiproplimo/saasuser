@@ -12,6 +12,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
   const token = localStorage.getItem('access_token');
 
+  // Skip interceptor for partner API requests (they have their own interceptor)
+  if (req.url.includes('saas.apis.partner')) {
+    return next(req);
+  }
+
   // Subject to track ongoing refresh token requests
   let refreshTokenInProgress = false;
   const refreshTokenSubject = new BehaviorSubject<string | null>(null);

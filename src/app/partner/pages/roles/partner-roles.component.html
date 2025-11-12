@@ -1,0 +1,122 @@
+<div class="p-6">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Roles & Permissions</h1>
+    <p class="mt-2 text-gray-600 dark:text-gray-400">Manage roles and their permissions for your partner account</p>
+  </div>
+
+  @if (loading()) {
+  <div class="flex justify-center py-12">
+    <p-progress-spinner [style]="{ width: '50px', height: '50px' }"></p-progress-spinner>
+  </div>
+  } @else {
+  <!-- Search and Actions -->
+  <div class="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+    <div class="flex-1 max-w-md">
+      <span class="p-input-icon-left w-full block">
+        <i class="pi pi-search text-gray-400"></i>
+        <input
+          type="text"
+          pInputText
+          placeholder="Search roles by name or description..."
+          [value]="searchQuery()"
+          (input)="onSearchChange($any($event.target).value)"
+          class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400"
+        />
+      </span>
+    </div>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        (click)="setupDefaults()"
+        class="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+        <i class="pi pi-cog"></i>
+        Setup Defaults
+      </button>
+      <button
+        type="button"
+        (click)="navigateToCreate()"
+        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-semibold transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+        <i class="pi pi-plus"></i>
+        Create Role
+      </button>
+    </div>
+  </div>
+
+  <!-- Roles Table -->
+  <p-card>
+    <p-table
+      [value]="filteredRoles()"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} roles"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      styleClass="p-datatable-striped">
+      <ng-template pTemplate="header">
+        <tr>
+          <th scope="col">Role Name</th>
+          <th scope="col">Description</th>
+          <th scope="col">Permissions</th>
+          <th scope="col">Type</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-role>
+        <tr>
+          <td class="font-semibold">{{ role.role_name }}</td>
+          <td>{{ role.description || '-' }}</td>
+          <td>
+            <p-tag [value]="getPermissionCount(role) + ' permissions'" severity="info" />
+          </td>
+          <td>
+            <p-tag
+              [value]="role.is_default ? 'Default' : 'Custom'"
+              [severity]="role.is_default ? 'success' : 'warning'" />
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <button
+                type="button"
+                (click)="editRole(role)"
+                class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-all">
+                <i class="pi pi-pencil mr-1"></i>
+                Edit
+              </button>
+              @if (!role.is_default) {
+                <button
+                  type="button"
+                  (click)="deleteRole(role)"
+                  class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-semibold transition-all">
+                  <i class="pi pi-trash mr-1"></i>
+                  Delete
+                </button>
+              }
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="text-center py-8">
+            <div class="flex flex-col items-center gap-3">
+              <i class="pi pi-shield text-4xl text-gray-400"></i>
+              <p class="text-gray-600 dark:text-gray-400">
+                @if (searchQuery()) {
+                  No roles match your search criteria
+                } @else {
+                  No roles found. Click "Setup Defaults" to create default roles.
+                }
+              </p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+  }
+
+  <p-confirmDialog></p-confirmDialog>
+</div>
+
+

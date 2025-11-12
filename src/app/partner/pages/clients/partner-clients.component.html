@@ -10,20 +10,151 @@
     <p-progress-spinner [style]="{ width: '50px', height: '50px' }"></p-progress-spinner>
   </div>
   } @else {
+  <!-- Search and Metrics Section -->
+  <div class="mb-8 space-y-6">
+    <!-- Search Bar -->
+    <div class="flex items-center gap-4">
+      <div class="flex-1 max-w-md">
+        <span class="p-input-icon-left w-full block">
+          <i class="pi pi-search text-gray-400"></i>
+          <input
+            type="text"
+            pInputText
+            placeholder="Search clients by name, email, company, product, or plan..."
+            [value]="searchQuery()"
+            (input)="onSearchChange($any($event.target).value)"
+            class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400"
+          />
+        </span>
+      </div>
+      @if (searchQuery() || statusFilter() !== 'all') {
+        <button
+          type="button"
+          class="px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-semibold transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+          (click)="clearFilters()">
+          <i class="pi pi-times"></i>
+          Clear
+        </button>
+      }
+    </div>
+
+    <!-- Metrics Cards (Clickable) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total Clients -->
+      <button
+        type="button"
+        (click)="onCardClick('all')"
+        [class]="statusFilter() === 'all' 
+          ? 'bg-gradient-to-br from-blue-500 to-blue-600 shadow-2xl ring-4 ring-blue-300 dark:ring-blue-700 scale-105' 
+          : 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 hover:scale-105 hover:shadow-2xl'"
+        class="w-full rounded-2xl shadow-xl p-6 border-2 border-blue-200/50 dark:border-blue-700/50 cursor-pointer transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-blue-500 text-left">
+        <div class="flex items-center justify-between">
+          <div>
+            <p [class]="statusFilter() === 'all' ? 'text-blue-100' : 'text-blue-600 dark:text-blue-400'" class="text-xs font-semibold uppercase tracking-wider mb-2">
+              Total Clients
+            </p>
+            <p [class]="statusFilter() === 'all' ? 'text-white' : 'text-gray-900 dark:text-white'" class="text-4xl font-extrabold mb-1">
+              {{ totalClients() }}
+            </p>
+          </div>
+          <div [class]="statusFilter() === 'all' ? 'bg-white/20 backdrop-blur-sm' : 'bg-gradient-to-br from-blue-500 to-blue-600'" class="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="pi pi-users text-white text-2xl"></i>
+          </div>
+        </div>
+      </button>
+
+      <!-- Active Clients -->
+      <button
+        type="button"
+        (click)="onCardClick('active')"
+        [class]="statusFilter() === 'active' 
+          ? 'bg-gradient-to-br from-green-500 to-emerald-600 shadow-2xl ring-4 ring-green-300 dark:ring-green-700 scale-105' 
+          : 'bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/30 dark:to-emerald-800/20 hover:scale-105 hover:shadow-2xl'"
+        class="w-full rounded-2xl shadow-xl p-6 border-2 border-green-200/50 dark:border-green-700/50 cursor-pointer transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-green-500 text-left">
+        <div class="flex items-center justify-between">
+          <div>
+            <p [class]="statusFilter() === 'active' ? 'text-green-100' : 'text-green-600 dark:text-green-400'" class="text-xs font-semibold uppercase tracking-wider mb-2">
+              Active
+            </p>
+            <p [class]="statusFilter() === 'active' ? 'text-white' : 'text-gray-900 dark:text-white'" class="text-4xl font-extrabold mb-1">
+              {{ activeCount() }}
+            </p>
+          </div>
+          <div [class]="statusFilter() === 'active' ? 'bg-white/20 backdrop-blur-sm' : 'bg-gradient-to-br from-green-500 to-emerald-600'" class="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="pi pi-check-circle text-white text-2xl"></i>
+          </div>
+        </div>
+      </button>
+
+      <!-- Trial Clients -->
+      <button
+        type="button"
+        (click)="onCardClick('trial')"
+        [class]="statusFilter() === 'trial' 
+          ? 'bg-gradient-to-br from-amber-500 to-yellow-600 shadow-2xl ring-4 ring-amber-300 dark:ring-amber-700 scale-105' 
+          : 'bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-800/20 hover:scale-105 hover:shadow-2xl'"
+        class="w-full rounded-2xl shadow-xl p-6 border-2 border-amber-200/50 dark:border-amber-700/50 cursor-pointer transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-amber-500 text-left">
+        <div class="flex items-center justify-between">
+          <div>
+            <p [class]="statusFilter() === 'trial' ? 'text-amber-100' : 'text-amber-600 dark:text-amber-400'" class="text-xs font-semibold uppercase tracking-wider mb-2">
+              Trial
+            </p>
+            <p [class]="statusFilter() === 'trial' ? 'text-white' : 'text-gray-900 dark:text-white'" class="text-4xl font-extrabold mb-1">
+              {{ trialCount() }}
+            </p>
+          </div>
+          <div [class]="statusFilter() === 'trial' ? 'bg-white/20 backdrop-blur-sm' : 'bg-gradient-to-br from-amber-500 to-yellow-600'" class="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="pi pi-clock text-white text-2xl"></i>
+          </div>
+        </div>
+      </button>
+
+      <!-- Inactive Clients -->
+      <button
+        type="button"
+        (click)="onCardClick('inactive')"
+        [class]="statusFilter() === 'inactive' 
+          ? 'bg-gradient-to-br from-red-500 to-rose-600 shadow-2xl ring-4 ring-red-300 dark:ring-red-700 scale-105' 
+          : 'bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-900/30 dark:to-rose-800/20 hover:scale-105 hover:shadow-2xl'"
+        class="w-full rounded-2xl shadow-xl p-6 border-2 border-red-200/50 dark:border-red-700/50 cursor-pointer transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-red-500 text-left">
+        <div class="flex items-center justify-between">
+          <div>
+            <p [class]="statusFilter() === 'inactive' ? 'text-red-100' : 'text-red-600 dark:text-red-400'" class="text-xs font-semibold uppercase tracking-wider mb-2">
+              Inactive
+            </p>
+            <p [class]="statusFilter() === 'inactive' ? 'text-white' : 'text-gray-900 dark:text-white'" class="text-4xl font-extrabold mb-1">
+              {{ inactiveCount() }}
+            </p>
+          </div>
+          <div [class]="statusFilter() === 'inactive' ? 'bg-white/20 backdrop-blur-sm' : 'bg-gradient-to-br from-red-500 to-rose-600'" class="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="pi pi-times-circle text-white text-2xl"></i>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Clients Table -->
   <p-card>
-    <p-table [value]="clients()" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
-             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} clients"
-             [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-striped">
+    <p-table 
+      [value]="filteredClients()" 
+      [paginator]="true" 
+      [rows]="10" 
+      [showCurrentPageReport]="true" 
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} clients"
+      [rowsPerPageOptions]="[10, 25, 50]" 
+      styleClass="p-datatable-striped"
+      [globalFilterFields]="['name', 'email', 'company', 'product_name', 'subscription_plan']">
       <ng-template pTemplate="header">
         <tr>
-          <th>Client Name</th>
-          <th>Email</th>
-          <th>Company</th>
-          <th>Product</th>
-          <th>Plan</th>
-          <th>Status</th>
-          <th>Subscription Date</th>
-          <th>Monthly Revenue</th>
+          <th scope="col">Client Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Company</th>
+          <th scope="col">Product</th>
+          <th scope="col">Plan</th>
+          <th scope="col">Status</th>
+          <th scope="col">Subscription Date</th>
+          <th scope="col">Monthly Revenue</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-client>
@@ -45,7 +176,21 @@
           <td colspan="8" class="text-center py-8">
             <div class="flex flex-col items-center gap-3">
               <i class="pi pi-users text-4xl text-gray-400"></i>
-              <p class="text-gray-600 dark:text-gray-400">No clients found</p>
+              <p class="text-gray-600 dark:text-gray-400">
+                @if (searchQuery() || statusFilter() !== 'all') {
+                  No clients match your search criteria
+                } @else {
+                  No clients found
+                }
+              </p>
+              @if (searchQuery() || statusFilter() !== 'all') {
+                <button
+                  type="button"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all"
+                  (click)="clearFilters()">
+                  Clear Filters
+                </button>
+              }
             </div>
           </td>
         </tr>
