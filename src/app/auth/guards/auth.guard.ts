@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (token && !tokenService.isTokenExpired()) {
     return true; // Allow navigation if token exists and is not expired
   } else {
-    // Token is missing or expired, redirect to login
+    // Token is missing or expired, redirect to
     return router.createUrlTree(['/auth/login'], { queryParams: { returnUrl: state.url } });
   }
 };
