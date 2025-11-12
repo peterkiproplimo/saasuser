@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -29,6 +30,7 @@ import { DestroyRef } from '@angular/core';
     DividerModule,
     BadgeModule,
     ProgressBarModule,
+    ProgressSpinnerModule,
     DialogModule,
     ToastModule
   ],
@@ -54,6 +56,12 @@ export class Profile implements OnInit {
   // Account stats (only populated from API)
   accountStats = signal<any>(null);
 
+  // Account status fields (from API)
+  accountStatus = signal<string | null>(null);
+  emailVerified = signal<boolean | null>(null);
+  twoFactorAuth = signal<boolean | null>(null);
+  profileCompletion = signal<number | null>(null);
+
   // Form for editing profile
   profileForm: FormGroup;
 
@@ -76,13 +84,31 @@ export class Profile implements OnInit {
   /* ------------------------- API calls -------------------------- */
   fetchCustomerProfile(): void {
     this.isLoadingProfile.set(true);
+    this.apiNotFound.set(false);
 
     this.http
-      .get(`${this.base_url}.api.profile.get_customer_profile`)
+      .get(`${this.base_url}.profile.get_user_profile`)
       .pipe(takeUntilDestroyed(this.destroy))
       .subscribe({
         next: (response: any) => {
-          this.customerProfile = response?.data || response;
+          // API returns: { status: 200, message: "...", data: { user: {...} } }
+          let userData = null;
+
+          if (response?.data?.user) {
+            // Standard format: response.data.user
+            userData = response.data.user;
+          } else if (response?.data) {
+            // Fallback: response.data might be the user object directly
+            userData = response.data;
+          } else if (response?.message?.data?.user) {
+            userData = response.message.data.user;
+          } else if (response?.user) {
+            userData = response.user;
+          } else {
+            userData = response;
+          }
+
+          this.customerProfile = userData;
           this.apiNotFound.set(false);
 
           // Update user data if available
@@ -99,20 +125,45 @@ export class Profile implements OnInit {
             if (this.customerProfile.name) {
               this.user.name = this.customerProfile.name;
             }
+            if (this.customerProfile.customer) {
+              // Use customer field as name if name is not available
+              if (!this.user.name) {
+                this.user.name = this.customerProfile.customer;
+              }
+            }
+            if (this.customerProfile.last_login) {
+              this.user.last_login = this.customerProfile.last_login;
+            }
 
             // Update form with fetched data
             this.profileForm.patchValue({
               firstName: this.customerProfile.first_name || this.user.first_name || '',
               lastName: this.customerProfile.last_name || this.user.last_name || '',
               email: this.customerProfile.email || this.user.email || '',
-              phone: this.customerProfile.phone || '',
-              company: this.customerProfile.company || '',
-              bio: this.customerProfile.bio || ''
+              phone: this.customerProfile.phone || this.customerProfile.mobile_no || '',
+              company: this.customerProfile.organization || this.customerProfile.company || this.customerProfile.company_name || '',
+              bio: this.customerProfile.bio || this.customerProfile.biography || ''
             });
 
             // Update account stats only if available from API
             if (this.customerProfile.account_stats) {
               this.accountStats.set(this.customerProfile.account_stats);
+            } else if (this.customerProfile.stats) {
+              this.accountStats.set(this.customerProfile.stats);
+            }
+
+            // Update account status fields from API
+            if (this.customerProfile.account_status !== undefined) {
+              this.accountStatus.set(this.customerProfile.account_status);
+            }
+            if (this.customerProfile.email_verified !== undefined) {
+              this.emailVerified.set(this.customerProfile.email_verified);
+            }
+            if (this.customerProfile.two_factor_auth !== undefined) {
+              this.twoFactorAuth.set(this.customerProfile.two_factor_auth);
+            }
+            if (this.customerProfile.profile_completion !== undefined) {
+              this.profileCompletion.set(this.customerProfile.profile_completion);
             }
           }
 
@@ -120,7 +171,7 @@ export class Profile implements OnInit {
         },
         error: (error) => {
           this.isLoadingProfile.set(false);
-          this.handleApiError(error, 'Failed to load customer profile');
+          this.handleApiError(error, 'Failed to load user profile');
         },
       });
   }
@@ -235,18 +286,12 @@ export class Profile implements OnInit {
     return (first + last).toUpperCase();
   }
 
-  getAccountCompletion(): number {
-    let completed = 0;
-    const total = 6;
-
-    if (this.user.first_name) completed++;
-    if (this.user.last_name) completed++;
-    if (this.user.email) completed++;
-    if (this.profileForm.get('phone')?.value) completed++;
-    if (this.profileForm.get('company')?.value) completed++;
-    if (this.profileForm.get('bio')?.value) completed++;
-
-    return Math.round((completed / total) * 100);
+  getAccountCompletion(): number | null {
+    // Only return profile completion if available from API
+    if (this.profileCompletion() !== null) {
+      return this.profileCompletion();
+    }
+    return null;
   }
 
   // Getter for account stats (for template)

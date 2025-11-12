@@ -79,8 +79,9 @@ export class FreeTrialStepperComponent implements OnInit {
     base_url = environment.BASE_URL;
 
     ngOnInit() {
-        // Load plans for the selected solution
+        // Load plans for the selected solution using the solution name
         if (this.solutionData?.name) {
+            // Use solution name to get plans via the new API
             this.plansApiService.loadPlans(this.solutionData.name);
         }
     }

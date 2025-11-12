@@ -25,7 +25,7 @@ export class SideBarItem {
     const routeMap: { [key: string]: string } = {
       'Dashboard': '/customer',
       'Subscriptions': '/customer/subscriptions',
-      'Purchase Plans': '/customer/subscribe',
+      'Purchase Service': '/customer/subscribe',
       'Invoices': '/customer/invoices',
       'Billing History': '/customer/billing',
       'Support Tickets': '/customer/tickets',

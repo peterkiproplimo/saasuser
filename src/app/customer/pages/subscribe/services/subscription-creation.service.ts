@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 
 export interface CreateSubscriptionRequest {
     plan: string;
@@ -49,7 +50,7 @@ export interface CreateSubscriptionResponse {
     providedIn: 'root'
 })
 export class SubscriptionCreationService {
-    private baseUrl = 'https://saas.techsavanna.technology/api/method/saas.apis.subscription.create_subscription';
+    private baseUrl = `${environment.BASE_URL}.subscription.create_subscription`;
 
     // Signals for reactive state management
     isLoading = signal(false);
