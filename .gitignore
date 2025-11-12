@@ -54,3 +54,6 @@ SEED_PRODUCTS_SCRIPT.js
 NODE_UPGRADE.md
 *.seed.js
 *.seed.ts
+
+# Local environment file (not committed to repo)
+src/environments/environment.local.ts
