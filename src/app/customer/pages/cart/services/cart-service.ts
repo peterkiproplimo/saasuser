@@ -1,9 +1,9 @@
 // cart.service.ts
-import {Injectable, computed, signal, inject} from '@angular/core';
-import {CartItem} from '../models/cart-iten';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../../environments/environment';
-import {Observable} from 'rxjs';
+import { Injectable, computed, signal, inject } from '@angular/core';
+import { CartItem } from '../models/cart-iten';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
@@ -62,7 +62,7 @@ export class CartService {
   }
 
 
-  place_order(plans: any):Observable<any>{
+  place_order(plans: any): Observable<any> {
     return this.http.post<any>(`${this.base_url}.subscription.create_subscription`, plans);
   }
 

@@ -13,13 +13,13 @@ export class TokenService {
     private tokenExpirationSubject = new BehaviorSubject<boolean>(false);
     public tokenExpired$ = this.tokenExpirationSubject.asObservable();
 
-  private http = inject(HttpClient);
-  private router = inject(Router);
-  private base_url = environment.BASE_URL;
+    private http = inject(HttpClient);
+    private router = inject(Router);
+    private base_url = environment.BASE_URL;
 
-  constructor() {
-    // Don't initialize in constructor to avoid circular dependencies
-  }
+    constructor() {
+        // Don't initialize in constructor to avoid circular dependencies
+    }
 
     /**
      * Start monitoring token expiration
@@ -79,49 +79,49 @@ export class TokenService {
         }
     }
 
-  /**
-   * Refresh token before it expires
-   */
-  private refreshTokenBeforeExpiry(): void {
-    const refreshToken = localStorage.getItem('refresh_token');
-    if (!refreshToken) {
-      this.handleTokenExpiration();
-      return;
+    /**
+     * Refresh token before it expires
+     */
+    private refreshTokenBeforeExpiry(): void {
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (!refreshToken) {
+            this.handleTokenExpiration();
+            return;
+        }
+
+        const refresh_token_request: RefreshTokenRequest = {
+            refresh_token: refreshToken
+        };
+
+        this.http.post<RefreshTokenResponse>(
+            `${this.base_url}.accounts.refresh_access_token`,
+            refresh_token_request
+        ).subscribe({
+            next: (response) => {
+                console.log('Token refreshed successfully');
+                localStorage.setItem('access_token', response.access_token!);
+                localStorage.setItem('refresh_token', response.refresh_token!);
+                // Restart the timer with the new token
+                this.startTokenExpirationTimer();
+            },
+            error: (error) => {
+                console.error('Token refresh failed:', error);
+                this.handleTokenExpiration();
+            }
+        });
     }
 
-    const refresh_token_request: RefreshTokenRequest = {
-      refresh_token: refreshToken
-    };
-
-    this.http.post<RefreshTokenResponse>(
-      `${this.base_url}.accounts.refresh_access_token`,
-      refresh_token_request
-    ).subscribe({
-      next: (response) => {
-        console.log('Token refreshed successfully');
-        localStorage.setItem('access_token', response.access_token!);
-        localStorage.setItem('refresh_token', response.refresh_token!);
-        // Restart the timer with the new token
-        this.startTokenExpirationTimer();
-      },
-      error: (error) => {
-        console.error('Token refresh failed:', error);
-        this.handleTokenExpiration();
-      }
-    });
-  }
-
-  /**
-   * Handle token expiration
-   */
-  private handleTokenExpiration(): void {
-    console.log('Token expired, logging out user');
-    this.tokenExpirationSubject.next(true);
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user');
-    this.router.navigate(['/auth/login']);
-  }
+    /**
+     * Handle token expiration
+     */
+    private handleTokenExpiration(): void {
+        console.log('Token expired, logging out user');
+        this.tokenExpirationSubject.next(true);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user');
+        this.router.navigate(['/auth/login']);
+    }
 
     /**
      * Check if token is expired

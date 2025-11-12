@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../../../environments/environment';
 
 export interface Solution {
     name: string;
@@ -31,7 +32,7 @@ export interface SolutionsResponse {
     providedIn: 'root'
 })
 export class SolutionsApiService {
-    private baseUrl = 'https://saas.techsavanna.technology/api/method/saas.apis.subscription.list_saas_application';
+    private baseUrl = `${environment.BASE_URL}.subscription.list_saas_application`;
 
     // Signals for reactive state management
     solutions = signal<Solution[]>([]);
