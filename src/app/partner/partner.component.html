@@ -220,7 +220,7 @@
                     <img [src]="storedPartner.logo" alt="Partner Logo" class="h-10 w-10 rounded-full border-2 border-white object-cover" />
                   } @else {
                     <div class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
-                      {{ (storedPartner.first_name?.charAt(0) || '').toUpperCase() }}{{ (storedPartner.last_name?.charAt(0) || '').toUpperCase() }}
+                      {{ (storedPartner.first_name.charAt(0) || '').toUpperCase() }}{{ (storedPartner.last_name.charAt(0) || '').toUpperCase() }}
                     </div>
                   }
                   <div class="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-white">
@@ -252,8 +252,8 @@
                         } @else {
                           <div
                             class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
-                            {{ (storedPartner.first_name?.charAt(0) || '').toUpperCase() }}{{
-                            (storedPartner.last_name?.charAt(0) || '').toUpperCase() }}
+                            {{ (storedPartner.first_name.charAt(0) || '').toUpperCase() }}{{
+                            (storedPartner.last_name.charAt(0) || '').toUpperCase() }}
                           </div>
                         }
                         <div

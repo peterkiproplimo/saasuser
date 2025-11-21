@@ -51,7 +51,7 @@ export class PartnerAuthService {
         console.log('Login - Response body:', JSON.stringify(httpResponse.body, null, 2));
         
         // Check response body structure
-        // According to Postman response: { status: 200, message: "Login successful", data: { partner: {...} }, token: "...", role: "Admin", is_owner: true }
+        // Actual API response: { status: 200, message: "Login successful", data: { partner: {...}, access_token: "...", refresh_token: "...", role: "Admin", is_owner: true } }
         const body = httpResponse.body;
         
         if (!body) {
@@ -59,22 +59,38 @@ export class PartnerAuthService {
           return;
         }
         
-        // Extract partner - API returns it as body.data.partner
-        const partner = body.data?.partner || body.partner || null;
+        // Extract partner - API returns it as body.data.partner (inside data object)
+        let partner = body.data?.partner || body.partner || null;
         
-        // Extract token - API returns it INSIDE data object: body.data.token (NOT at root!)
-        const token = body.data?.token || body.token || null;
+        // Extract token - API returns it as body.data.access_token (inside data object, not at root!)
+        // Also check for refresh_token if needed
+        const token = body.data?.access_token || body.data?.token || body.token || null;
         
         console.log('Login - Extracted partner:', partner);
-        console.log('Login - Partner has id?', partner?.id ? `Yes: ${partner.id}` : 'No');
+        console.log('Login - Partner keys:', partner ? Object.keys(partner) : []);
         console.log('Login - Extracted token:', token ? `Token present (${token.substring(0, 20)}...)` : 'Token missing');
         
         if (partner && token) {
           try {
-            // Ensure partner has required fields
+            // Normalize partner object - ensure it has an 'id' field
+            // Some APIs might return 'partner_id', 'user_id', or other variations
             if (!partner.id) {
-              console.error('Login - Partner object missing id field:', partner);
-              return;
+              // Try to find alternative ID field names
+              const alternativeIdFields = ['partner_id', 'user_id', '_id', 'uuid'];
+              for (const field of alternativeIdFields) {
+                if (partner[field]) {
+                  partner = { ...partner, id: partner[field] };
+                  console.log(`Login - Found ID in field '${field}': ${partner.id}`);
+                  break;
+                }
+              }
+            }
+            
+            // If still no ID, log warning but continue (some APIs might not require it)
+            if (!partner.id) {
+              console.warn('Login - Partner object missing id field, but continuing anyway:', partner);
+              // Generate a temporary ID if needed
+              partner = { ...partner, id: partner.email || `temp_${Date.now()}` };
             }
             
             localStorage.setItem(this.CURRENT_PARTNER_KEY, JSON.stringify(partner));
